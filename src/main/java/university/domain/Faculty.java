@@ -1,6 +1,6 @@
 package university.domain;
 
-class Faculty {
+class Faculty implements Entity {
     private String code;
     private String name;
     private String shortName;
@@ -13,10 +13,6 @@ class Faculty {
         this.shortName = shortName;
         this.dean = dean;
         this.contacts = contacts;
-    }
-
-    public String getCode() {
-        return code;
     }
 
     public void setCode(String code) {
@@ -53,6 +49,11 @@ class Faculty {
 
     public void setContacts(String contacts) {
         this.contacts = contacts;
+    }
+
+    @Override
+    public String getID() {
+        return code;
     }
 }
 

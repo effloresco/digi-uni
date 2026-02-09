@@ -2,7 +2,7 @@ package university.domain;
 
 import java.time.LocalDate;
 
-public class Person {
+public class Person implements Entity{
     private String id;
     private String lastName;
     private String firstName;
@@ -20,10 +20,6 @@ public class Person {
         this.birthDate = birthDate;
         this.email = email;
         this.phone = phone;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public void setId(String id) {
@@ -80,5 +76,10 @@ public class Person {
 
     public String getFullName() {
         return lastName + " " + firstName + " " + middleName;
+    }
+
+    @Override
+    public String getID() {
+        return id;
     }
 }
