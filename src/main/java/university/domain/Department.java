@@ -1,4 +1,4 @@
-package university;
+package university.domain;
 
 class Department {
     private String code;

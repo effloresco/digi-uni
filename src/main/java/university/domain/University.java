@@ -1,4 +1,4 @@
-package university;
+package university.domain;
 
 public class University {
     private String fullName;
