@@ -10,6 +10,7 @@ import university.service.DepartmentService;
 import university.service.FacultyService;
 import university.service.PersonService;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -151,7 +152,20 @@ public class ConsoleInterface {
         facultyService.deleteFaculty(faculty);
     }
     private void changeFaculty(){
+        boolean found = false;
+        String facultyId = null;
+        while (!found) {
+            System.out.println("Введіть ідентифікатор факультету, що треба замінити");
+            facultyId = scanner.nextLine();
 
+            Optional<Faculty> optionalFaculty = facultyRepository.findById(facultyId);
+
+            if (optionalFaculty.isPresent()) {
+                found = true;
+            } else
+                System.out.println("Факультет з таким ID не знайдено.");
+        }
+        facultyService.updateFaculty(facultyId, facultyGenerator());
     }
     private void departmentManaging(){
         System.out.println("*-управління кафедрами-*");
@@ -159,6 +173,9 @@ public class ConsoleInterface {
     }
     private void studentManaging(){
         System.out.println("*-управління студентами-*");
+
+    }
+    private void teacherGenerator(){
 
     }
     private void teacherManaging(){
