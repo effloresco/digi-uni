@@ -2,6 +2,7 @@ package university.ui;
 
 import university.domain.Faculty;
 import university.domain.Person;
+import university.domain.Student;
 import university.domain.Teacher;
 import university.repository.DepartmentRepository;
 import university.repository.FacultyRepository;
@@ -9,6 +10,8 @@ import university.repository.PersonRepository;
 import university.service.DepartmentService;
 import university.service.FacultyService;
 import university.service.PersonService;
+import static university.service.ReportService.*;
+import static university.service.SearchService.*;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -65,7 +68,7 @@ public class ConsoleInterface {
         }
     }
     private void facultyManaging(){
-        System.out.println("*-управління факультетами-*");
+        System.out.println("*-Управління факультетами-*");
         System.out.println("1 - додати факультет");
         System.out.println("2 - змінити факультет");
         System.out.println("3 - видалити факультет");
@@ -168,16 +171,72 @@ public class ConsoleInterface {
         facultyService.updateFaculty(facultyId, facultyGenerator());
     }
     private void departmentManaging(){
-        System.out.println("*-управління кафедрами-*");
+        System.out.println("*-Управління кафедрами-*");
 
     }
     private void studentManaging(){
-        System.out.println("*-управління студентами-*");
+        System.out.println("\n*-Управління студентами-*");
 
+        while (true) {
+            System.out.println("1. Пошук");
+            System.out.println("2. Звіти");
+            System.out.println("0. Вихід");
+            System.out.print("Виберіть опцію: ");
+
+            String choice = scanner.nextLine();
+
+            switch (choice) {
+                case "1" -> search();
+                case "2" -> reports();
+                case "0" -> System.exit(0);
+                default -> System.out.println("Невірний вибір!");
+            }
+        }
     }
     private void teacherGenerator(){
 
     }
+
+    private void search(){
+        System.out.println("\n*-Пошук студентів-*");
+        while (true) {
+            System.out.println("1. Пошук за ПІБ");
+            System.out.println("2. Пошук за курсом");
+            System.out.println("3. Пошук за групою");
+            System.out.println("0. Вихід");
+            System.out.print("Виберіть опцію: ");
+
+            String choice = scanner.nextLine();
+
+            switch (choice) {
+                case "1" -> searchStudentByFullName();
+                case "2" -> searchByCourse();
+                case "3" -> searchByGroup();
+                case "0" -> System.exit(0);
+                default -> System.out.println("Невірний вибір!");
+            }
+        }
+    }
+
+    private void reports(){
+        System.out.println("\n*-Списки студентів-*");
+        while (true) {
+            System.out.println("1. За алфавітом");
+            System.out.println("2. За курсом");
+            System.out.println("0. Вихід");
+            System.out.print("Виберіть опцію: ");
+
+            String choice = scanner.nextLine();
+
+            switch (choice) {
+                case "1" -> printAllStudentsAlphabetically();
+                case "2" -> printAllStudentsByCourse();
+                case "0" -> System.exit(0);
+                default -> System.out.println("Невірний вибір!");
+            }
+        }
+    }
+
     private void teacherManaging(){
         System.out.println("*-управління викладачами-*");
 
