@@ -2,7 +2,7 @@ package university.domain;
 
 import java.time.LocalDate;
 
-class Teacher extends Person {
+public class Teacher extends Person {
     private String position;
     private String degree;
     private String title;

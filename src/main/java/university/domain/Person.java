@@ -2,7 +2,7 @@ package university.domain;
 
 import java.time.LocalDate;
 
-public class Person implements Entity{
+public class Person implements Entity<String>{
     private String id;
     private String lastName;
     private String firstName;

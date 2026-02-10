@@ -1,6 +1,6 @@
 package university.domain;
 
-class Department implements Entity{
+public class Department implements Entity<String>{
     private String code;
     private String name;
     private Faculty faculty;
