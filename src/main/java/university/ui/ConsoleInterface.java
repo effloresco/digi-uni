@@ -10,6 +10,8 @@ import university.repository.PersonRepository;
 import university.service.DepartmentService;
 import university.service.FacultyService;
 import university.service.PersonService;
+import static university.service.ReportService.*;
+import static university.service.SearchService.*;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -26,15 +28,12 @@ public class ConsoleInterface {
     private final PersonRepository personRepository = new PersonRepository();
     private final PersonService personService = new PersonService(new PersonRepository());
 
-    private final Teacher teacher =  new Teacher("123", "Іваненко", "Петро", "Іванович", LocalDate.now(),"test@mail.com", "+380992134951", "красавчік", "потужний", "2Б", LocalDate.now(), 2);
-
     public static void main(String[] args) {
         ConsoleInterface ui = new ConsoleInterface();
         ui.run();
     }
 
     public void run() {
-        personRepository.add(teacher);
         System.out.println("*---DigiUni Registry---*");
         while(true){
             System.out.println("1 - управління факультетами");
@@ -69,10 +68,9 @@ public class ConsoleInterface {
         }
     }
     private void facultyManaging(){
-
         boolean status = true;
         while(status){
-            System.out.println("*-управління факультетами-*");
+            System.out.println("*-Управління факультетами-*");
             System.out.println("1 - додати факультет");
             System.out.println("2 - змінити факультет");
             System.out.println("3 - видалити факультет");
@@ -85,10 +83,10 @@ public class ConsoleInterface {
                         addFaculty();
                         break;
                     case 2:
-                        changeFaculty();
+                        deleteFaculty();
                         break;
                     case 3:
-                        deleteFaculty();
+                        changeFaculty();
                         break;
                     case 0:
                         status = false;
@@ -173,16 +171,72 @@ public class ConsoleInterface {
         facultyService.updateFaculty(facultyId, facultyGenerator());
     }
     private void departmentManaging(){
-        System.out.println("*-управління кафедрами-*");
+        System.out.println("*-Управління кафедрами-*");
 
     }
     private void studentManaging(){
-        System.out.println("*-управління студентами-*");
+        System.out.println("\n*-Управління студентами-*");
 
+        while (true) {
+            System.out.println("1. Пошук");
+            System.out.println("2. Звіти");
+            System.out.println("0. Вихід");
+            System.out.print("Виберіть опцію: ");
+
+            String choice = scanner.nextLine();
+
+            switch (choice) {
+                case "1" -> search();
+                case "2" -> reports();
+                case "0" -> System.exit(0);
+                default -> System.out.println("Невірний вибір!");
+            }
+        }
     }
     private void teacherGenerator(){
 
     }
+
+    private void search(){
+        System.out.println("\n*-Пошук студентів-*");
+        while (true) {
+            System.out.println("1. Пошук за ПІБ");
+            System.out.println("2. Пошук за курсом");
+            System.out.println("3. Пошук за групою");
+            System.out.println("0. Вихід");
+            System.out.print("Виберіть опцію: ");
+
+            String choice = scanner.nextLine();
+
+            switch (choice) {
+                case "1" -> searchStudentByFullName();
+                case "2" -> searchByCourse();
+                case "3" -> searchByGroup();
+                case "0" -> System.exit(0);
+                default -> System.out.println("Невірний вибір!");
+            }
+        }
+    }
+
+    private void reports(){
+        System.out.println("\n*-Списки студентів-*");
+        while (true) {
+            System.out.println("1. За алфавітом");
+            System.out.println("2. За курсом");
+            System.out.println("0. Вихід");
+            System.out.print("Виберіть опцію: ");
+
+            String choice = scanner.nextLine();
+
+            switch (choice) {
+                case "1" -> printAllStudentsAlphabetically();
+                case "2" -> printAllStudentsByCourse();
+                case "0" -> System.exit(0);
+                default -> System.out.println("Невірний вибір!");
+            }
+        }
+    }
+
     private void teacherManaging(){
         System.out.println("*-управління викладачами-*");
 
