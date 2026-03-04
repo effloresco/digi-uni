@@ -27,6 +27,7 @@ public class ConsoleInterface {
     private final DepartmentService departmentService = new DepartmentService(new DepartmentRepository());
     private final PersonRepository personRepository = new PersonRepository();
     private final PersonService personService = new PersonService(new PersonRepository());
+    private final Teacher teacher =  new Teacher("123", "Іваненко", "Петро", "Іванович", LocalDate.now(),"test@mail.com", "+380992134951", "красавчік", "потужний", "2Б", LocalDate.now(), 2);
 
     public static void main(String[] args) {
         ConsoleInterface ui = new ConsoleInterface();
@@ -34,6 +35,8 @@ public class ConsoleInterface {
     }
 
     public void run() {
+        personRepository.add(teacher);
+        studentGenerator();
         System.out.println("*---DigiUni Registry---*");
         while(true){
             System.out.println("1 - управління факультетами");
@@ -67,6 +70,26 @@ public class ConsoleInterface {
             }
         }
     }
+    private void studentGenerator() {
+        Student student1;
+        Student student2;
+        Student student3;
+
+        student1 = new Student("2135467", "Петренко", "Петро", "Петрович", LocalDate.now(),
+                "first@mail.com", "", "", 5, "1А", 2010, Student.StudentStatus.EXPELLED, Student.StudyForm.BUDGET);
+
+        student2 = new Student("1234567", "Іваненко", "Іван", "Іванович", LocalDate.now(),
+                "second@mail.com", "", "", 2, "5В", 2010, Student.StudentStatus.STUDYING, Student.StudyForm.CONTRACT);
+
+        student3 = new Student("6543217", "Іваненко", "Петро", "Іванович", LocalDate.now(),
+                "third@mail.com", "", "", 2, "2Б", 2010, Student.StudentStatus.STUDYING, Student.StudyForm.CONTRACT);
+
+        studentDatabase.add(student1);
+        studentDatabase.add(student2);
+        studentDatabase.add(student3);
+
+    }
+
     private void facultyManaging(){
         boolean status = true;
         while(status){
@@ -83,10 +106,10 @@ public class ConsoleInterface {
                         addFaculty();
                         break;
                     case 2:
-                        deleteFaculty();
+                        changeFaculty();
                         break;
                     case 3:
-                        changeFaculty();
+                        deleteFaculty();
                         break;
                     case 0:
                         status = false;
@@ -176,8 +199,8 @@ public class ConsoleInterface {
     }
     private void studentManaging(){
         System.out.println("\n*-Управління студентами-*");
-
-        while (true) {
+        boolean status = true;
+        while (status) {
             System.out.println("1. Пошук");
             System.out.println("2. Звіти");
             System.out.println("0. Вихід");
@@ -188,7 +211,7 @@ public class ConsoleInterface {
             switch (choice) {
                 case "1" -> search();
                 case "2" -> reports();
-                case "0" -> System.exit(0);
+                case "0" -> status = false;
                 default -> System.out.println("Невірний вибір!");
             }
         }
@@ -199,7 +222,8 @@ public class ConsoleInterface {
 
     private void search(){
         System.out.println("\n*-Пошук студентів-*");
-        while (true) {
+        boolean status = true;
+        while (status) {
             System.out.println("1. Пошук за ПІБ");
             System.out.println("2. Пошук за курсом");
             System.out.println("3. Пошук за групою");
@@ -212,7 +236,7 @@ public class ConsoleInterface {
                 case "1" -> searchStudentByFullName();
                 case "2" -> searchByCourse();
                 case "3" -> searchByGroup();
-                case "0" -> System.exit(0);
+                case "0" -> status = false;
                 default -> System.out.println("Невірний вибір!");
             }
         }
@@ -220,7 +244,8 @@ public class ConsoleInterface {
 
     private void reports(){
         System.out.println("\n*-Списки студентів-*");
-        while (true) {
+        boolean status = true;
+        while (status) {
             System.out.println("1. За алфавітом");
             System.out.println("2. За курсом");
             System.out.println("0. Вихід");
@@ -231,7 +256,7 @@ public class ConsoleInterface {
             switch (choice) {
                 case "1" -> printAllStudentsAlphabetically();
                 case "2" -> printAllStudentsByCourse();
-                case "0" -> System.exit(0);
+                case "0" -> status = false;
                 default -> System.out.println("Невірний вибір!");
             }
         }
