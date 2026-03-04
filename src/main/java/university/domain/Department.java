@@ -1,18 +1,22 @@
 package university.domain;
 
-public class Department implements Entity<String>{
+import university.repository.FacultyRepository;
+import university.repository.TeacherRepository;
+
+import java.util.Optional;
+
+import static university.service.Utils.*;
+
+public class Department implements Entity<String> {
+    protected final FacultyRepository facultyRepository = FacultyRepository.get();
+    protected final TeacherRepository teacherRepository = TeacherRepository.get();
     private String code;
     private String name;
     private Faculty faculty;
-    private Teacher head;
+    private Person head;
     private String location;
 
-    public Department(String code, String name, Faculty faculty, Teacher head, String location) {
-        this.code = code;
-        this.name = name;
-        this.faculty = faculty;
-        this.head = head;
-        this.location = location;
+    public Department() {
     }
 
     public void setCode(String code) {
@@ -23,7 +27,11 @@ public class Department implements Entity<String>{
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name) throws InvalidValue {
+        if (containsNonLetter(name)) {
+            throw new InvalidValue("Назва може містити лише літери");
+        }
+
         this.name = name;
     }
 
@@ -31,24 +39,39 @@ public class Department implements Entity<String>{
         return faculty;
     }
 
-    public void setFaculty(Faculty faculty) {
-        this.faculty = faculty;
+    public void setFaculty(String facultyId) throws InvalidValue {
+        Optional<Faculty> optionalFaculty = facultyRepository.findById(facultyId);
+
+        if (!optionalFaculty.isPresent()) {
+            throw new InvalidValue("Факультет з таким ID не знайдено.");
+        }
+        this.faculty = optionalFaculty.get();
     }
 
-    public Teacher getHead() {
+    public Person getHead() {
         return head;
     }
 
-    public void setHead(Teacher head) {
-        this.head = head;
+    public void setHead(String teacherId) throws InvalidValue {
+
+        Optional<Person> optionalPerson = teacherRepository.findById(teacherId);
+        if (optionalPerson.isPresent()) {
+            Person person = optionalPerson.get();
+            if (!(person instanceof Teacher)) {
+                throw new InvalidValue("Ця особа не є викладачем");
+            }
+        } else {
+            throw new InvalidValue("Особу з таким ID не знайдено.");
+        }
+        this.head = optionalPerson.get();
     }
 
     public String getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setLocation(String location) throws InvalidValue {
+
     }
 
     @Override

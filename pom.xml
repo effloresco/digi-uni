@@ -15,17 +15,10 @@
     </properties>
 
     <dependencies>
-
         <!-- JUnit 5 dependency -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.10.1</version> <!-- Use an appropriate version -->
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
             <version>5.10.1</version> <!-- Use an appropriate version -->
             <scope>test</scope>
         </dependency>

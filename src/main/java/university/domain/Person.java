@@ -1,6 +1,7 @@
 package university.domain;
 
 import java.time.LocalDate;
+import static university.service.Utils.*;
 
 public class Person implements Entity<String>{
     private String id;
@@ -30,7 +31,10 @@ public class Person implements Entity<String>{
         return lastName;
     }
 
-    public void setLastName(String lastName) {
+    public void setLastName(String lastName) throws InvalidValue{
+        if(containsNonDigit(lastName)){
+            throw new InvalidValue("Прізвище може містити лише літери");
+        }
         this.lastName = lastName;
     }
 
@@ -38,7 +42,10 @@ public class Person implements Entity<String>{
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public void setFirstName(String firstName) throws InvalidValue{
+        if(containsNonDigit(firstName)){
+            throw new InvalidValue("Ім'я може містити лише літери");
+        }
         this.firstName = firstName;
     }
 
@@ -46,7 +53,10 @@ public class Person implements Entity<String>{
         return middleName;
     }
 
-    public void setMiddleName(String middleName) {
+    public void setMiddleName(String middleName) throws InvalidValue{
+        if(containsNonDigit(middleName)){
+            throw new InvalidValue("По батькові може містити лише літери");
+        }
         this.middleName = middleName;
     }
 
@@ -62,7 +72,10 @@ public class Person implements Entity<String>{
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(String email) throws InvalidValue{
+        if (!email.contains("@") || !email.contains(".")) {
+            throw new InvalidValue("Електронна пошта має містити '@' та '.'");
+        }
         this.email = email;
     }
 
@@ -70,7 +83,11 @@ public class Person implements Entity<String>{
         return phone;
     }
 
-    public void setPhone(String phone) {
+    public void setPhone(String phone) throws InvalidValue{
+
+        if (containsNonDigit(phone) || phone.length() > 12 || phone.length() < 10) {
+            throw new InvalidValue("Потрібно вказати дійсний номер телефону");
+        }
         this.phone = phone;
     }
 
