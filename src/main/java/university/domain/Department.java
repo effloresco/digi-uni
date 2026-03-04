@@ -2,7 +2,7 @@ package university.domain;
 
 import university.exceptions.InvalidValue;
 import university.repository.FacultyRepository;
-import university.repository.TeacherRepository;
+import university.repository.PersonRepository;
 
 import java.util.Optional;
 
@@ -10,11 +10,11 @@ import static university.service.Utils.*;
 
 public class Department implements Entity<String> {
     protected final FacultyRepository facultyRepository = FacultyRepository.get();
-    protected final TeacherRepository teacherRepository = TeacherRepository.get();
+    protected final PersonRepository personRepository = PersonRepository.get();
     private String code;
     private String name;
     private Faculty faculty;
-    private Person head;
+    private Teacher head;
     private String location;
 
     public Department() {
@@ -55,7 +55,7 @@ public class Department implements Entity<String> {
 
     public void setHead(String teacherId) throws InvalidValue {
 
-        Optional<Person> optionalPerson = teacherRepository.findById(teacherId);
+        Optional<Person> optionalPerson = personRepository.findById(teacherId);
         if (optionalPerson.isPresent()) {
             Person person = optionalPerson.get();
             if (!(person instanceof Teacher)) {
@@ -64,7 +64,7 @@ public class Department implements Entity<String> {
         } else {
             throw new InvalidValue("Особу з таким ID не знайдено.");
         }
-        this.head = optionalPerson.get();
+        this.head = (Teacher)optionalPerson.get();
     }
 
     public String getLocation() {
