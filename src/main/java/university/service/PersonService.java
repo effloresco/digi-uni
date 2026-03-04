@@ -14,8 +14,8 @@ public class PersonService {
 
     public void createPerson(Person person){
         Optional<Person> testCopy = personRepository.findById(person.getID());
-        testCopy.orElseThrow(
-                () -> new IllegalArgumentException("Не можна створити новий факультет з істуючим id")
+        testCopy.ifPresent(
+                exists -> {throw new IllegalArgumentException("Не можна створити новий факультет з істуючим id");}
         );
         personRepository.add(person);
     }

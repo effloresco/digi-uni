@@ -14,8 +14,8 @@ public class DepartmentService {
 
     public void createDepartment(Department department){
         Optional<Department> testCopy = departmentRepository.findById(department.getID());
-        testCopy.orElseThrow(
-                () -> new IllegalArgumentException("Не можна створити новий факультет з істуючим id")
+        testCopy.ifPresent(
+                exists -> {throw new IllegalArgumentException("Не можна створити новий факультет з істуючим id");}
         );
         departmentRepository.add(department);
     }

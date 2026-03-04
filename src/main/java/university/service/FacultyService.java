@@ -16,7 +16,7 @@ public class FacultyService{
     public void createFaculty(Faculty faculty){
         Optional<Faculty> testCopy = facultyRepository.findById(faculty.getID());
         testCopy.ifPresent(
-                exists -> new IllegalArgumentException("Не можна створити новий факультет з істуючим id")
+                exists -> {throw new IllegalArgumentException("Не можна створити новий факультет з істуючим id");}
         );
         facultyRepository.add(faculty);
     }
