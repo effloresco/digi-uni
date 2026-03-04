@@ -12,26 +12,33 @@ public class PersonService {
         this.personRepository = repository;
     }
 
-    public void createPerson(Person person){
+    public void createPerson(Person person) {
         Optional<Person> testCopy = personRepository.findById(person.getID());
-        testCopy.orElseThrow(
-                () -> new IllegalArgumentException("Не можна створити новий факультет з істуючим id")
-        );
+        if (testCopy.isPresent()) {
+            throw new IllegalArgumentException("Не можна створити особу з існуючим id");
+        }
+
         personRepository.add(person);
     }
-    public void deletePerson(Person person){
+
+    public void deletePerson(Person person) {
         Optional<Person> testCopy = personRepository.findById(person.getID());
         testCopy.orElseThrow(
-                () -> new IllegalArgumentException("Не існує такого факультету")
+                () -> new IllegalArgumentException("Не існує такої особи")
         );
         personRepository.deleteByID(person.getID());
     }
-    public void updatePerson(String id, Person person){
+
+    public void updatePerson(String id, Person person) {
         Optional<Person> testCopy = personRepository.findById(id);
         testCopy.ifPresentOrElse(
                 exists -> {
-                    personRepository.deleteByID(id); personRepository.add(person);},
-                () -> { throw new IllegalArgumentException("Не існує такого факультету"); }
+                    personRepository.deleteByID(id);
+                    personRepository.add(person);
+                },
+                () -> {
+                    throw new IllegalArgumentException("Не існує такої особи");
+                }
         );
     }
 }

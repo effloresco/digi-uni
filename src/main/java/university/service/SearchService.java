@@ -8,10 +8,6 @@ import java.util.*;
 public class SearchService {
     public static PersonRepository studentDatabase = new PersonRepository();
 
-    public SearchService(PersonRepository repository) {
-        this.studentDatabase = repository;
-    }
-
     public static Scanner scanner = new Scanner(System.in);
 
     public static void searchStudentByFullName() {
@@ -27,7 +23,6 @@ public class SearchService {
         } else {
             results.forEach(p -> System.out.println(String.format("%-30s", p.getFullName()) + " | " + p.getID() +
                     " | " + String.format("%-20s", p.getEmail()) + " | " + p.getBirthDate()));
-            ;
         }
     }
 
