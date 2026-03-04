@@ -1,5 +1,7 @@
 package university.domain;
 
+import university.exceptions.InvalidValue;
+
 import java.time.LocalDate;
 import static university.service.Utils.*;
 
@@ -31,7 +33,7 @@ public class Person implements Entity<String>{
         return lastName;
     }
 
-    public void setLastName(String lastName) throws InvalidValue{
+    public void setLastName(String lastName) throws InvalidValue {
         if(containsNonDigit(lastName)){
             throw new InvalidValue("Прізвище може містити лише літери");
         }

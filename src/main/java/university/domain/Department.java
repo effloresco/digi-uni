@@ -1,5 +1,6 @@
 package university.domain;
 
+import university.exceptions.InvalidValue;
 import university.repository.FacultyRepository;
 import university.repository.TeacherRepository;
 
