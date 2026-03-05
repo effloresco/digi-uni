@@ -2,26 +2,28 @@ package university.domain;
 
 import university.exceptions.InvalidValue;
 import university.repository.FacultyRepository;
-import university.repository.PersonRepository;
-
+import university.repository.TeacherRepository;
 import java.util.Optional;
-
 import static university.service.Utils.*;
 
 public class Department implements Entity<String> {
     protected final FacultyRepository facultyRepository = FacultyRepository.get();
-    protected final PersonRepository personRepository = PersonRepository.get();
-    private String code;
+    protected final TeacherRepository teacherRepository = TeacherRepository.get();
+    private String id;
     private String name;
     private Faculty faculty;
-    private Teacher head;
+    private Person head;
     private String location;
 
     public Department() {
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setId(String id) throws InvalidValue {
+        if (containsNonDigit(id)) {
+            throw new InvalidValue("ID може містити лише цифри");
+        }
+
+        this.id = id;
     }
 
     public String getName() {
@@ -55,7 +57,7 @@ public class Department implements Entity<String> {
 
     public void setHead(String teacherId) throws InvalidValue {
 
-        Optional<Person> optionalPerson = personRepository.findById(teacherId);
+        Optional<Person> optionalPerson = teacherRepository.findById(teacherId);
         if (optionalPerson.isPresent()) {
             Person person = optionalPerson.get();
             if (!(person instanceof Teacher)) {
@@ -64,19 +66,19 @@ public class Department implements Entity<String> {
         } else {
             throw new InvalidValue("Особу з таким ID не знайдено.");
         }
-        this.head = (Teacher)optionalPerson.get();
+        this.head = optionalPerson.get();
     }
 
     public String getLocation() {
         return location;
     }
 
-    public void setLocation(String location) throws InvalidValue {
+    public void setLocation(String location){
 
     }
 
     @Override
     public String getID() {
-        return code;
+        return id;
     }
 }

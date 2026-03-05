@@ -9,15 +9,19 @@ public class ManagementMenu {
         ManagementMenu management = new ManagementMenu();
     }
 
-    public void management (){
+    public void management() {
         FacultyMenu fcManagement = new FacultyMenu();
-//        StudentMenu stManagement = new StudentMenu();
+        StudentMenu stManagement = new StudentMenu();
+        DepartmentMenu dpManagement = new DepartmentMenu();
+        TeacherMenu tcManagement = new TeacherMenu();
 
         boolean status = true;
         while (status) {
-            System.out.println("\n*-Оберіть:-*");
+            System.out.println("\n*-Керування даними:-*");
             System.out.println("1 - Управління факультетами");
+            System.out.println("2 - Управління кафедрами");
             System.out.println("3 - Управління студентами");
+            System.out.println("4 - Управління викладачами");
             System.out.println("0 - Повернутись назад");
             String inputLine = scanner.nextLine();
             try {
@@ -27,8 +31,13 @@ public class ManagementMenu {
                         fcManagement.facultyManaging();
                         break;
                     case 2:
-//                        stManagement.studentManaging();
+                        dpManagement.departmentManagement();
                         break;
+                    case 3:
+                        stManagement.studentManagement();
+                        break;
+                    case 4:
+                        tcManagement.teacherManagement();
                     case 0:
                         status = false;
                         break;
