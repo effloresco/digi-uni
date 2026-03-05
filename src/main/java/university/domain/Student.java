@@ -1,5 +1,7 @@
 package university.domain;
-import java.time.LocalDate;
+
+import university.exceptions.InvalidValue;
+import static university.service.Utils.*;
 
 public class Student extends Person {
 
@@ -13,17 +15,7 @@ public class Student extends Person {
     private StudyForm form;
     private StudentStatus status;
 
-    public Student(String id, String lastName, String firstName, String middleName,
-                   LocalDate birthDate, String email, String phone,
-                   String studentId, int course, String group, int enrollmentYear,
-                   StudentStatus status, StudyForm form) {
-        super(id, lastName, firstName, middleName, birthDate, email, phone);
-        this.studentId = studentId;
-        setCourse(course);
-        this.group = group;
-        this.enrollmentYear = enrollmentYear;
-        this.form = form;
-        this.status = status;
+    public Student() {
     }
 
     public String getStudentId() {
@@ -34,17 +26,35 @@ public class Student extends Person {
         return group;
     }
 
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
-    }
-
     public int getCourse() {
         return course;
     }
 
-    public void setCourse(int course) {
-        if (course < 1 || course > 6) throw new IllegalArgumentException("Курс має бути від 1 до 6");
-        this.course = course;
+    public void setStudentId(String studentId) throws InvalidValue {
+        if (containsNonDigit(String.valueOf(studentId))) {
+            throw new InvalidValue("Ідентифікатор може містити лише цифри");
+        }
+        this.studentId = studentId;
     }
 
+    public void setCourse(int course) throws InvalidValue{
+        if (containsNonDigit(String.valueOf(course))||(course < 1 || course > 6)) {
+            throw new InvalidValue("Курс має бути від 1 до 6");
+        }
+    }
+    public void setGroup(String group){
+        this.group = group;
+    }
+    public void setEnrollmentYear(int year)throws  InvalidValue{
+        if (containsNonDigit(String.valueOf(year))||String.valueOf(year).length()!=4) {
+            throw new InvalidValue("Некоректний рік");
+        }
+        this.enrollmentYear = year;
+    }
+    public void setStudyForm(StudyForm form){
+        this.form = form;
+    }
+    public void setStudentStatus(StudentStatus status){
+        this.status = status;
+    }
 }

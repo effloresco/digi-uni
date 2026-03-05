@@ -1,9 +1,9 @@
 package university.domain;
 
 import university.exceptions.InvalidValue;
-
 import java.time.LocalDate;
 import static university.service.Utils.*;
+import university.exceptions.*;
 
 public class Person implements Entity<String>{
     private String id;
@@ -14,27 +14,20 @@ public class Person implements Entity<String>{
     private String email;
     private String phone;
 
-    public Person(String id, String lastName, String firstName, String middleName,
-                  LocalDate birthDate, String email, String phone) {
-        this.id = id;
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.birthDate = birthDate;
-        this.email = email;
-        this.phone = phone;
-    }
+    public Person(){};
 
-    public void setId(String id) {
-        this.id = id;
+    public void setId(String id) throws InvalidValue{
+        if (containsNonDigit(id)) {
+            throw new InvalidValue("ID може містити лише літери");
+        }
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) throws InvalidValue {
-        if(containsNonDigit(lastName)){
+    public void setLastName(String lastName) throws InvalidValue{
+        if(containsNonLetter(lastName)){
             throw new InvalidValue("Прізвище може містити лише літери");
         }
         this.lastName = lastName;
@@ -45,7 +38,7 @@ public class Person implements Entity<String>{
     }
 
     public void setFirstName(String firstName) throws InvalidValue{
-        if(containsNonDigit(firstName)){
+        if(containsNonLetter(firstName)){
             throw new InvalidValue("Ім'я може містити лише літери");
         }
         this.firstName = firstName;
@@ -56,7 +49,7 @@ public class Person implements Entity<String>{
     }
 
     public void setMiddleName(String middleName) throws InvalidValue{
-        if(containsNonDigit(middleName)){
+        if(containsNonLetter(middleName)){
             throw new InvalidValue("По батькові може містити лише літери");
         }
         this.middleName = middleName;
