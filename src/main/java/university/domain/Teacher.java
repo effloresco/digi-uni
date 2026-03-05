@@ -1,7 +1,6 @@
 package university.domain;
 
 import university.exceptions.InvalidValue;
-
 import java.time.LocalDate;
 import static university.service.Utils.*;
 
@@ -12,17 +11,7 @@ public class Teacher extends Person {
     private LocalDate hireDate;
     private double rate;
 
-    public Teacher(String id, String lastName, String firstName, String middleName,
-                   LocalDate birthDate, String email, String phone,
-                   String position, String degree, String title,
-                   LocalDate hireDate, double rate) {
-        super(id, lastName, firstName, middleName, birthDate, email, phone);
-        this.position = position;
-        this.degree = degree;
-        this.title = title;
-        this.hireDate = hireDate;
-        this.rate = rate;
-    }
+    public Teacher(){};
 
     public String getPosition() {
         return position;
