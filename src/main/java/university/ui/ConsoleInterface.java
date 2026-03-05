@@ -21,36 +21,29 @@ public class ConsoleInterface {
             System.out.println("2 - Пошук");
             System.out.println("3 - Звіти");
             System.out.println("0 - Вихід з програми");
-            String inputLine = scanner.nextLine();
-            try {
-                int input = Integer.parseInt(inputLine);
-                switch (input) {
-                    case 1:
-                        management.management();
-                        break;
-                    case 2:
-                        search();
-                        break;
-                    case 3:
-                        reports();
-                        break;
-                    case 4:
-//                        teacherManaging();
-                        break;
-                    case 0:
-                        System.exit(0);
-                    default:
-                        System.out.println("Введіть коректне значення");
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Введіть коректне значення");
+            String choice = scanner.nextLine();
+            switch (choice) {
+                case "1":
+                    management.management();
+                    break;
+                case "2":
+                    search();
+                    break;
+                case "3":
+                    reports();
+                    break;
+                case "0":
+                    System.exit(0);
+                default:
+                    System.out.println("Введіть коректне значення");
             }
         }
     }
 
     private void search() {
-        System.out.println("\n*-Пошук студентів-*");
-        while (true) {
+        boolean status = true;
+        while (status) {
+            System.out.println("\n*-Пошук студентів-*");
             System.out.println("1. Пошук за ПІБ");
             System.out.println("2. Пошук за курсом");
             System.out.println("3. Пошук за групою");
@@ -63,15 +56,16 @@ public class ConsoleInterface {
                 case "1" -> searchStudentByFullName();
                 case "2" -> searchByCourse();
                 case "3" -> searchByGroup();
-                case "0" -> System.exit(0);
+                case "0" -> status = false;
                 default -> System.out.println("Невірний вибір!");
             }
         }
     }
 
     private void reports() {
-        System.out.println("\n*-Списки студентів-*");
-        while (true) {
+        boolean status = true;
+        while (status) {
+            System.out.println("\n*-Списки студентів-*");
             System.out.println("1. За алфавітом");
             System.out.println("2. За курсом");
             System.out.println("0. Вихід");
@@ -82,7 +76,7 @@ public class ConsoleInterface {
             switch (choice) {
                 case "1" -> printAllStudentsAlphabetically();
                 case "2" -> printAllStudentsByCourse();
-                case "0" -> System.exit(0);
+                case "0" -> status = false;
                 default -> System.out.println("Невірний вибір!");
             }
         }

@@ -11,7 +11,7 @@ public class ManagementMenu {
 
     public void management (){
         FacultyMenu fcManagement = new FacultyMenu();
-        StudentMenu stManagement = new StudentMenu();
+//        StudentMenu stManagement = new StudentMenu();
 
         boolean status = true;
         while (status) {
@@ -27,7 +27,7 @@ public class ManagementMenu {
                         fcManagement.facultyManaging();
                         break;
                     case 2:
-                        stManagement.studentManaging();
+//                        stManagement.studentManaging();
                         break;
                     case 0:
                         status = false;
