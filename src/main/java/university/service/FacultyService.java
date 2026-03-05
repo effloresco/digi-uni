@@ -29,11 +29,19 @@ public class FacultyService{
         );
         facultyRepository.deleteByID(faculty.getID());
     }
-    public void updateFaculty(String id, Faculty faculty){
-        Optional<Faculty> testCopy = facultyRepository.findById(id);
-        testCopy.ifPresentOrElse(
-                exists -> {facultyRepository.deleteByID(id); facultyRepository.add(faculty);},
-                () -> { throw new FacultyNotFoundException("Не вдалось оновити факультет з id " + id + " причина: не знайдено в репозиторії"); }
+    public void updateFaculty(String currentId, Faculty faculty){
+        Optional<Faculty> testCopy = facultyRepository.findById(currentId);
+        testCopy.orElseThrow(
+                () -> new FacultyNotFoundException("Не вдалось оновити факультет з id " + currentId + " причина: не знайдено в репозиторії")
         );
+        String newId = faculty.getID();
+        if(!currentId.equals(newId)){
+            facultyRepository.findById(newId).ifPresent(
+                    exists -> {throw new FacultyAlreadyExistsException("Не вдалось оновити факультет з id " + currentId + " причина: факультет з id " + newId + " вже існує");}
+
+            );
+        }
+        facultyRepository.deleteByID(currentId);
+        facultyRepository.add(faculty);
     }
 }

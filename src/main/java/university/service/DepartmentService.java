@@ -1,8 +1,11 @@
 package university.service;
 
 import university.domain.Department;
+import university.domain.Faculty;
 import university.exceptions.DepartmentAlreadyExistsException;
 import university.exceptions.DepartmentNotFoundException;
+import university.exceptions.FacultyAlreadyExistsException;
+import university.exceptions.FacultyNotFoundException;
 import university.repository.Repository;
 
 import java.util.Optional;
@@ -28,11 +31,19 @@ public class DepartmentService {
         );
         departmentRepository.deleteByID(department.getID());
     }
-    public void updateDepartment(String id, Department department){
-        Optional<Department> testCopy = departmentRepository.findById(id);
-        testCopy.ifPresentOrElse(
-                exists -> {departmentRepository.deleteByID(id); departmentRepository.add(department);},
-                () -> { throw new DepartmentNotFoundException("Не вдалось оновити кафедру з id " + id + " причина: не знайдено в репозиторії"); }
+    public void updateDepartment(String currentId, Department department){
+        Optional<Department> testCopy = departmentRepository.findById(currentId);
+        testCopy.orElseThrow(
+                () -> new FacultyNotFoundException("Не вдалось оновити кафедру з id " + currentId + " причина: не знайдено в репозиторії")
         );
+        String newId = department.getID();
+        if(!currentId.equals(newId)){
+            departmentRepository.findById(newId).ifPresent(
+                    exists -> {throw new FacultyAlreadyExistsException("Не вдалось оновити кафедру з id " + currentId + " причина: кафедра з id " + newId + " вже існує");}
+
+            );
+        }
+        departmentRepository.deleteByID(currentId);
+        departmentRepository.add(department);
     }
 }

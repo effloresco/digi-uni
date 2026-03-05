@@ -1,6 +1,9 @@
 package university.service;
 
+import university.domain.Faculty;
 import university.domain.Person;
+import university.exceptions.FacultyAlreadyExistsException;
+import university.exceptions.FacultyNotFoundException;
 import university.exceptions.PersonAlreadyExistsException;
 import university.exceptions.PersonNotFoundException;
 import university.repository.Repository;
@@ -28,12 +31,19 @@ public class PersonService {
         );
         personRepository.deleteByID(person.getID());
     }
-    public void updatePerson(String id, Person person){
-        Optional<Person> testCopy = personRepository.findById(id);
-        testCopy.ifPresentOrElse(
-                exists -> {
-                    personRepository.deleteByID(id); personRepository.add(person);},
-                () -> { throw new PersonNotFoundException("Не вдалось оновити персону з id " + id + " причина: не знайдено в репозиторії"); }
+    public void updatePerson(String currentId, Person person){
+        Optional<Person> testCopy = personRepository.findById(currentId);
+        testCopy.orElseThrow(
+                () -> new FacultyNotFoundException("Не вдалось оновити персону з id " + currentId + " причина: не знайдено в репозиторії")
         );
+        String newId = person.getID();
+        if(!currentId.equals(newId)){
+            personRepository.findById(newId).ifPresent(
+                    exists -> {throw new FacultyAlreadyExistsException("Не вдалось оновити персону з id " + currentId + " причина: персона з id " + newId + " вже існує");}
+
+            );
+        }
+        personRepository.deleteByID(currentId);
+        personRepository.add(person);
     }
 }
