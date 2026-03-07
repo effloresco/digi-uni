@@ -7,8 +7,8 @@ import java.util.Optional;
 import static university.service.Utils.*;
 
 public class Department implements Entity<String> {
-    protected final FacultyRepository facultyRepository = FacultyRepository.get();
-    protected final TeacherRepository teacherRepository = TeacherRepository.get();
+    protected final FacultyRepository facultyRepository = FacultyRepository.get(FacultyRepository.class);
+    protected final TeacherRepository teacherRepository = TeacherRepository.get(TeacherRepository.class);
     private String id;
     private String name;
     private Faculty faculty;
@@ -57,7 +57,7 @@ public class Department implements Entity<String> {
 
     public void setHead(String teacherId) throws InvalidValue {
 
-        Optional<Person> optionalPerson = teacherRepository.findById(teacherId);
+        Optional<Teacher> optionalPerson = teacherRepository.findById(teacherId);
         if (optionalPerson.isPresent()) {
             Person person = optionalPerson.get();
             if (!(person instanceof Teacher)) {
