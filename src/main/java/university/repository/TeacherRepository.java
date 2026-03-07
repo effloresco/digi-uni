@@ -1,12 +1,6 @@
 package university.repository;
 
-public class TeacherRepository extends PersonRepository {
-    private static TeacherRepository teacherRepository;
+import university.domain.Person;
+import university.domain.Teacher;
 
-    public static TeacherRepository get(){
-        if (teacherRepository == null){
-            teacherRepository = new TeacherRepository();
-        }
-        return teacherRepository;
-    }
-}
+public class TeacherRepository extends Repository<Teacher, String> {}
