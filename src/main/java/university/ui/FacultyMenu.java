@@ -74,13 +74,8 @@ public class FacultyMenu {
                 Optional<Teacher> optionalPerson = teacherRepository.findById(teacherId);
 
                 if (optionalPerson.isPresent()) {
-                    Person person = optionalPerson.get();
-                    if (person instanceof Teacher t) {
-                        dean = t;
-                        found = true;
-                    } else {
-                        System.out.println("Ця особа не є викладачем");
-                    }
+                    dean = optionalPerson.get();
+                    found = true;
                 } else {
                     System.out.println("Особу з таким ID не знайдено.");
                 }
