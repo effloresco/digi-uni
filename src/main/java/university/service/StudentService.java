@@ -1,24 +1,49 @@
 package university.service;
 
-import university.domain.*;
+import university.domain.Faculty;
 import university.domain.Student;
+import university.exceptions.FacultyAlreadyExistsException;
+import university.exceptions.FacultyNotFoundException;
+import university.exceptions.PersonAlreadyExistsException;
+import university.exceptions.PersonNotFoundException;
 import university.repository.Repository;
 
-public class StudentService extends PersonService {
-    public StudentService(Repository<Person, String> repository) {
-        super(repository);
+import java.util.Optional;
+
+public class StudentService {
+    private final Repository<Student, String> personRepository;
+
+    public StudentService(Repository<Student, String> repository) {
+        this.personRepository = repository;
     }
 
-    public void createStudent(Student student) {
-        createPerson(student);
+    public void createStudent(Student person){
+        Optional<Student> testCopy = personRepository.findById(person.getID());
+        testCopy.ifPresent(
+                exists -> {throw new PersonAlreadyExistsException("Не вдалось додати студента з id " + person.getID() + " причина: студент вже існує");}
+        );
+        personRepository.add(person);
     }
-
-    public void deleteStudent(Student student) {
-        deletePerson(student);
+    public void deleteStudent(Student person){
+        Optional<Student> testCopy = personRepository.findById(person.getID());
+        testCopy.orElseThrow(
+                () -> new PersonNotFoundException("Не вдалось видалити студента з id " + person.getID() + " причина: не знайдено в репозиторії")
+        );
+        personRepository.deleteByID(person.getID());
     }
+    public void updateStudent(String currentId, Student person){
+        Optional<Student> testCopy = personRepository.findById(currentId);
+        testCopy.orElseThrow(
+                () -> new FacultyNotFoundException("Не вдалось оновити студента з id " + currentId + " причина: не знайдено в репозиторії")
+        );
+        String newId = person.getID();
+        if(!currentId.equals(newId)){
+            personRepository.findById(newId).ifPresent(
+                    exists -> {throw new FacultyAlreadyExistsException("Не вдалось оновити студента з id " + currentId + " причина: студент з id " + newId + " вже існує");}
 
-    public void updateStudent(String studentID, Student student) {
-        updatePerson(studentID, student);
+            );
+        }
+        personRepository.deleteByID(currentId);
+        personRepository.add(person);
     }
-
 }

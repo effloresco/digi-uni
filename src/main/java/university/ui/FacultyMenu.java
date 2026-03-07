@@ -4,7 +4,7 @@ import university.domain.Faculty;
 import university.domain.Person;
 import university.domain.Teacher;
 import university.repository.FacultyRepository;
-import university.repository.PersonRepository;
+import university.repository.TeacherRepository;
 import university.service.FacultyService;
 
 import static university.service.SearchService.*;
@@ -12,9 +12,9 @@ import static university.service.SearchService.*;
 import java.util.Optional;
 
 public class FacultyMenu {
-    protected final FacultyRepository facultyRepository = FacultyRepository.get();
+    protected final FacultyRepository facultyRepository = FacultyRepository.get(FacultyRepository.class);
     protected final FacultyService facultyService = new FacultyService(facultyRepository);
-    protected final PersonRepository teacherRepository = PersonRepository.get();
+    protected final TeacherRepository teacherRepository = TeacherRepository.get(TeacherRepository.class);
 
     protected void facultyManaging() {
         boolean status = true;
@@ -71,7 +71,7 @@ public class FacultyMenu {
             String teacherId = scanner.nextLine();
 
             if(!teacherId.isEmpty()){
-                Optional<Person> optionalPerson = teacherRepository.findById(teacherId);
+                Optional<Teacher> optionalPerson = teacherRepository.findById(teacherId);
 
                 if (optionalPerson.isPresent()) {
                     Person person = optionalPerson.get();

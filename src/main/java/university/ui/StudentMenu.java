@@ -16,7 +16,7 @@ import static university.domain.Student.StudyForm.*;
 import static university.service.SearchService.*;
 
 public class StudentMenu {
-    protected final StudentRepository studentRepository = StudentRepository.get();
+    protected final StudentRepository studentRepository = StudentRepository.get(StudentRepository.class);
     protected final StudentService studentService = new StudentService(studentRepository);
     boolean resume;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
@@ -255,7 +255,7 @@ public class StudentMenu {
             System.out.println("Введіть ідентифікатор студента, якого треба видалити");
             String studentId = scanner.nextLine();
 
-            Optional<Person> optionalStudent = studentRepository.findById(studentId);
+            Optional<Student> optionalStudent = studentRepository.findById(studentId);
             if (optionalStudent.isPresent()) {
                 student = (Student) optionalStudent.get();
                 found = true;
@@ -273,7 +273,7 @@ public class StudentMenu {
             System.out.println("Введіть ідентифікатор студента, що треба замінити");
             studentId = scanner.nextLine();
 
-            Optional<Person> optionalStudent = studentRepository.findById(studentId);
+            Optional<Student> optionalStudent = studentRepository.findById(studentId);
 
             if (optionalStudent.isPresent()) {
                 found = true;

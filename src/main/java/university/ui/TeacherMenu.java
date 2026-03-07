@@ -13,7 +13,7 @@ import static university.service.SearchService.*;
 
 public class TeacherMenu {
 
-    protected final TeacherRepository teacherRepository = TeacherRepository.get();
+    protected final TeacherRepository teacherRepository = TeacherRepository.get(TeacherRepository.class);
     protected final TeacherService teacherService = new TeacherService(teacherRepository);
     boolean resume;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
@@ -210,7 +210,7 @@ public class TeacherMenu {
             System.out.println("Введіть ідентифікатор вчителя, якого треба видалити");
             String teachertId = scanner.nextLine();
 
-            Optional<Person> optionalTeacher = teacherRepository.findById(teachertId);
+            Optional<Teacher> optionalTeacher = teacherRepository.findById(teachertId);
             if (optionalTeacher.isPresent()) {
                 teacher = (Teacher) optionalTeacher.get();
                 found = true;
@@ -227,7 +227,7 @@ public class TeacherMenu {
         while (!found) {
             System.out.println("Введіть ідентифікатор викладача, що треба замінити");
             teachertId = scanner.nextLine();
-            Optional<Person> optionalTeacher = teacherRepository.findById(teachertId);
+            Optional<Teacher> optionalTeacher = teacherRepository.findById(teachertId);
 
             if (optionalTeacher.isPresent()) {
                 found = true;

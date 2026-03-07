@@ -1,12 +1,12 @@
 package university.service;
 
 import university.domain.*;
-import university.repository.PersonRepository;
+import university.repository.StudentRepository;
 
 import java.util.*;
 
 public class SearchService {
-    public static PersonRepository studentDatabase = new PersonRepository();
+    public static StudentRepository studentDatabase = StudentRepository.get(StudentRepository.class);
 
     public static Scanner scanner = new Scanner(System.in);
 
@@ -14,7 +14,7 @@ public class SearchService {
         System.out.print("Введіть текст для пошуку (ПІБ): ");
         String query = scanner.nextLine().toLowerCase();
 
-        List<Person> results = studentDatabase.findAll().stream()
+        List<Student> results = studentDatabase.findAll().stream()
                 .filter(p -> p.getFullName().toLowerCase().contains(query))
                 .toList();
 
