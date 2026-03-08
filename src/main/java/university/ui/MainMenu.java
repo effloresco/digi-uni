@@ -1,5 +1,7 @@
 package university.ui;
 import university.domain.User;
+import university.repository.Repository;
+import university.repository.UserRepository;
 import university.service.UserService;
 
 import static university.service.ReportService.*;
@@ -10,6 +12,14 @@ public class MainMenu {
     private final Scanner scanner = new Scanner(System.in);
     private final ManagementMenu management = new ManagementMenu();
     private final AuthMenu auth = new AuthMenu();
+
+    private static final UserRepository userRepository = UserRepository.get(UserRepository.class);
+    private static final UserService userService = new UserService(userRepository);
+    static{
+        //adds default admin user
+        userService.createUser(new User("admin", "12345678", User.UserRole.ADMIN));
+    }
+
 
     public static void main(String[] args) {
         MainMenu ui = new MainMenu();
@@ -22,23 +32,26 @@ public class MainMenu {
                 auth.auth();
             }
             System.out.println("\n*---DigiUni Registry---*");
-            System.out.println("1 - Пошук");
-            System.out.println("2 - Звіти");
+            System.out.println("1 - Вихід з акаунта користувача");
+            System.out.println("2 - Пошук");
+            System.out.println("3 - Звіти");
             if (UserService.currentUser == User.UserRole.MANAGER || UserService.currentUser == User.UserRole.ADMIN)
-                System.out.println("3 - Управління");
+                System.out.println("4 - Управління");
             System.out.println("0 - Вихід з програми");
             String inputLine = scanner.nextLine();
             try {
                 int input = Integer.parseInt(inputLine);
                 switch (input) {
-
                     case 1:
+                        UserService.currentUser = null;
+                        continue;
+                    case 2:
                         search();
                         break;
-                    case 2:
+                    case 3:
                         reports();
                         break;
-                    case 3:
+                    case 4:
                         if (UserService.currentUser == User.UserRole.MANAGER || UserService.currentUser == User.UserRole.ADMIN)
                             management.management();
                         break;

@@ -1,5 +1,8 @@
 package university.ui;
 
+import university.domain.User;
+import university.service.UserService;
+
 import java.util.Scanner;
 
 public class ManagementMenu {
@@ -14,6 +17,7 @@ public class ManagementMenu {
         StudentMenu stManagement = new StudentMenu();
         DepartmentMenu dpManagement = new DepartmentMenu();
         TeacherMenu tcManagement = new TeacherMenu();
+        UserMenu usManagment = new UserMenu();
 
         boolean status = true;
         while (status) {
@@ -22,6 +26,8 @@ public class ManagementMenu {
             System.out.println("2 - Управління кафедрами");
             System.out.println("3 - Управління студентами");
             System.out.println("4 - Управління викладачами");
+            if (UserService.currentUser == User.UserRole.ADMIN)
+                System.out.println("5 - Управління користувачами");
             System.out.println("0 - Повернутись назад");
             String inputLine = scanner.nextLine();
             try {
@@ -38,6 +44,10 @@ public class ManagementMenu {
                         break;
                     case 4:
                         tcManagement.teacherManagement();
+                        break;
+                    case 5:
+                        usManagment.userManagement();
+                        break;
                     case 0:
                         status = false;
                         break;

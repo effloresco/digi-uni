@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class AuthMenu {
     protected final Scanner scanner = new Scanner(System.in);
-    protected final UserRepository userRepository = UserRepository.get(UserRepository.class);
+    private final UserRepository userRepository = UserRepository.get(UserRepository.class);
 
     static void main() {
         AuthMenu auth = new AuthMenu();
@@ -18,10 +18,10 @@ public class AuthMenu {
     public void auth() {
 //        UserService userManagement = new UserService();
         boolean status = true;
-        boolean startAgain = false;
+        boolean success = false;
         User targetUser = null;
+        System.out.println("\n*-Вхід в DigiUni:-*");
         while (status) {
-            System.out.println("\n*-Вхід в DigiUni:-*");
             System.out.println("Введіть ім'я користувача (для виходу введіть 0)");
             String username = scanner.nextLine();
             if (username.equals("0")) {
@@ -34,7 +34,6 @@ public class AuthMenu {
 
             if (results.isEmpty()) {
                 System.out.println("Неправильне ім'я користувача. Повторіть спробу");
-                startAgain = true;
             } else {
                 targetUser = results.get(0);
                 System.out.println("Введіть пароль (для виходу введіть 0)");
@@ -51,7 +50,17 @@ public class AuthMenu {
                 System.out.println("Успішний вхід! Вітаємо, " + targetUser.getUserName());
                 UserService.currentUser = targetUser.getRole();
                 status = false;
+                success = true;
             }
+        }
+        status = true;
+        while(status && !success){
+            System.out.println("Вийти з програми? y/n");
+            String answer = scanner.nextLine();
+            if (answer.equals("y"))
+                System.exit(0);
+            else if (answer.equals("n"))
+                status = false;
         }
     }
 }
