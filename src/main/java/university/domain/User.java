@@ -3,7 +3,7 @@ package university.domain;
 public class User implements Entity<Integer>{
     public enum UserRole {ADMIN, MANAGER, USER}
 
-    private static int currentId = 0;
+    private static int currentId = 1;
 
     private final int id;
     private String username;
@@ -14,6 +14,13 @@ public class User implements Entity<Integer>{
     public User(String username, String password, UserRole role) {
         this.id = currentId;
         currentId++;
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+
+    public User(String username, String password, UserRole role, int id) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.role = role;

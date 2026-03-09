@@ -46,14 +46,16 @@ public class UserMenu {
 
     }
 
-    protected User userGenerator() {
-        System.out.println("Введіть ім'я користувача");
+    protected User userGenerator(int id) {
+        System.out.println("Введіть ім'я користувача (для виходу введіть 0)");
         String username = scanner.nextLine();
-        System.out.println("Введіть пароль користувача");
+        if ("0".equals(username)) return null;
+        System.out.println("Введіть пароль користувача (для виходу введіть 0)");
         String password = scanner.nextLine();
+        if ("0".equals(password)) return null;
         User.UserRole role = null;
         while(role == null){
-            System.out.println("Оберіть роль користувача");
+            System.out.println("Оберіть роль користувача (для виходу введіть 0)");
             System.out.println("1 - Користувач");
             System.out.println("2 - Менеджер");
             System.out.println("3 - Адміністратор");
@@ -70,6 +72,8 @@ public class UserMenu {
                     case 3:
                         role = User.UserRole.ADMIN;
                         break;
+                    case 0:
+                        return null;
                     default:
                         System.out.println("Введіть коректне значення");
                 }
@@ -77,11 +81,15 @@ public class UserMenu {
                 System.out.println("Введіть коректне значення");
             }
         }
+        if(id != 0)
+            return new User(username, password, role, id);
         return new User(username, password, role);
     }
 
     protected void addUser() {
-        userService.createUser(userGenerator());
+        User user = userGenerator(0);
+        if (user == null) return;
+        userService.createUser(user);
     }
 
     protected void deleteUser() {
@@ -128,13 +136,16 @@ public class UserMenu {
 
                     if (optionalUser.isPresent()) {
                         found = true;
+                        userService.deleteUser(optionalUser.get());
+                        User user = userGenerator(Id);
+                        if (user == null) return;
+                        userService.createUser(user);
                     } else
                         System.out.println("Користувача з таким ID не знайдено.");
                 }
             }catch (NumberFormatException e) {
                 System.out.println("Введіть коректне значення");
             }
-
         }
     }
 }
