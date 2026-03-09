@@ -12,7 +12,7 @@ import static university.service.SearchService.scanner;
 public class DepartmentMenu {
     protected final DepartmentRepository departmentRepository = new DepartmentRepository();
     protected final DepartmentService departmentService = new DepartmentService(departmentRepository);
-    protected final TeacherRepository teacherRepository = TeacherRepository.get();
+    protected final TeacherRepository teacherRepository = TeacherRepository.get(TeacherRepository.class);
     protected Department department = new Department();
     boolean resume;
     Teacher dean = null;
