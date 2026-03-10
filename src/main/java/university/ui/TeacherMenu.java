@@ -17,7 +17,7 @@ public class TeacherMenu {
     protected final TeacherService teacherService = new TeacherService(teacherRepository);
     boolean resume;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-    int min = 100000000;
+    int min = 0;
     int max = 999999999;
     Random random = new Random();
     Integer randomNumber = random.nextInt(max - min + 1) + min;

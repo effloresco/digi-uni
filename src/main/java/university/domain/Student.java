@@ -4,7 +4,6 @@ import university.exceptions.InvalidValue;
 import static university.service.Utils.*;
 
 public class Student extends Person {
-
     public enum StudyForm {BUDGET, CONTRACT}
     public enum StudentStatus {STUDYING, ACADEMIC_LEAVE, EXPELLED}
 
@@ -16,10 +15,6 @@ public class Student extends Person {
     private StudentStatus status;
 
     public Student() {
-    }
-
-    public String getStudentId() {
-        return studentId;
     }
 
     public String getGroup() {
@@ -57,4 +52,19 @@ public class Student extends Person {
     public void setStudentStatus(StudentStatus status){
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "details=" + super.toString() + // Виклик toString() з Person
+                ", studentId='" + studentId + '\'' +
+                ", course=" + course +
+                ", group='" + group + '\'' +
+                ", enrollmentYear=" + enrollmentYear +
+                ", form=" + form +
+                ", status=" + status +
+                '}';
+    }
+
+
 }

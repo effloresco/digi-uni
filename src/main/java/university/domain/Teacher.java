@@ -64,4 +64,16 @@ public class Teacher extends Person {
         }
         this.rate = rate;
     }
+
+    @Override
+    public String toString() {
+        return "Teacher{" +
+                "details=" + super.toString() + // Виклик toString() з Person
+                ", position='" + position + '\'' +
+                ", degree='" + degree + '\'' +
+                ", title='" + title + '\'' +
+                ", hireDate=" + hireDate +
+                ", rate=" + rate +
+                '}';
+    }
 }
