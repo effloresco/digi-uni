@@ -21,11 +21,12 @@ public class RepositoryTest {
 
     @BeforeEach
     public void setupTest(){
-        teacher = new Teacher("TestTeacherID", "","","", LocalDate.now(), "","","","","",LocalDate.now(),1);
+        teacher = new Teacher();
         faculty1 = new Faculty("1", "", "", teacher, "");
         faculty2 = new Faculty("2", "", "", teacher, "");
         repo = new FacultyRepository();
     }
+
     @Test
     public void testFindByID(){
         repo.add(faculty1);
