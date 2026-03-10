@@ -46,10 +46,14 @@ public class UserMenu {
 
     }
 
-    protected User userGenerator(int id) {
+    protected User userGenerator(int id, String allowedUsername) {
         System.out.println("Введіть ім'я користувача (для виходу введіть 0)");
         String username = scanner.nextLine();
         if ("0".equals(username)) return null;
+        if (userRepository.checkUsername(username) && !username.equals(allowedUsername)) {
+            System.out.println("Це ім'я користувача вже використовується");
+            return null;
+        }
         System.out.println("Введіть пароль користувача (для виходу введіть 0)");
         String password = scanner.nextLine();
         if ("0".equals(password)) return null;
@@ -87,7 +91,7 @@ public class UserMenu {
     }
 
     protected void addUser() {
-        User user = userGenerator(0);
+        User user = userGenerator(0, "0");
         if (user == null) return;
         userService.createUser(user);
     }
@@ -128,17 +132,17 @@ public class UserMenu {
             System.out.println("Введіть ідентифікатор користувача, якого треба замінити (введіть 0 щоб повернутись назад)");
             userId = scanner.nextLine();
             try {
-                int Id = Integer.parseInt(userId);
-                if (Id == 0)
+                int id = Integer.parseInt(userId);
+                if (id == 0)
                     exit = true;
                 else{
-                    Optional<User> optionalUser = userRepository.findById(Id);
+                    Optional<User> optionalUser = userRepository.findById(id);
 
                     if (optionalUser.isPresent()) {
                         found = true;
-                        userService.deleteUser(optionalUser.get());
-                        User user = userGenerator(Id);
+                        User user = userGenerator(id, optionalUser.get().getUserName());
                         if (user == null) return;
+                        userService.deleteUser(optionalUser.get());
                         userService.createUser(user);
                     } else
                         System.out.println("Користувача з таким ID не знайдено.");
