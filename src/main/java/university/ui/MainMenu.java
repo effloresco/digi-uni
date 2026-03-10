@@ -1,4 +1,5 @@
 package university.ui;
+
 import university.domain.User;
 import university.repository.Repository;
 import university.repository.UserRepository;
@@ -6,16 +7,19 @@ import university.service.UserService;
 
 import static university.service.ReportService.*;
 import static university.service.SearchService.*;
+
 import java.util.Scanner;
 
 public class MainMenu {
     private final Scanner scanner = new Scanner(System.in);
     private final ManagementMenu management = new ManagementMenu();
     private final AuthMenu auth = new AuthMenu();
-
+    private final ReportsMenu reportsMenu = new ReportsMenu();
+    private final SearchMenu searchMenu = new SearchMenu();
     private static final UserRepository userRepository = UserRepository.get(UserRepository.class);
     private static final UserService userService = new UserService(userRepository);
-    static{
+
+    static {
         //adds default admin user
         userService.createUser(new User("admin", "12345678", User.UserRole.ADMIN));
     }
@@ -28,7 +32,7 @@ public class MainMenu {
 
     public void run() {
         while (true) {
-            while(UserService.currentUser == null){
+            while (UserService.currentUser == null) {
                 auth.auth();
             }
             System.out.println("\n*---DigiUni Registry---*");
@@ -46,10 +50,10 @@ public class MainMenu {
                         UserService.currentUser = null;
                         continue;
                     case 2:
-                        search();
+                        searchMenu.searchOptions();
                         break;
                     case 3:
-                        reports();
+                        reportsMenu.reports();
                         break;
                     case 4:
                         if (UserService.currentUser == User.UserRole.MANAGER || UserService.currentUser == User.UserRole.ADMIN)
@@ -66,44 +70,7 @@ public class MainMenu {
         }
     }
 
-    private void search() {
-        while (true) {
-            System.out.println("\n*-Пошук студентів-*");
-            System.out.println("1. Пошук за ПІБ");
-            System.out.println("2. Пошук за курсом");
-            System.out.println("3. Пошук за групою");
-            System.out.println("0. Вихід");
-            System.out.print("Виберіть опцію: ");
 
-            String choice = scanner.nextLine();
 
-            switch (choice) {
-                case "1" -> searchStudentByFullName();
-                case "2" -> searchByCourse();
-                case "3" -> searchByGroup();
-                case "0" -> System.exit(0);
-                default -> System.out.println("Невірний вибір!");
-            }
-        }
-    }
-
-    private void reports() {
-        while (true) {
-            System.out.println("\n*-Списки студентів-*");
-            System.out.println("1. За алфавітом");
-            System.out.println("2. За курсом");
-            System.out.println("0. Вихід");
-            System.out.print("Виберіть опцію: ");
-
-            String choice = scanner.nextLine();
-
-            switch (choice) {
-                case "1" -> printAllStudentsAlphabetically();
-                case "2" -> printAllStudentsByCourse();
-                case "0" -> System.exit(0);
-                default -> System.out.println("Невірний вибір!");
-            }
-        }
-    }
 
 }
