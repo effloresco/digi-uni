@@ -1,9 +1,9 @@
 package university.service;
 
-import university.domain.Faculty;
+
 import university.domain.User;
-import university.exceptions.FacultyAlreadyExistsException;
-import university.exceptions.FacultyNotFoundException;
+import university.exceptions.UserAlreadyExistsException;
+import university.exceptions.UserNotFoundException;
 import university.repository.Repository;
 
 import java.util.Optional;
@@ -17,33 +17,33 @@ public class UserService {
         this.userRepository = repository;
     }
 
-    public void createUser(User faculty){
-        Optional<User> testCopy = userRepository.findById(faculty.getID());
+    public void createUser(User user){
+        Optional<User> testCopy = userRepository.findById(user.getID());
         testCopy.ifPresent(
-                exists -> {throw new FacultyAlreadyExistsException("Не вдалось додати користувача з id " + faculty.getID() + " причина: користувач вже існує");}
+                exists -> {throw new UserAlreadyExistsException("Не вдалось додати користувача з id " + user.getID() + " причина: користувач вже існує");}
         );
-        userRepository.add(faculty);
+        userRepository.add(user);
     }
-    public void deleteUser(User faculty){
-        Optional<User> testCopy = userRepository.findById(faculty.getID());
+    public void deleteUser(User user){
+        Optional<User> testCopy = userRepository.findById(user.getID());
         testCopy.orElseThrow(
-                () -> new FacultyNotFoundException("Не вдалось видалити користувача з id " + faculty.getID() + " причина: не знайдено в репозиторії")
+                () -> new UserNotFoundException("Не вдалось видалити користувача з id " + user.getID() + " причина: не знайдено в репозиторії")
         );
-        userRepository.deleteByID(faculty.getID());
+        userRepository.deleteByID(user.getID());
     }
-    public void updateUser(int currentId, User faculty){
+    public void updateUser(int currentId, User user){
         Optional<User> testCopy = userRepository.findById(currentId);
         testCopy.orElseThrow(
-                () -> new FacultyNotFoundException("Не вдалось оновити користувача з id " + currentId + " причина: не знайдено в репозиторії")
+                () -> new UserNotFoundException("Не вдалось оновити користувача з id " + currentId + " причина: не знайдено в репозиторії")
         );
-        int newId = faculty.getID();
+        int newId = user.getID();
         if(currentId == newId){
             userRepository.findById(newId).ifPresent(
-                    exists -> {throw new FacultyAlreadyExistsException("Не вдалось оновити користувача з id " + currentId + " причина: користувач з id " + newId + " вже існує");}
+                    exists -> {throw new UserAlreadyExistsException("Не вдалось оновити користувача з id " + currentId + " причина: користувач з id " + newId + " вже існує");}
 
             );
         }
         userRepository.deleteByID(currentId);
-        userRepository.add(faculty);
+        userRepository.add(user);
     }
 }
