@@ -6,7 +6,8 @@ import static university.service.SearchService.*;
 public class ReportsMenu {
 
     protected void reports() {
-        while (true) {
+        boolean status = true;
+        while (status) {
             System.out.println("\n*-Списки-*");
             System.out.println("1. Список студентів");
             System.out.println("2. Список викладачів");
@@ -24,6 +25,7 @@ public class ReportsMenu {
                     reportTeacher();
                     break;
                 case 0:
+                    status = false;
                     break;
                 default:
                     System.out.println("Введіть коректне значення");
@@ -32,7 +34,8 @@ public class ReportsMenu {
     }
 
     private void reportStud() {
-        while (true) {
+        boolean status = true;
+        while (status) {
             System.out.println("\n*-Вивести список студентів-*");
             System.out.println("1. За алфавітом");
             System.out.println("2. За курсом");
@@ -49,6 +52,7 @@ public class ReportsMenu {
                     printAllStudentsByCourse();
                     break;
                 case 0:
+                    status = false;
                     break;
                 default:
                     System.out.println("Введіть коректне значення");
@@ -57,7 +61,8 @@ public class ReportsMenu {
     }
 
     private void reportTeacher() {
-        while (true) {
+        boolean status = true;
+        while (status) {
             System.out.println("\n*-Вивести список викладачів-*");
             System.out.println("1. За алфавітом");
             System.out.println("0. Вихід");
@@ -71,6 +76,7 @@ public class ReportsMenu {
                     printAllTeachersAlphabetically();
                     break;
                 case 0:
+                    status = false;
                     break;
                 default:
                     System.out.println("Введіть коректне значення");

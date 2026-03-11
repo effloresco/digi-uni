@@ -6,7 +6,8 @@ import static university.service.SearchService.searchStudentByGroup;
 public class SearchMenu {
 
     protected void searchOptions() {
-        while (true) {
+        boolean status = true;
+        while (status) {
             System.out.println("\n*-Пошук-*");
             System.out.println("1. Пошук студентів");
             System.out.println("2. Пошук викладачів");
@@ -23,6 +24,7 @@ public class SearchMenu {
                     searchTeacher();
                     break;
                 case 0:
+                    status = false;
                     break;
                 default:
                     System.out.println("Введіть коректне значення");
@@ -33,7 +35,8 @@ public class SearchMenu {
 
 
     private void searchStud() {
-        while (true) {
+        boolean status = true;
+        while (status) {
             System.out.println("\n*-Пошук студентів-*");
             System.out.println("1. Пошук за ПІБ");
             System.out.println("2. Пошук за курсом");
@@ -55,6 +58,7 @@ public class SearchMenu {
                     searchStudentByGroup();
                     break;
                 case 0:
+                    status = false;
                     break;
                 default:
                     System.out.println("Введіть коректне значення");
@@ -63,7 +67,8 @@ public class SearchMenu {
     }
 
     private void searchTeacher() {
-        while (true) {
+        boolean status = true;
+        while (status) {
             System.out.println("\n*-Пошук викладачів-*");
             System.out.println("1. Пошук за ПІБ");
             System.out.println("2. Пошук за курсом");
@@ -85,6 +90,7 @@ public class SearchMenu {
                     searchStudentByGroup();
                     break;
                 case 0:
+                    status = false;
                     break;
                 default:
                     System.out.println("Введіть коректне значення");
