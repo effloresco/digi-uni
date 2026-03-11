@@ -20,6 +20,7 @@ public class Person implements Entity<String>{
         if (containsNonDigit(id)) {
             throw new InvalidValue("ID може містити лише літери");
         }
+        this.id = id;
     }
 
     public String getLastName() {

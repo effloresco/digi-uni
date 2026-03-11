@@ -1,5 +1,7 @@
 package university.service;
 
+import java.util.Random;
+
 public final class Utils {
     public static boolean containsNonDigit(String s) {
         if (s == null) {
@@ -29,5 +31,12 @@ public final class Utils {
             }
         }
         return false;
+    }
+    public static int getRandomNumber(){
+        int min = 0;
+        int max = 999999999;
+        Random random = new Random();
+        Integer randomNumber = random.nextInt(max - min + 1) + min;
+    return randomNumber;
     }
 }

@@ -6,6 +6,8 @@ import university.repository.StudentRepository;
 import university.service.SearchService;
 import university.service.StudentService;
 import university.exceptions.*;
+import university.service.Utils;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -20,10 +22,6 @@ public class StudentMenu {
     protected final StudentService studentService = new StudentService(studentRepository);
     boolean resume;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-    int min = 0;
-    int max = 999999999;
-    Random random = new Random();
-    Integer randomNumber = random.nextInt(max - min + 1) + min;
 
     protected void studentManagement() {
         boolean status = true;
@@ -63,7 +61,7 @@ public class StudentMenu {
         Student student = new Student();
         do {
             try {
-                student.setId(String.valueOf(random.nextInt(max - min + 1) + min));
+                student.setId(String.valueOf(Utils.getRandomNumber()));
                 resume = true;
             } catch (InvalidValue e) {
                 System.out.println(e.getMessage());
