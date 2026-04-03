@@ -11,6 +11,8 @@ import university.service.Utils;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import static university.domain.Student.StudentStatus.*;
@@ -23,14 +25,48 @@ public class StudentMenu {
     boolean resume;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
+    private List<String> changeList = new ArrayList<>();
+
+    private final String opt0 = "0 - Вихід";
+    private final String opt1change = "1 - ID";
+    private final String opt2change = "2 - Ім'я";
+    private final String opt3change = "3 - Прізвище";
+    private final String opt4change = "4 - По батькові";
+    private final String opt5change = "5 - Дату народження";
+    private final String opt6change = "6 - Електронну пошту";
+    private final String opt7change = "7 - Номер телефону";
+    private final String opt8change = "8 - Ідентифікатор студента";
+    private final String opt9change = "9 - Курс";
+    private final String opt10change = "10 - Групу";
+    private final String opt11change = "11 - Рік вступу";
+    private final String opt12change = "12 - форму навчання";
+    private final String opt13change = "13 - Статус студента";
+
+    private List<String> studentStatuses = new ArrayList<>();
+    private final String opt1status = "1 - Вчиться";
+    private final String opt2status = "2 - У академічній відпустці";
+    private final String opt3status = "3 - Відрахований";
+
+    private List<String> studyForms = new ArrayList<>();
+    private final String opt1form = "1 - Бюджет";
+    private final String opt2form = "2 - Контракт";
+
+    private List<String> menuOptions = new ArrayList<>();
+    private final String opt1g = "1 - Додати студента";
+    private final String opt2g = "2 - Змінити інформацію про студента";
+    private final String opt3g = "3 - Видалити студента з бази даних";
+
     protected void studentManagement() {
         boolean status = true;
+        menuOptions.add(opt1g);
+        menuOptions.add(opt2g);
+        menuOptions.add(opt3g);
+        menuOptions.add(opt0);
         while (status) {
             System.out.println("\n*-Управління студентами-*");
-            System.out.println("1 - додати студента");
-            System.out.println("2 - змінити інформацію про студента");
-            System.out.println("3 - видалити студента з бази даних");
-            System.out.println("0 - повернутись назад");
+            for (String option : menuOptions) {
+                System.out.println(option);
+            }
             String inputLine = scanner.nextLine();
             try {
                 int input = Integer.parseInt(inputLine);
@@ -179,13 +215,16 @@ public class StudentMenu {
 
         } while (!resume);
 
+        studyForms.add(opt1form);
+        studyForms.add(opt2form);
+        studyForms.add(opt0);
 
         do {
             status = true;
             System.out.println("\n*-Оберіть форму навчання: -*");
-            System.out.println("1 - Бюджет");
-            System.out.println("2 - Контракт");
-            System.out.println("0 - Повернутись назад");
+            for (String option : studyForms) {
+                System.out.println(option);
+            }
             String inputLine = scanner.nextLine();
             try {
                 int input = Integer.parseInt(inputLine);
@@ -209,13 +248,16 @@ public class StudentMenu {
             }
         } while (status);
 
+        studentStatuses.add(opt1status);
+        studentStatuses.add(opt2status);
+        studentStatuses.add(opt3status);
+        studentStatuses.add(opt0);
         do {
             status = true;
             System.out.println("\n*-Оберіть статус студента: -*");
-            System.out.println("1 - Вчиться");
-            System.out.println("2 - У академічній відпустці");
-            System.out.println("3 - Відрахований");
-            System.out.println("0 - Повернутись назад");
+            for (String option : studentStatuses) {
+                System.out.println(option);
+            }
             String inputLine = scanner.nextLine();
             try {
                 int input = Integer.parseInt(inputLine);
@@ -277,22 +319,25 @@ public class StudentMenu {
                 found = true;
                 student = (Student) optionalStudent.get();
                 boolean status = true;
+                changeList.add(opt1change);
+                changeList.add(opt2change);
+                changeList.add(opt3change);
+                changeList.add(opt4change);
+                changeList.add(opt5change);
+                changeList.add(opt6change);
+                changeList.add(opt7change);
+                changeList.add(opt8change);
+                changeList.add(opt9change);
+                changeList.add(opt10change);
+                changeList.add(opt11change);
+                changeList.add(opt12change);
+                changeList.add(opt13change);
+                changeList.add(opt0);
                 while (status) {
                     System.out.println("\n*-Оберіть, що змінити-*");
-                    System.out.println("1 - ID");
-                    System.out.println("2 - Ім'я");
-                    System.out.println("3 - Прізвище");
-                    System.out.println("4 - По батькові");
-                    System.out.println("5 - Дату народження");
-                    System.out.println("6 - Електронну пошту");
-                    System.out.println("7 - Номер телефону");
-                    System.out.println("8 - Ідентифікатор студента");
-                    System.out.println("9 - Курс");
-                    System.out.println("10 - Групу");
-                    System.out.println("11 - Рік вступу");
-                    System.out.println("12 - форму навчання");
-                    System.out.println("13 - Статус студента");
-                    System.out.println("0 - повернутись назад");
+                    for (String option : changeList) {
+                        System.out.println(option);
+                    }
                     String inputLine = scanner.nextLine();
                     try {
                         int input = Integer.parseInt(inputLine);
@@ -428,9 +473,9 @@ public class StudentMenu {
                                         do {
                                             status = true;
                                             System.out.println("\n*-Оберіть форму навчання: -*");
-                                            System.out.println("1 - Бюджет");
-                                            System.out.println("2 - Контракт");
-                                            System.out.println("0 - Повернутись назад");
+                                            for (String option : studyForms) {
+                                                System.out.println(option);
+                                            }
                                             String inputLocalLine = scanner.nextLine();
                                             try {
                                                 int inputLocal = Integer.parseInt(inputLocalLine);
@@ -455,10 +500,9 @@ public class StudentMenu {
                             case 13:
                                 do {
                                     System.out.println("\n*-Оберіть статус студента: -*");
-                                    System.out.println("1 - Вчиться");
-                                    System.out.println("2 - У академічній відпустці");
-                                    System.out.println("3 - Відрахований");
-                                    System.out.println("0 - Повернутись назад");
+                                    for (String option : studentStatuses) {
+                                        System.out.println(option);
+                                    }
                                     String inputLocalLine = scanner.nextLine();
                                     try {
                                         int inputLocal = Integer.parseInt(inputLocalLine);

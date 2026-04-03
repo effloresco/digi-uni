@@ -9,6 +9,8 @@ import university.service.FacultyService;
 
 import static university.service.SearchService.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class FacultyMenu {
@@ -16,14 +18,25 @@ public class FacultyMenu {
     protected final FacultyService facultyService = new FacultyService(facultyRepository);
     protected final TeacherRepository teacherRepository = TeacherRepository.get(TeacherRepository.class);
 
+    private final String opt1 = "1 - Додати факультет";
+    private final String opt2 = "2 - Змінити інформацію про факультет";
+    private final String opt3 = "3 - Видалити факультет з бази даних";
+    private final String opt0 = "0 - Повернутись назад";
+
+    private List<String> menuOptions = new ArrayList<>();
+
     protected void facultyManaging() {
         boolean status = true;
+        menuOptions.add(opt1);
+        menuOptions.add(opt2);
+        menuOptions.add(opt3);
+        menuOptions.add(opt0);
         while (status) {
             System.out.println("\n*-Управління факультетами-*");
-            System.out.println("1 - Додати факультет");
-            System.out.println("2 - Змінити факультет");
-            System.out.println("3 - Видалити факультет");
-            System.out.println("0 - Повернутись назад");
+            for (String option : menuOptions) {
+                System.out.println(option);
+            }
+
             String inputLine = scanner.nextLine();
             try {
                 int input = Integer.parseInt(inputLine);
@@ -63,14 +76,14 @@ public class FacultyMenu {
         return new Faculty(code, name, shortName, dean, contacts);
     }
 
-    protected Teacher receiveDean(){
+    protected Teacher receiveDean() {
         Teacher dean = null;
         boolean found = false;
         while (!found) {
             System.out.println("Введіть ідентифікатор декана(залиште поле пустим, щоб додати пізніше)");
             String teacherId = scanner.nextLine();
 
-            if(!teacherId.isEmpty()){
+            if (!teacherId.isEmpty()) {
                 Optional<Teacher> optionalPerson = teacherRepository.findById(teacherId);
 
                 if (optionalPerson.isPresent()) {
@@ -79,7 +92,7 @@ public class FacultyMenu {
                 } else {
                     System.out.println("Особу з таким ID не знайдено.");
                 }
-            }else found = true;
+            } else found = true;
         }
         return dean;
     }
@@ -98,7 +111,7 @@ public class FacultyMenu {
 
             if (facultyId.equals("0"))
                 exit = true;
-            else{
+            else {
                 Optional<Faculty> optionalFaculty = facultyRepository.findById(facultyId);
 
                 if (optionalFaculty.isPresent()) {
@@ -122,7 +135,7 @@ public class FacultyMenu {
 
             if (facultyId.equals("0"))
                 exit = true;
-            else{
+            else {
                 Optional<Faculty> optionalFaculty = facultyRepository.findById(facultyId);
 
                 if (optionalFaculty.isPresent()) {
@@ -132,7 +145,7 @@ public class FacultyMenu {
             }
         }
         if (!exit)
-            if (facultyRepository.findById(facultyId).get().getDean() == null){
+            if (facultyRepository.findById(facultyId).get().getDean() == null) {
                 System.out.println("Додати лише декана? y/n");
                 String choice = scanner.nextLine();
                 switch (choice) {

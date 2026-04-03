@@ -3,7 +3,9 @@ package university.domain;
 import university.exceptions.InvalidValue;
 import university.repository.FacultyRepository;
 import university.repository.TeacherRepository;
+
 import java.util.Optional;
+
 import static university.service.Utils.*;
 
 public class Department implements Entity<String> {
@@ -73,8 +75,9 @@ public class Department implements Entity<String> {
         return location;
     }
 
-    public void setLocation(String location){
-
+    public void setLocation(String location) throws InvalidValue {
+        if (location.isEmpty()) throw new InvalidValue("Поле не може бути порожнім");
+        this.location = location;
     }
 
     @Override

@@ -4,6 +4,8 @@ import university.domain.User;
 import university.repository.UserRepository;
 import university.service.UserService;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static university.service.SearchService.scanner;
@@ -12,14 +14,29 @@ public class UserMenu {
     protected final UserRepository userRepository = UserRepository.get(UserRepository.class);
     protected final UserService userService = new UserService(userRepository);
 
+    private List<String> roleList = new ArrayList<>();
+
+    private final String opt0 = "0 - Вихід";
+    private final String opt1role = "1 - Користувач";
+    private final String opt2role = "2 - Менеджер";
+    private final String opt3role = "3 - Адміністратор";
+
+    private List<String> menuOptions = new ArrayList<>();
+    private final String opt1g = "1 - Додати користувача";
+    private final String opt2g = "2 - Змінити користувача";
+    private final String opt3g = "3 - Видалити користувача";
+
     protected void userManagement() {
         boolean status = true;
+        menuOptions.add(opt1g);
+        menuOptions.add(opt2g);
+        menuOptions.add(opt3g);
+        menuOptions.add(opt0);
         while (status) {
             System.out.println("\n*-Управління користувачами-*");
-            System.out.println("1 - Додати користувача");
-            System.out.println("2 - Змінити користувача");
-            System.out.println("3 - Видалити користувача");
-            System.out.println("0 - Повернутись назад");
+            for (String option : menuOptions) {
+                System.out.println(option);
+            }
             String inputLine = scanner.nextLine();
             try {
                 int input = Integer.parseInt(inputLine);
@@ -58,11 +75,17 @@ public class UserMenu {
         String password = scanner.nextLine();
         if ("0".equals(password)) return null;
         User.UserRole role = null;
+
+        roleList.add(opt1role);
+        roleList.add(opt2role);
+        roleList.add(opt3role);
+        roleList.add(opt0);
+
         while(role == null){
-            System.out.println("Оберіть роль користувача (для виходу введіть 0)");
-            System.out.println("1 - Користувач");
-            System.out.println("2 - Менеджер");
-            System.out.println("3 - Адміністратор");
+            System.out.println("Оберіть роль користувача");
+            for (String option : menuOptions) {
+                System.out.println(option);
+            }
             String inputLine = scanner.nextLine();
             try {
                 int input = Integer.parseInt(inputLine);

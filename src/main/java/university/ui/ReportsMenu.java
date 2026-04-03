@@ -1,17 +1,38 @@
 package university.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static university.service.ReportService.*;
 import static university.service.SearchService.*;
 
 public class ReportsMenu {
 
+    private List<String> menuOptions = new ArrayList<>();
+    private final String opt1g = "1 - Список студентів";
+    private final String opt2g = "2 - Список викладачів";
+    private final String opt0 = "0 - Вихід";
+
+    private List<String> studentOptions = new ArrayList<>();
+    private final String opt1s = "1. За алфавітом";
+    private final String opt2s = "2. За курсом";
+
+
+    private List<String> teacherOptions = new ArrayList<>();
+    private final String opt1t = "1. За алфавітом";
+
     protected void reports() {
         boolean status = true;
+        menuOptions.add(opt1g);
+        menuOptions.add(opt2g);
+        menuOptions.add(opt0);
+
         while (status) {
             System.out.println("\n*-Списки-*");
-            System.out.println("1. Список студентів");
-            System.out.println("2. Список викладачів");
-            System.out.println("0. Вихід");
+            for (String option : menuOptions) {
+                System.out.println(option);
+            }
+
             System.out.print("Виберіть опцію: ");
 
             String choice = scanner.nextLine();
@@ -35,12 +56,17 @@ public class ReportsMenu {
 
     private void reportStud() {
         boolean status = true;
+        studentOptions.add(opt1s);
+        studentOptions.add(opt2s);
+        studentOptions.add(opt0);
         while (status) {
             System.out.println("\n*-Вивести список студентів-*");
-            System.out.println("1. За алфавітом");
-            System.out.println("2. За курсом");
-            System.out.println("0. Вихід");
+            for (String option : studentOptions) {
+                System.out.println(option);
+            }
+
             System.out.print("Виберіть опцію: ");
+
 
             String choice = scanner.nextLine();
             int input = Integer.parseInt(choice);
@@ -62,10 +88,13 @@ public class ReportsMenu {
 
     private void reportTeacher() {
         boolean status = true;
+        teacherOptions.add(opt1t);
+        teacherOptions.add(opt0);
         while (status) {
             System.out.println("\n*-Вивести список викладачів-*");
-            System.out.println("1. За алфавітом");
-            System.out.println("0. Вихід");
+            for (String option : teacherOptions) {
+                System.out.println(option);
+            }
             System.out.print("Виберіть опцію: ");
 
             String choice = scanner.nextLine();

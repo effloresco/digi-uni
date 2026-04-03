@@ -6,6 +6,8 @@ import university.service.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import university.exceptions.*;
@@ -18,15 +20,38 @@ public class TeacherMenu {
     boolean resume;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
+    private List<String> changeList = new ArrayList<>();
+
+    private final String opt0 = "0 - Вихід";
+    private final String opt1change = "1 - ID";
+    private final String opt2change = "2 - Ім'я";
+    private final String opt3change = "3 - Прізвище";
+    private final String opt4change = "4 - По батькові";
+    private final String opt5change = "5 - Дату народження";
+    private final String opt6change = "6 - Електронну пошту";
+    private final String opt7change = "7 - Номер телефону";
+    private final String opt8change = "8 - Посаду";
+    private final String opt9change = "9 - Науковий ступінь";
+    private final String opt10change = "10 - Вчене звання";
+    private final String opt11change = "11 - Дату влаштування на роботу";
+    private final String opt12change = "12 - Ставку";
+
+    private List<String> menuOptions = new ArrayList<>();
+    private final String opt1g = "1 - Додати викладача";
+    private final String opt2g = "2 - Змінити інформацію про викладача";
+    private final String opt3g = "3 - Видалити викладача з бази даних";
 
     protected void teacherManagement() {
         boolean status = true;
+        menuOptions.add(opt1g);
+        menuOptions.add(opt2g);
+        menuOptions.add(opt3g);
+        menuOptions.add(opt0);
         while (status) {
             System.out.println("\n*-Управління викладачами-*");
-            System.out.println("1 - додати викладача");
-            System.out.println("2 - змінити інформацію про викладача");
-            System.out.println("3 - видалити викладача з бази даних");
-            System.out.println("0 - повернутись назад");
+            for (String option : menuOptions) {
+                System.out.println(option);
+            }
             String inputLine = scanner.nextLine();
             try {
                 int input = Integer.parseInt(inputLine);
@@ -230,21 +255,24 @@ public class TeacherMenu {
                 found = true;
                 teacher = (Teacher) optionalTeacher.get();
                 boolean status = true;
+                changeList.add(opt1change);
+                changeList.add(opt2change);
+                changeList.add(opt3change);
+                changeList.add(opt4change);
+                changeList.add(opt5change);
+                changeList.add(opt6change);
+                changeList.add(opt7change);
+                changeList.add(opt8change);
+                changeList.add(opt9change);
+                changeList.add(opt10change);
+                changeList.add(opt11change);
+                changeList.add(opt12change);
+                changeList.add(opt0);
                 while (status) {
                     System.out.println("\n*-Оберіть, що змінити-*");
-                    System.out.println("1 - ID");
-                    System.out.println("2 - Ім'я");
-                    System.out.println("3 - Прізвище");
-                    System.out.println("4 - По батькові");
-                    System.out.println("5 - Дату народження");
-                    System.out.println("6 - Електронну пошту");
-                    System.out.println("7 - Номер телефону");
-                    System.out.println("8 - Посаду");
-                    System.out.println("9 - Науковий ступінь");
-                    System.out.println("10 - Вчене звання");
-                    System.out.println("11 - Дату влаштування на роботу");
-                    System.out.println("12 - Ставку");
-                    System.out.println("0 - повернутись назад");
+                    for (String option : menuOptions) {
+                        System.out.println(option);
+                    }
                     String inputLine = scanner.nextLine();
                     try {
                         int input = Integer.parseInt(inputLine);
