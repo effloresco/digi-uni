@@ -1,17 +1,20 @@
 package university.domain;
 
 import university.exceptions.InvalidValue;
+
 import java.time.LocalDate;
+
 import static university.service.Utils.*;
 
-public class Teacher extends Person {
+public non-sealed class Teacher extends Person {
     private String position;
     private String degree;
     private String title;
     private LocalDate hireDate;
     private double rate;
 
-    public Teacher(){};
+    public Teacher() {
+    }
 
     public String getPosition() {
         return position;
@@ -50,7 +53,10 @@ public class Teacher extends Person {
         return hireDate;
     }
 
-    public void setHireDate(LocalDate hireDate) {
+    public void setHireDate(LocalDate hireDate) throws InvalidValue {
+        if (hireDate.toString().isEmpty()) {
+            throw new InvalidValue("Поле не може бути порожнім");
+        }
         this.hireDate = hireDate;
     }
 
@@ -67,13 +73,6 @@ public class Teacher extends Person {
 
     @Override
     public String toString() {
-        return "Teacher{" +
-                "details=" + super.toString() + // Виклик toString() з Person
-                ", position='" + position + '\'' +
-                ", degree='" + degree + '\'' +
-                ", title='" + title + '\'' +
-                ", hireDate=" + hireDate +
-                ", rate=" + rate +
-                '}';
+        return "Teacher{" + "details=" + super.toString() + ", position='" + position + '\'' + ", degree='" + degree + '\'' + ", title='" + title + '\'' + ", hireDate=" + hireDate + ", rate=" + rate + '}';
     }
 }

@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import static university.service.Utils.*;
 import university.exceptions.*;
 
-public class Person implements Entity<String>{
+public sealed class Person implements Entity<String> permits Student, Teacher {
     private String id;
     private String lastName;
     private String firstName;
@@ -14,11 +14,12 @@ public class Person implements Entity<String>{
     private String email;
     private String phone;
 
-    public Person(){};
+    public Person() {
+    }
 
-    public void setId(String id) throws InvalidValue{
+    public void setId(String id) throws InvalidValue {
         if (containsNonDigit(id)) {
-            throw new InvalidValue("ID може містити лише літери");
+            throw new InvalidValue("ID може містити лише цифри");
         }
         this.id = id;
     }
@@ -27,8 +28,8 @@ public class Person implements Entity<String>{
         return lastName;
     }
 
-    public void setLastName(String lastName) throws InvalidValue{
-        if(containsNonLetter(lastName)){
+    public void setLastName(String lastName) throws InvalidValue {
+        if (containsNonLetter(lastName)) {
             throw new InvalidValue("Прізвище може містити лише літери");
         }
         this.lastName = lastName;
@@ -38,8 +39,8 @@ public class Person implements Entity<String>{
         return firstName;
     }
 
-    public void setFirstName(String firstName) throws InvalidValue{
-        if(containsNonLetter(firstName)){
+    public void setFirstName(String firstName) throws InvalidValue {
+        if (containsNonLetter(firstName)) {
             throw new InvalidValue("Ім'я може містити лише літери");
         }
         this.firstName = firstName;
@@ -49,8 +50,8 @@ public class Person implements Entity<String>{
         return middleName;
     }
 
-    public void setMiddleName(String middleName) throws InvalidValue{
-        if(containsNonLetter(middleName)){
+    public void setMiddleName(String middleName) throws InvalidValue {
+        if (containsNonLetter(middleName)) {
             throw new InvalidValue("По батькові може містити лише літери");
         }
         this.middleName = middleName;
@@ -68,7 +69,7 @@ public class Person implements Entity<String>{
         return email;
     }
 
-    public void setEmail(String email) throws InvalidValue{
+    public void setEmail(String email) throws InvalidValue {
         if (!email.contains("@") || !email.contains(".")) {
             throw new InvalidValue("Електронна пошта має містити '@' та '.'");
         }
@@ -79,7 +80,7 @@ public class Person implements Entity<String>{
         return phone;
     }
 
-    public void setPhone(String phone) throws InvalidValue{
+    public void setPhone(String phone) throws InvalidValue {
 
         if (containsNonDigit(phone) || phone.length() > 12 || phone.length() < 10) {
             throw new InvalidValue("Потрібно вказати дійсний номер телефону");
@@ -98,16 +99,9 @@ public class Person implements Entity<String>{
 
     @Override
     public String toString() {
-        return "Person{" +
-                "id='" + id + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", middleName='" + middleName + '\'' +
-                ", birthDate=" + birthDate +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                '}';
+        return "Person{" + "id='" + id + '\'' + ", lastName='" + lastName + '\'' + ", firstName='" + firstName + '\'' + ", middleName='" + middleName + '\'' + ", birthDate=" + birthDate + ", email='" + email + '\'' + ", phone='" + phone + '\'' + '}';
     }
+
 }
 
 
