@@ -18,8 +18,8 @@ public class FacultyService{
     public void createFaculty(Faculty faculty){
         Optional<Faculty> testCopy = facultyRepository.findById(faculty.getID());
         testCopy.ifPresent(
-                exists -> {throw new FacultyAlreadyExistsException("Не вдалось додати факультет з id " + faculty.getID() + " причина: факультет вже існує");}
-        );
+                exists -> {throw new FacultyAlreadyExistsException("Не вдалось додати факультет з id " + faculty.getID() + " причина: факультет вже існує"
+        );});
         facultyRepository.add(faculty);
     }
     public void deleteFaculty(Faculty faculty){
