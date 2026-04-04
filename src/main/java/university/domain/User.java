@@ -1,15 +1,13 @@
 package university.domain;
 
-public class User implements Entity<Integer>{
+public class User implements Entity<Integer> {
     public enum UserRole {ADMIN, MANAGER, USER}
 
     private static int currentId = 1;
-
     private final int id;
     private String username;
     private String password;
     private UserRole role;
-
 
     public User(String username, String password, UserRole role) {
         this.id = currentId;

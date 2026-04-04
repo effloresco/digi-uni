@@ -4,7 +4,6 @@ import university.domain.User;
 import university.repository.UserRepository;
 import university.service.UserService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,29 +13,15 @@ public class UserMenu {
     protected final UserRepository userRepository = UserRepository.get(UserRepository.class);
     protected final UserService userService = new UserService(userRepository);
 
-    private List<String> roleList = new ArrayList<>();
-
     private final String opt0 = "0 - Вихід";
-    private final String opt1role = "1 - Користувач";
-    private final String opt2role = "2 - Менеджер";
-    private final String opt3role = "3 - Адміністратор";
-
-    private List<String> menuOptions = new ArrayList<>();
-    private final String opt1g = "1 - Додати користувача";
-    private final String opt2g = "2 - Змінити користувача";
-    private final String opt3g = "3 - Видалити користувача";
+    private final List<String> roleOptions = List.of("1 - Користувач", "2 - Менеджер", "3 - Адміністратор", opt0);
+    private final List<String> menuOptions = List.of("1 - Додати користувача", "2 - Змінити користувача", "3 - Видалити користувача", opt0);
 
     protected void userManagement() {
         boolean status = true;
-        menuOptions.add(opt1g);
-        menuOptions.add(opt2g);
-        menuOptions.add(opt3g);
-        menuOptions.add(opt0);
         while (status) {
             System.out.println("\n*-Управління користувачами-*");
-            for (String option : menuOptions) {
-                System.out.println(option);
-            }
+            menuOptions.forEach(System.out::println);
             String inputLine = scanner.nextLine();
             try {
                 int input = Integer.parseInt(inputLine);
@@ -60,7 +45,6 @@ public class UserMenu {
                 System.out.println("Введіть коректне значення");
             }
         }
-
     }
 
     protected User userGenerator(int id, String allowedUsername) {
@@ -76,17 +60,11 @@ public class UserMenu {
         if ("0".equals(password)) return null;
         User.UserRole role = null;
 
-        roleList.add(opt1role);
-        roleList.add(opt2role);
-        roleList.add(opt3role);
-        roleList.add(opt0);
-
-        while(role == null){
+        while (role == null) {
             System.out.println("Оберіть роль користувача");
-            for (String option : menuOptions) {
-                System.out.println(option);
-            }
+            roleOptions.forEach(System.out::println);
             String inputLine = scanner.nextLine();
+
             try {
                 int input = Integer.parseInt(inputLine);
                 switch (input) {
@@ -108,8 +86,7 @@ public class UserMenu {
                 System.out.println("Введіть коректне значення");
             }
         }
-        if(id != 0)
-            return new User(username, password, role, id);
+        if (id != 0) return new User(username, password, role, id);
         return new User(username, password, role);
     }
 
@@ -128,37 +105,33 @@ public class UserMenu {
             String input = scanner.nextLine();
             try {
                 int userId = Integer.parseInt(input);
-                if (userId == 0)
-                    exit = true;
-                else{
+                if (userId == 0) exit = true;
+                else {
                     Optional<User> optionalUser = userRepository.findById(userId);
 
                     if (optionalUser.isPresent()) {
                         user = optionalUser.get();
                         found = true;
-                    } else
-                        System.out.println("Користувача з таким ID не знайдено.");
+                    } else System.out.println("Користувача з таким ID не знайдено.");
                 }
-            }catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 System.out.println("Введіть коректне значення");
             }
         }
-        if (!exit)
-            userService.deleteUser(user);
+        if (!exit) userService.deleteUser(user);
     }
 
     protected void changeUser() {
         boolean found = false;
         boolean exit = false;
-        String userId = null;
+        String userId;
         while (!found && !exit) {
             System.out.println("Введіть ідентифікатор користувача, якого треба замінити (введіть 0 щоб повернутись назад)");
             userId = scanner.nextLine();
             try {
                 int id = Integer.parseInt(userId);
-                if (id == 0)
-                    exit = true;
-                else{
+                if (id == 0) exit = true;
+                else {
                     Optional<User> optionalUser = userRepository.findById(id);
 
                     if (optionalUser.isPresent()) {
@@ -167,10 +140,9 @@ public class UserMenu {
                         if (user == null) return;
                         userService.deleteUser(optionalUser.get());
                         userService.createUser(user);
-                    } else
-                        System.out.println("Користувача з таким ID не знайдено.");
+                    } else System.out.println("Користувача з таким ID не знайдено.");
                 }
-            }catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 System.out.println("Введіть коректне значення");
             }
         }

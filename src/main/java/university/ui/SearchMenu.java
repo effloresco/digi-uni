@@ -1,6 +1,5 @@
 package university.ui;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static university.service.SearchService.*;
@@ -8,32 +7,20 @@ import static university.service.SearchService.searchStudentByGroup;
 
 public class SearchMenu {
 
-    private List<String> menuOptions = new ArrayList<>();
-    private final String opt1g = "1 - Пошук студентів";
-    private final String opt2g = "2 - Пошук викладачів";
     private final String opt0 = "0 - Вихід";
 
-    private List<String> studentOptions = new ArrayList<>();
-    private final String opt1s = "1. Пошук за ПІБ";
-    private final String opt2s = "2. Пошук за курсом";
-    private final String opt3s = "3. Пошук за групою";
+    private final List<String> menuOptions = List.of("1 - Пошук студентів", "2 - Пошук викладачів", opt0);
 
+    private final List<String> studentOptions = List.of("1. Пошук за ПІБ", "2. Пошук за курсом", "3. Пошук за групою", opt0);
 
-    private List<String> teacherOptions = new ArrayList<>();
-    private final String opt1t = "1. Пошук за ПІБ";
-    private final String opt2t = "2. Пошук за курсом";
-    private final String opt3t = "3. Пошук за групою";
+    private final List<String> teacherOptions = List.of("1. Пошук за ПІБ", "2. Пошук за курсом", "3. Пошук за групою", opt0);
+
 
     protected void searchOptions() {
         boolean status = true;
-        menuOptions.add(opt1g);
-        menuOptions.add(opt2g);
-        menuOptions.add(opt0);
         while (status) {
             System.out.println("\n*-Пошук-*");
-            for (String option : menuOptions) {
-                System.out.println(option);
-            }
+            menuOptions.forEach(System.out::println);
             System.out.print("Виберіть опцію: ");
 
             String choice = scanner.nextLine();
@@ -58,15 +45,9 @@ public class SearchMenu {
 
     private void searchStud() {
         boolean status = true;
-        studentOptions.add(opt1s);
-        studentOptions.add(opt2s);
-        studentOptions.add(opt3s);
-        studentOptions.add(opt0);
         while (status) {
             System.out.println("\n*-Пошук студентів-*");
-            for (String option : studentOptions) {
-                System.out.println(option);
-            }
+            studentOptions.forEach(System.out::println);
 
             System.out.print("Виберіть опцію: ");
 
@@ -94,15 +75,9 @@ public class SearchMenu {
 
     private void searchTeacher() {
         boolean status = true;
-        teacherOptions.add(opt1t);
-        teacherOptions.add(opt2t);
-        teacherOptions.add(opt3t);
-        teacherOptions.add(opt0);
         while (status) {
             System.out.println("\n*-Пошук викладачів-*");
-            for (String option : teacherOptions) {
-                System.out.println(option);
-            }
+            teacherOptions.forEach(System.out::println);
             System.out.print("Виберіть опцію: ");
 
             String choice = scanner.nextLine();

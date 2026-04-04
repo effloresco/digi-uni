@@ -3,14 +3,15 @@ package university.ui;
 import university.domain.*;
 import university.repository.TeacherRepository;
 import university.service.*;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
+
 import university.exceptions.*;
+
 import static university.service.SearchService.*;
 
 public class TeacherMenu {
@@ -20,38 +21,16 @@ public class TeacherMenu {
     boolean resume;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
-    private List<String> changeList = new ArrayList<>();
-
     private final String opt0 = "0 - Вихід";
-    private final String opt1change = "1 - ID";
-    private final String opt2change = "2 - Ім'я";
-    private final String opt3change = "3 - Прізвище";
-    private final String opt4change = "4 - По батькові";
-    private final String opt5change = "5 - Дату народження";
-    private final String opt6change = "6 - Електронну пошту";
-    private final String opt7change = "7 - Номер телефону";
-    private final String opt8change = "8 - Посаду";
-    private final String opt9change = "9 - Науковий ступінь";
-    private final String opt10change = "10 - Вчене звання";
-    private final String opt11change = "11 - Дату влаштування на роботу";
-    private final String opt12change = "12 - Ставку";
-
-    private List<String> menuOptions = new ArrayList<>();
-    private final String opt1g = "1 - Додати викладача";
-    private final String opt2g = "2 - Змінити інформацію про викладача";
-    private final String opt3g = "3 - Видалити викладача з бази даних";
+    private List<String> changeList = List.of("1 - ID", "2 - Ім'я", "3 - Прізвище", "4 - По батькові", "5 - Дату народження", "6 - Електронну пошту", "7 - Номер телефону", "8 - Посаду", "9 - Науковий ступінь", "10 - Вчене звання", "11 - Дату влаштування на роботу", "12 - Ставку", opt0);
+    private List<String> menuOptions = List.of("1 - Додати викладача", "2 - Змінити інформацію про викладача", "3 - Видалити викладача з бази даних", opt0);
 
     protected void teacherManagement() {
         boolean status = true;
-        menuOptions.add(opt1g);
-        menuOptions.add(opt2g);
-        menuOptions.add(opt3g);
-        menuOptions.add(opt0);
         while (status) {
             System.out.println("\n*-Управління викладачами-*");
-            for (String option : menuOptions) {
-                System.out.println(option);
-            }
+            menuOptions.forEach(System.out::println);
+
             String inputLine = scanner.nextLine();
             try {
                 int input = Integer.parseInt(inputLine);
@@ -89,7 +68,7 @@ public class TeacherMenu {
                 resume = false;
             }
         } while (!resume);
-        System.out.println("Ідентифікатор викладача: "+ teacher.getID());
+        System.out.println("Ідентифікатор викладача: " + teacher.getID());
 
         System.out.println("Введіть ім'я");
         do {
@@ -100,7 +79,6 @@ public class TeacherMenu {
                 System.out.println(e.getMessage());
                 resume = false;
             }
-
         } while (!resume);
 
         System.out.println("Введіть прізвище");
@@ -125,7 +103,6 @@ public class TeacherMenu {
             }
         } while (!resume);
 
-
         System.out.println("Введіть дату народження викладача");
         do {
             try {
@@ -135,10 +112,7 @@ public class TeacherMenu {
                 System.out.println("Введіть коректну дату");
                 resume = false;
             }
-
         } while (!resume);
-
-
 
         System.out.println("Введіть електронну пошту");
         do {
@@ -162,7 +136,6 @@ public class TeacherMenu {
             }
         } while (!resume);
 
-
         System.out.println("Введіть посаду");
         do {
             try {
@@ -173,7 +146,6 @@ public class TeacherMenu {
                 resume = false;
             }
         } while (!resume);
-
 
         System.out.println("Введіть  науковий ступінь");
         do {
@@ -197,7 +169,6 @@ public class TeacherMenu {
             }
         } while (!resume);
 
-
         System.out.println("Введіть дату влаштування на роботу");
         do {
             try {
@@ -207,7 +178,6 @@ public class TeacherMenu {
                 System.out.println("Введіть коректну дату");
                 resume = false;
             }
-
         } while (!resume);
 
         System.out.println("Введіть ставку");
@@ -220,32 +190,33 @@ public class TeacherMenu {
                 resume = false;
             }
         } while (!resume);
-        System.out.println("Викладача "+teacher.getFullName()+" створено");
+        System.out.println("Викладача " + teacher.getFullName() + " створено");
         return teacher;
     }
-
 
     protected void deleteTeacher() {
         boolean found = false;
         Teacher teacher = null;
         while (!found) {
             System.out.println("Введіть ідентифікатор вчителя, якого треба видалити");
-            String teachertId = scanner.nextLine();
+            String teacherId = scanner.nextLine();
 
-            Optional<Teacher> optionalTeacher = teacherRepository.findById(teachertId);
+            Optional<Teacher> optionalTeacher = teacherRepository.findById(teacherId);
             if (optionalTeacher.isPresent()) {
-                teacher = (Teacher) optionalTeacher.get();
+                teacher = optionalTeacher.get();
                 found = true;
-            } else{ System.out.println("Викладача з таким ID не знайдено.");
-            break;}
+            } else {
+                System.out.println("Викладача з таким ID не знайдено.");
+                break;
+            }
         }
         teacherService.deleteTeacher(teacher);
     }
 
     protected void changeTeacher() {
         boolean found = false;
-        String teachertId = null;
-        Teacher teacher = null;
+        String teachertId;
+        Teacher teacher;
         while (!found) {
             System.out.println("Введіть ідентифікатор викладача, що треба замінити");
             teachertId = scanner.nextLine();
@@ -253,21 +224,10 @@ public class TeacherMenu {
 
             if (optionalTeacher.isPresent()) {
                 found = true;
-                teacher = (Teacher) optionalTeacher.get();
+                teacher = optionalTeacher.get();
                 boolean status = true;
-                changeList.add(opt1change);
-                changeList.add(opt2change);
-                changeList.add(opt3change);
-                changeList.add(opt4change);
-                changeList.add(opt5change);
-                changeList.add(opt6change);
-                changeList.add(opt7change);
-                changeList.add(opt8change);
-                changeList.add(opt9change);
-                changeList.add(opt10change);
-                changeList.add(opt11change);
-                changeList.add(opt12change);
-                changeList.add(opt0);
+                changeList.forEach(System.out::println);
+
                 while (status) {
                     System.out.println("\n*-Оберіть, що змінити-*");
                     for (String option : menuOptions) {
@@ -299,7 +259,6 @@ public class TeacherMenu {
                                         System.out.println(e.getMessage());
                                         resume = false;
                                     }
-
                                 } while (!resume);
                                 break;
                             case 3:
@@ -408,7 +367,6 @@ public class TeacherMenu {
                                         System.out.println("Введіть коректну дату");
                                         resume = false;
                                     }
-
                                 } while (!resume);
                                 break;
                             case 12:

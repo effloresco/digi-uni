@@ -3,7 +3,6 @@ package university.ui;
 import university.domain.User;
 import university.service.UserService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -14,12 +13,10 @@ public class ManagementMenu {
         ManagementMenu management = new ManagementMenu();
     }
 
-    private final String opt1 = "1 - Управління факультетами";
-    private final String opt2  = "2 - Управління кафедрами";
-    private final String opt3  = "3 - Управління студентами";
-    private final String opt4  = "4 - Управління викладачами";
+    private final String opt0 = "0 - Вихід";
 
-    private List<String> menuOptions = new ArrayList<>();
+    private final List<String> menuOptions = List.of("1 - Управління факультетами", "2 - Управління кафедрами", "3 - Управління студентами", "4 - Управління викладачами", opt0);
+
 
     public void management() {
         FacultyMenu fcManagement = new FacultyMenu();
@@ -29,19 +26,11 @@ public class ManagementMenu {
         UserMenu usManagment = new UserMenu();
 
         boolean status = true;
-        menuOptions.add(opt1);
-        menuOptions.add(opt2);
-        menuOptions.add(opt3);
-        menuOptions.add(opt4);
         while (status) {
             System.out.println("\n*-Керування даними:-*");
-                for (String option : menuOptions) {
-                    System.out.println(option);
-                }
+            menuOptions.forEach(System.out::println);
 
-            if (UserService.currentUser == User.UserRole.ADMIN)
-                System.out.println("5 - Управління користувачами");
-            System.out.println("0 - Повернутись назад");
+            if (UserService.currentUser == User.UserRole.ADMIN) System.out.println("5 - Управління користувачами");
             String inputLine = scanner.nextLine();
             try {
                 int input = Integer.parseInt(inputLine);

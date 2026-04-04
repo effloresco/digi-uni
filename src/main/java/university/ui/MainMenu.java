@@ -1,12 +1,8 @@
 package university.ui;
 
 import university.domain.User;
-import university.repository.Repository;
 import university.repository.UserRepository;
 import university.service.UserService;
-
-import static university.service.ReportService.*;
-import static university.service.SearchService.*;
 
 import java.util.Scanner;
 
@@ -25,7 +21,7 @@ public class MainMenu {
     }
 
 
-    public static void main(String[] args) {
+static void main() {
         MainMenu ui = new MainMenu();
         ui.run();
     }

@@ -1,6 +1,5 @@
 package university.ui;
 
-import university.domain.Person;
 import university.domain.Student;
 import university.repository.StudentRepository;
 import university.service.SearchService;
@@ -11,10 +10,9 @@ import university.service.Utils;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
+
 import static university.domain.Student.StudentStatus.*;
 import static university.domain.Student.StudyForm.*;
 import static university.service.SearchService.*;
@@ -25,48 +23,20 @@ public class StudentMenu {
     boolean resume;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
-    private List<String> changeList = new ArrayList<>();
-
     private final String opt0 = "0 - Вихід";
-    private final String opt1change = "1 - ID";
-    private final String opt2change = "2 - Ім'я";
-    private final String opt3change = "3 - Прізвище";
-    private final String opt4change = "4 - По батькові";
-    private final String opt5change = "5 - Дату народження";
-    private final String opt6change = "6 - Електронну пошту";
-    private final String opt7change = "7 - Номер телефону";
-    private final String opt8change = "8 - Ідентифікатор студента";
-    private final String opt9change = "9 - Курс";
-    private final String opt10change = "10 - Групу";
-    private final String opt11change = "11 - Рік вступу";
-    private final String opt12change = "12 - форму навчання";
-    private final String opt13change = "13 - Статус студента";
+    private List<String> changeList = List.of("1 - ID", "2 - Ім'я", "3 - Прізвище", "4 - По батькові", "5 - Дату народження", "6 - Електронну пошту", "7 - Номер телефону", "8 - Ідентифікатор студента", "9 - Курс", "10 - Групу", "11 - Рік вступу", "12 - форму навчання", "13 - Статус студента", opt0);
 
-    private List<String> studentStatuses = new ArrayList<>();
-    private final String opt1status = "1 - Вчиться";
-    private final String opt2status = "2 - У академічній відпустці";
-    private final String opt3status = "3 - Відрахований";
+    private final List<String> studentStatuses = List.of("1 - Вчиться", "2 - У академічній відпустці", "3 - Відрахований", opt0);
 
-    private List<String> studyForms = new ArrayList<>();
-    private final String opt1form = "1 - Бюджет";
-    private final String opt2form = "2 - Контракт";
+    private final List<String> studyForms = List.of("1 - Бюджет", "2 - Контракт", opt0);
 
-    private List<String> menuOptions = new ArrayList<>();
-    private final String opt1g = "1 - Додати студента";
-    private final String opt2g = "2 - Змінити інформацію про студента";
-    private final String opt3g = "3 - Видалити студента з бази даних";
+    private final List<String> menuOptions = List.of("1 - Додати студента", "2 - Змінити інформацію про студента", "3 - Видалити студента з бази даних", opt0);
 
     protected void studentManagement() {
         boolean status = true;
-        menuOptions.add(opt1g);
-        menuOptions.add(opt2g);
-        menuOptions.add(opt3g);
-        menuOptions.add(opt0);
         while (status) {
             System.out.println("\n*-Управління студентами-*");
-            for (String option : menuOptions) {
-                System.out.println(option);
-            }
+            menuOptions.forEach(System.out::println);
             String inputLine = scanner.nextLine();
             try {
                 int input = Integer.parseInt(inputLine);
@@ -140,7 +110,6 @@ public class StudentMenu {
             }
         } while (!resume);
 
-
         System.out.println("Введіть дату народження студента");
         do {
             try {
@@ -174,7 +143,6 @@ public class StudentMenu {
                 resume = false;
             }
         } while (!resume);
-
 
         System.out.println("Введіть ідентифікатор студента");
         do {
@@ -215,16 +183,10 @@ public class StudentMenu {
 
         } while (!resume);
 
-        studyForms.add(opt1form);
-        studyForms.add(opt2form);
-        studyForms.add(opt0);
-
         do {
             status = true;
             System.out.println("\n*-Оберіть форму навчання: -*");
-            for (String option : studyForms) {
-                System.out.println(option);
-            }
+            studyForms.forEach(System.out::println);
             String inputLine = scanner.nextLine();
             try {
                 int input = Integer.parseInt(inputLine);
@@ -248,16 +210,10 @@ public class StudentMenu {
             }
         } while (status);
 
-        studentStatuses.add(opt1status);
-        studentStatuses.add(opt2status);
-        studentStatuses.add(opt3status);
-        studentStatuses.add(opt0);
         do {
             status = true;
             System.out.println("\n*-Оберіть статус студента: -*");
-            for (String option : studentStatuses) {
-                System.out.println(option);
-            }
+            studentStatuses.forEach(System.out::println);
             String inputLine = scanner.nextLine();
             try {
                 int input = Integer.parseInt(inputLine);
@@ -284,7 +240,7 @@ public class StudentMenu {
             }
         } while (status);
 
-        System.out.println("Студента "+student.getFullName()+" створено");
+        System.out.println("Студента " + student.getFullName() + " створено");
         return student;
     }
 
@@ -297,18 +253,20 @@ public class StudentMenu {
 
             Optional<Student> optionalStudent = studentRepository.findById(studentId);
             if (optionalStudent.isPresent()) {
-                student = (Student) optionalStudent.get();
+                student = optionalStudent.get();
                 found = true;
-            } else{ System.out.println("Студента з таким ID не знайдено.");
-            break;}
+            } else {
+                System.out.println("Студента з таким ID не знайдено.");
+                break;
+            }
         }
         studentService.deleteStudent(student);
     }
 
     protected void changeStudent() {
         boolean found = false;
-        String studentId = null;
-        Student student = null;
+        String studentId;
+        Student student;
         while (!found) {
             System.out.println("Введіть ідентифікатор студента, що треба замінити");
             studentId = scanner.nextLine();
@@ -317,27 +275,11 @@ public class StudentMenu {
 
             if (optionalStudent.isPresent()) {
                 found = true;
-                student = (Student) optionalStudent.get();
+                student = optionalStudent.get();
                 boolean status = true;
-                changeList.add(opt1change);
-                changeList.add(opt2change);
-                changeList.add(opt3change);
-                changeList.add(opt4change);
-                changeList.add(opt5change);
-                changeList.add(opt6change);
-                changeList.add(opt7change);
-                changeList.add(opt8change);
-                changeList.add(opt9change);
-                changeList.add(opt10change);
-                changeList.add(opt11change);
-                changeList.add(opt12change);
-                changeList.add(opt13change);
-                changeList.add(opt0);
                 while (status) {
                     System.out.println("\n*-Оберіть, що змінити-*");
-                    for (String option : changeList) {
-                        System.out.println(option);
-                    }
+                    changeList.forEach(System.out::println);
                     String inputLine = scanner.nextLine();
                     try {
                         int input = Integer.parseInt(inputLine);
@@ -402,107 +344,103 @@ public class StudentMenu {
                                         resume = false;
                                     }
                                 } while (!resume);
-                                    break;
-                                    case 6:
-                                        System.out.println("Введіть електронну пошту");
-                                        do {
-                                            try {
-                                                student.setEmail(scanner.nextLine());
-                                                resume = true;
-                                            } catch (InvalidValue e) {
-                                                System.out.println(e.getMessage());
-                                                resume = false;
-                                            }
-                                        } while (!resume);
-                                        break;
-                                    case 7:
-                                        System.out.println("Введіть номер телефону");
-                                        do {
-                                            try {
-                                                student.setPhone(scanner.nextLine());
-                                                resume = true;
-                                            } catch (InvalidValue e) {
-                                                System.out.println(e.getMessage());
-                                                resume = false;
-                                            }
-                                        } while (!resume);
-                                        break;
-                                    case 8:
-                                        System.out.println("Введіть ідентифікатор студента");
-                                        do {
-                                            try {
-                                                student.setStudentId(scanner.nextLine());
-                                                resume = true;
-                                            } catch (InvalidValue e) {
-                                                System.out.println(e.getMessage());
-                                                resume = false;
-                                            }
-                                        } while (!resume);
-                                        break;
-                                    case 9:
-                                        System.out.println("Введіть  курс");
-                                        do {
-                                            try {
-                                                student.setCourse(Integer.parseInt(SearchService.scanner.nextLine()));
-                                                resume = true;
-                                            } catch (InvalidValue e) {
-                                                System.out.println(e.getMessage());
-                                                resume = false;
-                                            }
-                                        } while (!resume);
-                                        break;
-                                    case 10:
-                                        System.out.println("Введіть групу");
-                                        student.setGroup(scanner.nextLine());
+                                break;
+                            case 6:
+                                System.out.println("Введіть електронну пошту");
+                                do {
+                                    try {
+                                        student.setEmail(scanner.nextLine());
                                         resume = true;
-                                        break;
-                                    case 11:
-                                        System.out.println("Введіть рік вступу");
-                                        do {
-                                            try {
-                                                student.setEnrollmentYear(Integer.parseInt(SearchService.scanner.nextLine()));
-                                                resume = true;
-                                            } catch (InvalidValue e) {
-                                                System.out.println(e.getMessage());
-                                                resume = false;
-                                            }
+                                    } catch (InvalidValue e) {
+                                        System.out.println(e.getMessage());
+                                        resume = false;
+                                    }
+                                } while (!resume);
+                                break;
+                            case 7:
+                                System.out.println("Введіть номер телефону");
+                                do {
+                                    try {
+                                        student.setPhone(scanner.nextLine());
+                                        resume = true;
+                                    } catch (InvalidValue e) {
+                                        System.out.println(e.getMessage());
+                                        resume = false;
+                                    }
+                                } while (!resume);
+                                break;
+                            case 8:
+                                System.out.println("Введіть ідентифікатор студента");
+                                do {
+                                    try {
+                                        student.setStudentId(scanner.nextLine());
+                                        resume = true;
+                                    } catch (InvalidValue e) {
+                                        System.out.println(e.getMessage());
+                                        resume = false;
+                                    }
+                                } while (!resume);
+                                break;
+                            case 9:
+                                System.out.println("Введіть  курс");
+                                do {
+                                    try {
+                                        student.setCourse(Integer.parseInt(SearchService.scanner.nextLine()));
+                                        resume = true;
+                                    } catch (InvalidValue e) {
+                                        System.out.println(e.getMessage());
+                                        resume = false;
+                                    }
+                                } while (!resume);
+                                break;
+                            case 10:
+                                System.out.println("Введіть групу");
+                                student.setGroup(scanner.nextLine());
+                                resume = true;
+                                break;
+                            case 11:
+                                System.out.println("Введіть рік вступу");
+                                do {
+                                    try {
+                                        student.setEnrollmentYear(Integer.parseInt(SearchService.scanner.nextLine()));
+                                        resume = true;
+                                    } catch (InvalidValue e) {
+                                        System.out.println(e.getMessage());
+                                        resume = false;
+                                    }
 
-                                        } while (!resume);
-                                        break;
-                                    case 12:
-                                        do {
-                                            status = true;
-                                            System.out.println("\n*-Оберіть форму навчання: -*");
-                                            for (String option : studyForms) {
-                                                System.out.println(option);
-                                            }
-                                            String inputLocalLine = scanner.nextLine();
-                                            try {
-                                                int inputLocal = Integer.parseInt(inputLocalLine);
-                                                switch (inputLocal) {
-                                                    case 1:
-                                                        student.setStudyForm(BUDGET);
-                                                        break;
-                                                    case 2:
-                                                        student.setStudyForm(CONTRACT);
-                                                        break;
-                                                    case 0:
-                                                        status = false;
-                                                        break;
-                                                    default:
-                                                        System.out.println("Введіть коректне значення");
-                                                }
-                                            } catch (NumberFormatException e) {
+                                } while (!resume);
+                                break;
+                            case 12:
+                                do {
+                                    status = true;
+                                    System.out.println("\n*-Оберіть форму навчання: -*");
+                                    studyForms.forEach(System.out::println);
+                                    String inputLocalLine = scanner.nextLine();
+                                    try {
+                                        int inputLocal = Integer.parseInt(inputLocalLine);
+                                        switch (inputLocal) {
+                                            case 1:
+                                                student.setStudyForm(BUDGET);
+                                                break;
+                                            case 2:
+                                                student.setStudyForm(CONTRACT);
+                                                break;
+                                            case 0:
+                                                status = false;
+                                                break;
+                                            default:
                                                 System.out.println("Введіть коректне значення");
-                                            }
-                                        } while (status);
-                                        break;
+                                        }
+                                    } catch (NumberFormatException e) {
+                                        System.out.println("Введіть коректне значення");
+                                    }
+                                } while (status);
+                                break;
                             case 13:
                                 do {
                                     System.out.println("\n*-Оберіть статус студента: -*");
-                                    for (String option : studentStatuses) {
-                                        System.out.println(option);
-                                    }
+                                    studentStatuses.forEach(System.out::println);
                                     String inputLocalLine = scanner.nextLine();
                                     try {
                                         int inputLocal = Integer.parseInt(inputLocalLine);
@@ -529,22 +467,22 @@ public class StudentMenu {
                                     }
                                 } while (status);
                                 break;
-                                    case 0:
-                                        status = false;
-                                        break;
-                                    default:
-                                        System.out.println("Введіть коректне значення");
-                                }
-                        } catch(NumberFormatException e){
-                            System.out.println("Введіть коректне значення");
+                            case 0:
+                                status = false;
+                                break;
+                            default:
+                                System.out.println("Введіть коректне значення");
                         }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Введіть коректне значення");
                     }
-                } else System.out.println("Кафедри з таким ID не знайдено.");
-            }
+                }
+            } else System.out.println("Кафедри з таким ID не знайдено.");
         }
+    }
 
-        protected void addStudent () {
-            studentService.createStudent(studentGenerator());
-        }
+    protected void addStudent() {
+        studentService.createStudent(studentGenerator());
+    }
 
 }
