@@ -30,7 +30,7 @@ public class ManagementMenu {
             System.out.println("\n*-Керування даними:-*");
             menuOptions.forEach(System.out::println);
 
-            if (UserService.currentUser == User.UserRole.ADMIN) System.out.println("5 - Управління користувачами");
+            if ((UserService.currentUser & User.PERMISSION_MANAGE_USERS) != 0) System.out.println("5 - Управління користувачами");
             String inputLine = scanner.nextLine();
             try {
                 int input = Integer.parseInt(inputLine);
@@ -48,7 +48,8 @@ public class ManagementMenu {
                         tcManagement.teacherManagement();
                         break;
                     case 5:
-                        usManagment.userManagement();
+                        if ((UserService.currentUser & User.PERMISSION_MANAGE_USERS) != 0)
+                            usManagment.userManagement();
                         break;
                     case 0:
                         status = false;

@@ -58,7 +58,7 @@ public class UserMenu {
         System.out.println("Введіть пароль користувача (для виходу введіть 0)");
         String password = scanner.nextLine();
         if ("0".equals(password)) return null;
-        User.UserRole role = null;
+        Integer role = null;
 
         while (role == null) {
             System.out.println("Оберіть роль користувача");
@@ -69,13 +69,13 @@ public class UserMenu {
                 int input = Integer.parseInt(inputLine);
                 switch (input) {
                     case 1:
-                        role = User.UserRole.USER;
+                        role = User.PERMISSION_VIEW;
                         break;
                     case 2:
-                        role = User.UserRole.MANAGER;
+                        role = User.PERMISSION_VIEW | User.PERMISSION_EDIT;
                         break;
                     case 3:
-                        role = User.UserRole.ADMIN;
+                        role = User.PERMISSION_VIEW | User.PERMISSION_EDIT | User.PERMISSION_MANAGE_USERS;
                         break;
                     case 0:
                         return null;

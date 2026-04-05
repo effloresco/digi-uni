@@ -17,7 +17,7 @@ public class MainMenu {
 
     static {
         //adds default admin user
-        userService.createUser(new User("admin", "12345678", User.UserRole.ADMIN));
+        userService.createUser(new User("admin", "12345678", User.PERMISSION_VIEW | User.PERMISSION_EDIT | User.PERMISSION_MANAGE_USERS));
     }
 
 
@@ -35,7 +35,7 @@ static void main() {
             System.out.println("1 - Вихід з акаунта користувача");
             System.out.println("2 - Пошук");
             System.out.println("3 - Звіти");
-            if (UserService.currentUser == User.UserRole.MANAGER || UserService.currentUser == User.UserRole.ADMIN)
+            if ((UserService.currentUser & User.PERMISSION_EDIT) != 0)
                 System.out.println("4 - Управління");
             System.out.println("0 - Вихід з програми");
             String inputLine = scanner.nextLine();
@@ -52,7 +52,7 @@ static void main() {
                         reportsMenu.reports();
                         break;
                     case 4:
-                        if (UserService.currentUser == User.UserRole.MANAGER || UserService.currentUser == User.UserRole.ADMIN)
+                        if ((UserService.currentUser & User.PERMISSION_EDIT) != 0)
                             management.management();
                         break;
                     case 0:

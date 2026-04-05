@@ -9,7 +9,7 @@ import university.repository.Repository;
 import java.util.Optional;
 
 public class UserService {
-    public static User.UserRole currentUser = null;
+    public static Integer currentUser = null;
 
     private final Repository<User, Integer> userRepository;
 
