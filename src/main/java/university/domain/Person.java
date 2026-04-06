@@ -20,8 +20,8 @@ public sealed class Person implements Entity<String> permits Student, Teacher {
         id = String.valueOf(++counter);
     }
 
-    public Person(String lastName, String firstName, String middleName, LocalDate birthDate, String email, String phone) throws InvalidValue {
-        id = String.valueOf(++counter);
+    public Person(String id, String lastName, String firstName, String middleName, LocalDate birthDate, String email, String phone) throws InvalidValue {
+        this.id = id;
         setLastName(lastName);
         setFirstName(firstName);
         setMiddleName(middleName);

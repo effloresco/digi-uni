@@ -20,8 +20,8 @@ public non-sealed class Student extends Person {
 
     public Student() {}
 
-    public Student(String lastName, String firstName, String middleName, LocalDate birthDate, String email, String phone, String studentId, int course, String group, int enrollmentYear, StudyForm form, StudentStatus status) {
-        super(lastName, firstName, middleName, birthDate, email, phone);
+    public Student(String id, String lastName, String firstName, String middleName, LocalDate birthDate, String email, String phone, String studentId, int course, String group, int enrollmentYear, StudyForm form, StudentStatus status) {
+        super(id, lastName, firstName, middleName, birthDate, email, phone);
         setStudentId(studentId);
         setCourse(course);
         setGroup(group);

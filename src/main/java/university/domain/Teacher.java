@@ -1,11 +1,13 @@
 package university.domain;
 
+import lombok.Getter;
 import university.exceptions.InvalidValue;
 
 import java.time.LocalDate;
 
 import static university.service.Utils.*;
 
+@Getter
 public non-sealed class Teacher extends Person {
     private String position;
     private String degree;
@@ -16,8 +18,13 @@ public non-sealed class Teacher extends Person {
     public Teacher() {
     }
 
-    public String getPosition() {
-        return position;
+    public Teacher(String id, String lastName, String firstName, String middleName, LocalDate birthDate, String email, String phone, String position, String degree, String title, LocalDate hireDate, double rate) throws InvalidValue {
+        super(id, lastName, firstName, middleName, birthDate, email, phone);
+        setPosition(position);
+        setDegree(degree);
+        setTitle(title);
+        setHireDate(hireDate);
+        setRate(rate);
     }
 
     public void setPosition(String position) throws InvalidValue {
@@ -27,19 +34,11 @@ public non-sealed class Teacher extends Person {
         this.position = position;
     }
 
-    public String getDegree() {
-        return degree;
-    }
-
     public void setDegree(String degree) throws InvalidValue {
         if (containsNonLetter(degree)) {
             throw new InvalidValue("Назва може містити лише літери");
         }
         this.degree = degree;
-    }
-
-    public String getTitle() {
-        return title;
     }
 
     public void setTitle(String title) throws InvalidValue {
@@ -49,19 +48,11 @@ public non-sealed class Teacher extends Person {
         this.title = title;
     }
 
-    public LocalDate getHireDate() {
-        return hireDate;
-    }
-
     public void setHireDate(LocalDate hireDate) throws InvalidValue {
         if (hireDate.toString().isEmpty()) {
             throw new InvalidValue("Поле не може бути порожнім");
         }
         this.hireDate = hireDate;
-    }
-
-    public double getRate() {
-        return rate;
     }
 
     public void setRate(double rate) throws InvalidValue {
