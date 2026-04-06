@@ -65,15 +65,6 @@ public class StudentMenu {
     protected Student studentGenerator() {
         boolean status;
         Student student = new Student();
-        do {
-            try {
-                student.setId(String.valueOf(Utils.getRandomNumber()));
-                resume = true;
-            } catch (InvalidValue e) {
-                System.out.println(e.getMessage());
-                resume = false;
-            }
-        } while (!resume);
         System.out.println("Ідентифікатор студента: " + student.getID());
 
         System.out.println("Введіть ім'я");
