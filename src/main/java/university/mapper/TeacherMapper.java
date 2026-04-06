@@ -9,7 +9,7 @@ public class TeacherMapper implements Mapper<Teacher, TeacherDto> {
     public TeacherDto toDto(Teacher teacher) {
         if (teacher == null) return null;
         return new TeacherDto(
-                teacher.getId(),
+                teacher.getID(),
                 teacher.getLastName(),
                 teacher.getFirstName(),
                 teacher.getMiddleName(),

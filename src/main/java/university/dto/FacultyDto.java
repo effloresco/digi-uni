@@ -4,7 +4,7 @@ import lombok.Getter;
 import university.domain.Teacher;
 
 @Getter
-public class FacultyDto {
+public class  FacultyDto {
     private final String code;
     private final String name;
     private final String shortName;

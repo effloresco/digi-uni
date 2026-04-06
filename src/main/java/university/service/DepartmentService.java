@@ -7,11 +7,13 @@ import university.exceptions.DepartmentNotFoundException;
 import university.exceptions.FacultyAlreadyExistsException;
 import university.exceptions.FacultyNotFoundException;
 import university.repository.Repository;
+import university.storage.DepartmentStorageManager;
 
 import java.util.Optional;
 
 public class DepartmentService {
     private final Repository<Department, String> departmentRepository;
+    private final DepartmentStorageManager departmentStorageManager = new DepartmentStorageManager();
 
     public DepartmentService(Repository<Department, String> repository) {
         this.departmentRepository = repository;
@@ -23,6 +25,7 @@ public class DepartmentService {
                 exists -> {throw new DepartmentAlreadyExistsException("Не вдалось додати кафедру з id " + department.getID() + " причина: кафедра вже існує");}
         );
         departmentRepository.add(department);
+        departmentStorageManager.saveAllData();
     }
     public void deleteDepartment(Department department){
         Optional<Department> testCopy = departmentRepository.findById(department.getID());
@@ -30,6 +33,7 @@ public class DepartmentService {
                 () -> new DepartmentNotFoundException("Не вдалось видалити кафедру з id " + department.getID() + " причина: не знайдено в репозиторії")
         );
         departmentRepository.deleteByID(department.getID());
+        departmentStorageManager.saveAllData();
     }
     public void updateDepartment(String currentId, Department department){
         Optional<Department> testCopy = departmentRepository.findById(currentId);
@@ -45,5 +49,6 @@ public class DepartmentService {
         }
         departmentRepository.deleteByID(currentId);
         departmentRepository.add(department);
+        departmentStorageManager.saveAllData();
     }
 }

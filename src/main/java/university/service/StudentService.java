@@ -7,11 +7,13 @@ import university.exceptions.FacultyNotFoundException;
 import university.exceptions.PersonAlreadyExistsException;
 import university.exceptions.PersonNotFoundException;
 import university.repository.Repository;
+import university.storage.StudentStorageManager;
 
 import java.util.Optional;
 
 public class StudentService {
     private final Repository<Student, String> personRepository;
+    private final StudentStorageManager studentStorageManager = new StudentStorageManager();
 
     public StudentService(Repository<Student, String> repository) {
         this.personRepository = repository;
@@ -23,6 +25,7 @@ public class StudentService {
                 exists -> {throw new PersonAlreadyExistsException("Не вдалось додати студента з id " + person.getID() + " причина: студент вже існує");}
         );
         personRepository.add(person);
+        studentStorageManager.saveAllData();
     }
     public void deleteStudent(Student person){
         Optional<Student> testCopy = personRepository.findById(person.getID());
@@ -30,6 +33,7 @@ public class StudentService {
                 () -> new PersonNotFoundException("Не вдалось видалити студента з id " + person.getID() + " причина: не знайдено в репозиторії")
         );
         personRepository.deleteByID(person.getID());
+        studentStorageManager.saveAllData();
     }
     public void updateStudent(String currentId, Student person){
         Optional<Student> testCopy = personRepository.findById(currentId);
@@ -45,5 +49,6 @@ public class StudentService {
         }
         personRepository.deleteByID(currentId);
         personRepository.add(person);
+        studentStorageManager.saveAllData();
     }
 }
