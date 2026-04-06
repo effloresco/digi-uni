@@ -1,11 +1,11 @@
 package university.domain;
 
+import lombok.Getter;
 import university.exceptions.InvalidValue;
-
 import java.time.LocalDate;
-
 import static university.service.Utils.*;
 
+@Getter
 public non-sealed class Student extends Person {
     public enum StudyForm {BUDGET, CONTRACT}
 
@@ -28,26 +28,6 @@ public non-sealed class Student extends Person {
         setEnrollmentYear(enrollmentYear);
         setStudyForm(form);
         setStudentStatus(status);
-    }
-
-    public StudyForm getStudyForm() {
-        return form;
-    }
-
-    public StudentStatus getStudentStatus() {
-        return status;
-    }
-
-    public int getEnrollmentYear() {
-        return enrollmentYear;
-    }
-
-    public String getGroup() {
-        return group;
-    }
-
-    public int getCourse() {
-        return course;
     }
 
     public void setStudentId(String studentId) throws InvalidValue {
