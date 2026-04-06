@@ -5,8 +5,10 @@ import java.time.LocalDate;
 import static university.service.Utils.*;
 import university.exceptions.*;
 
-public sealed class Person implements Entity<String> permits Student, Teacher {
-    private String id;
+public sealed class Person implements Entity<Integer> permits Student, Teacher {
+    private static int counter = 0;
+
+    private int id;
     private String lastName;
     private String firstName;
     private String middleName;
@@ -15,11 +17,11 @@ public sealed class Person implements Entity<String> permits Student, Teacher {
     private String phone;
 
     public Person() {
+        id = ++counter;
     }
 
-    public Person(String id, String lastName, String firstName, String middleName,
-                  LocalDate birthDate, String email, String phone) throws InvalidValue {
-        setId(id);
+    public Person(String lastName, String firstName, String middleName, LocalDate birthDate, String email, String phone) throws InvalidValue {
+        id = ++counter;
         setLastName(lastName);
         setFirstName(firstName);
         setMiddleName(middleName);
@@ -27,16 +29,9 @@ public sealed class Person implements Entity<String> permits Student, Teacher {
         setEmail(email);
         setPhone(phone);
     }
-    
 
-    public void setId(String id) throws InvalidValue {
-        if (containsNonDigit(id)) {
-            throw new InvalidValue("ID може містити лише цифри");
-        }
-        this.id = id;
-    }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
