@@ -17,11 +17,27 @@ public sealed class Person implements Entity<String> permits Student, Teacher {
     public Person() {
     }
 
+    public Person(String id, String lastName, String firstName, String middleName,
+                  LocalDate birthDate, String email, String phone) throws InvalidValue {
+        setId(id);
+        setLastName(lastName);
+        setFirstName(firstName);
+        setMiddleName(middleName);
+        setBirthDate(birthDate);
+        setEmail(email);
+        setPhone(phone);
+    }
+    
+
     public void setId(String id) throws InvalidValue {
         if (containsNonDigit(id)) {
             throw new InvalidValue("ID може містити лише цифри");
         }
         this.id = id;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getLastName() {
