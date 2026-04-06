@@ -21,8 +21,7 @@ public class FacultyMenu {
     private final String opt0 = "0 - Повернутись назад";
     private final List<String> menuOptions = List.of("1 - Додати факультет", "2 - Змінити інформацію про факультет", "3 - Видалити факультет з бази даних", opt0);
 
-    private final List<String> changeList = List.of("1 - ID", "2 - Назва", "3 - Коротка назва", "4 - Декан", "5 - Контакти", opt0);
-
+    private final List<String> changeList = List.of("1 - Назва", "2 - Коротка назва", "3 - Декан", "4 - Контакти", opt0);
     private String exitOpt = null;
 
     protected void facultyManaging() {
@@ -60,19 +59,9 @@ public class FacultyMenu {
 
     protected Faculty facultyGenerator() {
         Faculty faculty = new Faculty();
-        System.out.println("Введіть ідентифікатор факультету");
-        do {
-            try {
-                faculty.setId(scanner.nextLine());
-                resume = true;
-            } catch (InvalidValue e) {
-                System.out.println(e.getMessage());
-                resume = false;
-            }
-        } while (!resume);
+
         System.out.println("Ідентифікатор факультету: " + faculty.getID());
-
-
+        
         System.out.println("Введіть назву факультету");
         do {
             try {
@@ -203,18 +192,6 @@ public class FacultyMenu {
                                 int input = Integer.parseInt(inputLine);
                                 switch (input) {
                                     case 1:
-                                        System.out.println("Введіть ідентифікатор факультету");
-                                        do {
-                                            try {
-                                                faculty.setId(scanner.nextLine());
-                                                resume = true;
-                                            } catch (InvalidValue e) {
-                                                System.out.println(e.getMessage());
-                                                resume = false;
-                                            }
-                                        } while (!resume);
-                                        break;
-                                    case 2:
                                         System.out.println("Введіть назву факультету");
                                         do {
                                             try {
@@ -226,7 +203,7 @@ public class FacultyMenu {
                                             }
                                         } while (!resume);
                                         break;
-                                    case 3:
+                                    case 2:
                                         System.out.println("Введіть коротку назву факультету");
                                         do {
                                             try {
@@ -238,7 +215,7 @@ public class FacultyMenu {
                                             }
                                         } while (!resume);
                                         break;
-                                    case 4:
+                                    case 3:
                                         do {
                                             try {
                                                 faculty.setDean(receiveDean());
@@ -252,7 +229,7 @@ public class FacultyMenu {
                                             }
                                         } while (!resume);
                                         break;
-                                    case 5:
+                                    case 4:
                                         System.out.println("Введіть контакти факультету");
                                         do {
                                             try {
@@ -264,7 +241,6 @@ public class FacultyMenu {
                                             }
                                         } while (!resume);
                                         break;
-
                                     case 0:
                                         status = false;
                                         break;

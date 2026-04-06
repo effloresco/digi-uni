@@ -20,8 +20,7 @@ public class DepartmentMenu {
     private final String opt0 = "0 - Повернутись назад";
     private final List<String> menuOptions = List.of("1 - Додати кафедру", "2 - Змінити інформацію про кафедру", "3 - Видалити кафедру з бази даних", opt0);
 
-    private final List<String> changeList = List.of("1 - ID", "2 - Назва", "3 - Факультет", "4 - Голова кафедри", "5 - Локація(кабінет)", opt0);
-
+    private final List<String> changeList = List.of("1 - Назва", "2 - Факультет", "3 - Голова кафедри", "4 - Локація(кабінет)", opt0);
     protected void departmentManagement() {
         boolean status = true;
         while (status) {
@@ -55,18 +54,8 @@ public class DepartmentMenu {
 
     protected Department departmentGenerator() {
         Department department = new Department();
-        System.out.println("Введіть ідентифікатор кафедри");
-        do {
-            try {
-                department.setId(scanner.nextLine());
-                resume = true;
-            } catch (InvalidValue e) {
-                System.out.println(e.getMessage());
-                resume = false;
-            }
-        } while (!resume);
+        
         System.out.println("Ідентифікатор кафедри: " + department.getID());
-
 
         System.out.println("Введіть назву кафедри");
         do {
@@ -159,18 +148,6 @@ public class DepartmentMenu {
                         int input = Integer.parseInt(inputLine);
                         switch (input) {
                             case 1:
-                                System.out.println("Введіть ідентифікатор кафедри");
-                                do {
-                                    try {
-                                        department.setId(scanner.nextLine());
-                                        resume = true;
-                                    } catch (InvalidValue e) {
-                                        System.out.println(e.getMessage());
-                                        resume = false;
-                                    }
-                                } while (!resume);
-                                break;
-                            case 2:
                                 System.out.println("Введіть назву кафедри");
                                 do {
                                     try {
@@ -182,7 +159,7 @@ public class DepartmentMenu {
                                     }
                                 } while (!resume);
                                 break;
-                            case 3:
+                            case 2:
                                 do {
                                     System.out.println("Введіть факультет кафедри");
                                     try {
@@ -197,7 +174,7 @@ public class DepartmentMenu {
                                     }
                                 } while (!resume);
                                 break;
-                            case 4:
+                            case 3:
 
                                 do {
                                     System.out.println("Введіть голову кафедри");
@@ -213,7 +190,7 @@ public class DepartmentMenu {
                                     }
                                 } while (!resume);
                                 break;
-                            case 5:
+                            case 4:
                                 System.out.println("Введіть головний кабінет кафедри");
                                 do {
                                     try {
@@ -225,7 +202,6 @@ public class DepartmentMenu {
                                     }
                                 } while (!resume);
                                 break;
-
                             case 0:
                                 status = false;
                                 break;
