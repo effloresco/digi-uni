@@ -22,7 +22,7 @@ public class TeacherMenu {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     private final String opt0 = "0 - Вихід";
-    private List<String> changeList = List.of("1 - ID", "2 - Ім'я", "3 - Прізвище", "4 - По батькові", "5 - Дату народження", "6 - Електронну пошту", "7 - Номер телефону", "8 - Посаду", "9 - Науковий ступінь", "10 - Вчене звання", "11 - Дату влаштування на роботу", "12 - Ставку", opt0);
+    private List<String> changeList = List.of("1 - Ім'я", "2 - Прізвище", "3 - По батькові", "4 - Дату народження", "5 - Електронну пошту", "6 - Номер телефону", "7 - Посаду", "8 - Науковий ступінь", "9 - Вчене звання", "10 - Дату влаштування на роботу", "11 - Ставку", opt0);
     private List<String> menuOptions = List.of("1 - Додати викладача", "2 - Змінити інформацію про викладача", "3 - Видалити викладача з бази даних", opt0);
 
     protected void teacherManagement() {
@@ -59,15 +59,7 @@ public class TeacherMenu {
 
     protected Teacher teacherGenerator() {
         Teacher teacher = new Teacher();
-        do {
-            try {
-                teacher.setId(String.valueOf(Utils.getRandomNumber()));
-                resume = true;
-            } catch (InvalidValue e) {
-                System.out.println(e.getMessage());
-                resume = false;
-            }
-        } while (!resume);
+
         System.out.println("Ідентифікатор викладача: " + teacher.getID());
 
         System.out.println("Введіть ім'я");
@@ -238,18 +230,6 @@ public class TeacherMenu {
                         int input = Integer.parseInt(inputLine);
                         switch (input) {
                             case 1:
-                                System.out.println("Введіть ідентифікатор викладача");
-                                do {
-                                    try {
-                                        teacher.setId(scanner.nextLine());
-                                        resume = true;
-                                    } catch (InvalidValue e) {
-                                        System.out.println(e.getMessage());
-                                        resume = false;
-                                    }
-                                } while (!resume);
-                                break;
-                            case 2:
                                 System.out.println("Введіть ім'я");
                                 do {
                                     try {
@@ -261,7 +241,7 @@ public class TeacherMenu {
                                     }
                                 } while (!resume);
                                 break;
-                            case 3:
+                            case 2:
                                 System.out.println("Введіть прізвище");
                                 do {
                                     try {
@@ -273,7 +253,7 @@ public class TeacherMenu {
                                     }
                                 } while (!resume);
                                 break;
-                            case 4:
+                            case 3:
                                 System.out.println("Введіть по батькові");
                                 do {
                                     try {
@@ -285,7 +265,7 @@ public class TeacherMenu {
                                     }
                                 } while (!resume);
                                 break;
-                            case 5:
+                            case 4:
                                 do {
                                     try {
                                         teacher.setBirthDate(LocalDate.parse(SearchService.scanner.nextLine(), formatter));
@@ -297,7 +277,7 @@ public class TeacherMenu {
 
                                 } while (!resume);
                                 break;
-                            case 6:
+                            case 5:
                                 System.out.println("Введіть електронну пошту");
                                 do {
                                     try {
@@ -309,7 +289,7 @@ public class TeacherMenu {
                                     }
                                 } while (!resume);
                                 break;
-                            case 7:
+                            case 6:
                                 System.out.println("Введіть номер телефону");
                                 do {
                                     try {
@@ -321,7 +301,7 @@ public class TeacherMenu {
                                     }
                                 } while (!resume);
                                 break;
-                            case 8:
+                            case 7:
                                 System.out.println("Введіть посаду");
                                 do {
                                     try {
@@ -333,7 +313,7 @@ public class TeacherMenu {
                                     }
                                 } while (!resume);
                                 break;
-                            case 9:
+                            case 8:
                                 System.out.println("Введіть  науковий ступінь");
                                 do {
                                     try {
@@ -345,7 +325,7 @@ public class TeacherMenu {
                                     }
                                 } while (!resume);
                                 break;
-                            case 10:
+                            case 9:
                                 System.out.println("Введіть вчене звання");
                                 do {
                                     try {
@@ -357,7 +337,7 @@ public class TeacherMenu {
                                     }
                                 } while (!resume);
                                 break;
-                            case 11:
+                            case 10:
                                 System.out.println("Введіть дату влаштування на роботу");
                                 do {
                                     try {
@@ -369,7 +349,7 @@ public class TeacherMenu {
                                     }
                                 } while (!resume);
                                 break;
-                            case 12:
+                            case 11:
                                 System.out.println("Введіть ставку");
                                 do {
                                     try {

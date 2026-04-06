@@ -24,13 +24,13 @@ public class StudentMenu {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     private final String opt0 = "0 - Вихід";
-    private List<String> changeList = List.of("1 - ID", "2 - Ім'я", "3 - Прізвище", "4 - По батькові", "5 - Дату народження", "6 - Електронну пошту", "7 - Номер телефону", "8 - Ідентифікатор студента", "9 - Курс", "10 - Групу", "11 - Рік вступу", "12 - форму навчання", "13 - Статус студента", opt0);
+    private List<String> changeList = List.of( "1 - Ім'я", "2 - Прізвище", "3 - По батькові", "4 - Дату народження", "5 - Електронну пошту", "6 - Номер телефону", "6 - Ідентифікатор студента", "8 - Курс", "9 - Групу", "10 - Рік вступу", "11 - форму навчання", "12 - Статус студента", opt0);
 
     private final List<String> studentStatuses = List.of("1 - Вчиться", "2 - У академічній відпустці", "3 - Відрахований", opt0);
 
     private final List<String> studyForms = List.of("1 - Бюджет", "2 - Контракт", opt0);
 
-    private final List<String> menuOptions = List.of("1 - Додати студента", "2 - Змінити інформацію про студента", "3 - Видалити студента з бази даних", opt0);
+    private final List<String> menuOptions = List.of("1 - Додати студента", "2 - Змінити інформацію про студент а", "3 - Видалити студента з бази даних", opt0);
 
     protected void studentManagement() {
         boolean status = true;
@@ -276,18 +276,6 @@ public class StudentMenu {
                         int input = Integer.parseInt(inputLine);
                         switch (input) {
                             case 1:
-                                System.out.println("Введіть ідентифікатор викладача");
-                                do {
-                                    try {
-                                        student.setId(scanner.nextLine());
-                                        resume = true;
-                                    } catch (InvalidValue e) {
-                                        System.out.println(e.getMessage());
-                                        resume = false;
-                                    }
-                                } while (!resume);
-                                break;
-                            case 2:
                                 System.out.println("Введіть ім'я");
                                 do {
                                     try {
@@ -300,7 +288,7 @@ public class StudentMenu {
 
                                 } while (!resume);
                                 break;
-                            case 3:
+                            case 2:
                                 System.out.println("Введіть прізвище");
                                 do {
                                     try {
@@ -312,7 +300,7 @@ public class StudentMenu {
                                     }
                                 } while (!resume);
                                 break;
-                            case 4:
+                            case 3:
                                 System.out.println("Введіть по батькові");
                                 do {
                                     try {
@@ -324,7 +312,7 @@ public class StudentMenu {
                                     }
                                 } while (!resume);
                                 break;
-                            case 5:
+                            case 4:
                                 System.out.println("Введіть дату народження студента");
                                 do {
                                     try {
@@ -336,7 +324,7 @@ public class StudentMenu {
                                     }
                                 } while (!resume);
                                 break;
-                            case 6:
+                            case 5:
                                 System.out.println("Введіть електронну пошту");
                                 do {
                                     try {
@@ -348,7 +336,7 @@ public class StudentMenu {
                                     }
                                 } while (!resume);
                                 break;
-                            case 7:
+                            case 6:
                                 System.out.println("Введіть номер телефону");
                                 do {
                                     try {
@@ -360,7 +348,7 @@ public class StudentMenu {
                                     }
                                 } while (!resume);
                                 break;
-                            case 8:
+                            case 7:
                                 System.out.println("Введіть ідентифікатор студента");
                                 do {
                                     try {
@@ -372,7 +360,7 @@ public class StudentMenu {
                                     }
                                 } while (!resume);
                                 break;
-                            case 9:
+                            case 8:
                                 System.out.println("Введіть  курс");
                                 do {
                                     try {
@@ -384,12 +372,12 @@ public class StudentMenu {
                                     }
                                 } while (!resume);
                                 break;
-                            case 10:
+                            case 9:
                                 System.out.println("Введіть групу");
                                 student.setGroup(scanner.nextLine());
                                 resume = true;
                                 break;
-                            case 11:
+                            case 10:
                                 System.out.println("Введіть рік вступу");
                                 do {
                                     try {
@@ -402,7 +390,7 @@ public class StudentMenu {
 
                                 } while (!resume);
                                 break;
-                            case 12:
+                            case 11:
                                 do {
                                     status = true;
                                     System.out.println("\n*-Оберіть форму навчання: -*");
@@ -428,7 +416,7 @@ public class StudentMenu {
                                     }
                                 } while (status);
                                 break;
-                            case 13:
+                            case 12:
                                 do {
                                     System.out.println("\n*-Оберіть статус студента: -*");
                                     studentStatuses.forEach(System.out::println);
