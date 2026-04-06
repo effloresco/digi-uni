@@ -24,7 +24,7 @@ public class Department implements Entity<String> {
     private String location;
 
     public Department() {
-        id = String.valueOf(idCounter++);
+        id = String.valueOf(++idCounter);
     }
 
     public Department(String id, String name, Faculty faculty, Person head, String location) throws InvalidValue {

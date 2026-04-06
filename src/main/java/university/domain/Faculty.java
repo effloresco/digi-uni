@@ -18,7 +18,7 @@ public class Faculty implements Entity<String> {
     private String contacts;
 
     public Faculty() {
-        code = String.valueOf(idCounter++);
+        code = String.valueOf(++idCounter);
     }
 
     public Faculty(String code, String name, String shortName, Teacher dean, String contacts) throws InvalidValue {
