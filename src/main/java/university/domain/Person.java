@@ -8,7 +8,7 @@ import university.exceptions.*;
 public sealed class Person implements Entity<Integer> permits Student, Teacher {
     private static int counter = 0;
 
-    private int id;
+    private Integer id;
     private String lastName;
     private String firstName;
     private String middleName;
@@ -104,7 +104,7 @@ public sealed class Person implements Entity<Integer> permits Student, Teacher {
     }
 
     @Override
-    public String getID() {
+    public Integer getID() {
         return id;
     }
 
