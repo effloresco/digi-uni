@@ -1,6 +1,9 @@
 package university.domain;
 
 import university.exceptions.InvalidValue;
+
+import java.time.LocalDate;
+
 import static university.service.Utils.*;
 
 public non-sealed class Student extends Person {
@@ -15,7 +18,28 @@ public non-sealed class Student extends Person {
     private StudyForm form;
     private StudentStatus status;
 
-    public Student() {
+    public Student() {}
+
+    public Student(String id, String lastName, String firstName, String middleName, LocalDate birthDate, String email, String phone, String studentId, int course, String group, int enrollmentYear, StudyForm form, StudentStatus status) {
+        super(id, lastName, firstName, middleName, birthDate, email, phone);
+        setStudentId(studentId);
+        setCourse(course);
+        setGroup(group);
+        setEnrollmentYear(enrollmentYear);
+        setStudyForm(form);
+        setStudentStatus(status);
+    }
+
+    public StudyForm getStudyForm() {
+        return form;
+    }
+
+    public StudentStatus getStudentStatus() {
+        return status;
+    }
+
+    public int getEnrollmentYear() {
+        return enrollmentYear;
     }
 
     public String getGroup() {
