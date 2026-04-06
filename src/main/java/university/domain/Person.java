@@ -1,13 +1,14 @@
 package university.domain;
 
 import lombok.Getter;
+import lombok.Setter;
 import university.exceptions.InvalidValue;
 import java.time.LocalDate;
 import static university.service.Utils.*;
 
 @Getter
 public sealed class Person implements Entity<String> permits Student, Teacher {
-    @Getter
+    @Getter @Setter
     private static int idCounter = 0;
 
     private String id;

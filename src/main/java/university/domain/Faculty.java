@@ -1,13 +1,14 @@
 package university.domain;
 
 import lombok.Getter;
+import lombok.Setter;
 import university.exceptions.InvalidValue;
 import static university.service.Utils.containsNonDigit;
 import static university.service.Utils.containsNonLetter;
 
 @Getter
 public class Faculty implements Entity<String> {
-    @Getter
+    @Getter @Setter
     private static int idCounter = 0;
 
     private String code;

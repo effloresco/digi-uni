@@ -1,6 +1,7 @@
 package university.domain;
 
 import lombok.Getter;
+import lombok.Setter;
 import university.exceptions.InvalidValue;
 import university.repository.FacultyRepository;
 import university.repository.TeacherRepository;
@@ -11,7 +12,7 @@ import static university.service.Utils.*;
 
 @Getter
 public class Department implements Entity<String> {
-    @Getter
+    @Getter @Setter
     private static int idCounter = 0;
 
     protected final FacultyRepository facultyRepository = FacultyRepository.get(FacultyRepository.class);
