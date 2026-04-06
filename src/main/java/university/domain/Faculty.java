@@ -1,9 +1,11 @@
 package university.domain;
 
+import lombok.Getter;
 import university.exceptions.InvalidValue;
 import static university.service.Utils.containsNonDigit;
 import static university.service.Utils.containsNonLetter;
 
+@Getter
 public class Faculty implements Entity<String> {
     private String code;
     private String name;
@@ -14,15 +16,19 @@ public class Faculty implements Entity<String> {
     public Faculty() {
     }
 
+    public Faculty(String code, String name, String shortName, Teacher dean, String contacts) throws InvalidValue {
+        setId(code);
+        setName(name);
+        setShortName(shortName);
+        setDean(dean);
+        setContacts(contacts);
+    }
+
     public void setId(String code) throws InvalidValue {
         if (containsNonDigit(code)) {
             throw new InvalidValue("Code може містити лише літери");
         }
         this.code = code;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public void setName(String name) throws InvalidValue {
@@ -32,10 +38,6 @@ public class Faculty implements Entity<String> {
         this.name = name;
     }
 
-    public String getShortName() {
-        return shortName;
-    }
-
     public void setShortName(String shortName) throws InvalidValue {
         if (containsNonLetter(shortName)) {
             throw new InvalidValue("Коротке ім'я може містити лише літери");
@@ -43,16 +45,8 @@ public class Faculty implements Entity<String> {
         this.shortName = shortName;
     }
 
-    public Teacher getDean() {
-        return dean;
-    }
-
     public void setDean(Teacher dean) {
         this.dean = dean;
-    }
-
-    public String getContacts() {
-        return contacts;
     }
 
     public void setContacts(String contacts) {
