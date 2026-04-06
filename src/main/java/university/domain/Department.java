@@ -1,5 +1,6 @@
 package university.domain;
 
+import lombok.Getter;
 import university.exceptions.InvalidValue;
 import university.repository.FacultyRepository;
 import university.repository.TeacherRepository;
@@ -8,6 +9,7 @@ import java.util.Optional;
 
 import static university.service.Utils.*;
 
+@Getter
 public class Department implements Entity<String> {
     protected final FacultyRepository facultyRepository = FacultyRepository.get(FacultyRepository.class);
     protected final TeacherRepository teacherRepository = TeacherRepository.get(TeacherRepository.class);
@@ -20,16 +22,20 @@ public class Department implements Entity<String> {
     public Department() {
     }
 
+    public Department(String id, String name, Faculty faculty, Person head, String location) throws InvalidValue {
+        setId(id);
+        setName(name);
+        setFaculty(faculty.getID());
+        setHead(head.getID());
+        setLocation(location);
+    }
+
     public void setId(String id) throws InvalidValue {
         if (containsNonDigit(id)) {
             throw new InvalidValue("ID може містити лише цифри");
         }
 
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public void setName(String name) throws InvalidValue {
@@ -40,10 +46,6 @@ public class Department implements Entity<String> {
         this.name = name;
     }
 
-    public Faculty getFaculty() {
-        return faculty;
-    }
-
     public void setFaculty(String facultyId) throws InvalidValue {
         Optional<Faculty> optionalFaculty = facultyRepository.findById(facultyId);
 
@@ -51,10 +53,6 @@ public class Department implements Entity<String> {
             throw new InvalidValue("Факультет з таким ID не знайдено.");
         }
         this.faculty = optionalFaculty.get();
-    }
-
-    public Person getHead() {
-        return head;
     }
 
     public void setHead(String teacherId) throws InvalidValue {
@@ -69,10 +67,6 @@ public class Department implements Entity<String> {
             throw new InvalidValue("Особу з таким ID не знайдено.");
         }
         this.head = optionalPerson.get();
-    }
-
-    public String getLocation() {
-        return location;
     }
 
     public void setLocation(String location) throws InvalidValue {
