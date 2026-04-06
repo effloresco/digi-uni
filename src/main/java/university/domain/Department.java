@@ -11,6 +11,8 @@ import static university.service.Utils.*;
 
 @Getter
 public class Department implements Entity<String> {
+    private static int idCounter = 0;
+
     protected final FacultyRepository facultyRepository = FacultyRepository.get(FacultyRepository.class);
     protected final TeacherRepository teacherRepository = TeacherRepository.get(TeacherRepository.class);
     private String id;
@@ -20,22 +22,15 @@ public class Department implements Entity<String> {
     private String location;
 
     public Department() {
+        id = String.valueOf(idCounter++);
     }
 
     public Department(String id, String name, Faculty faculty, Person head, String location) throws InvalidValue {
-        setId(id);
+        this.id = id;
         setName(name);
         setFaculty(faculty.getID());
         setHead(head.getID());
         setLocation(location);
-    }
-
-    public void setId(String id) throws InvalidValue {
-        if (containsNonDigit(id)) {
-            throw new InvalidValue("ID може містити лише цифри");
-        }
-
-        this.id = id;
     }
 
     public void setName(String name) throws InvalidValue {

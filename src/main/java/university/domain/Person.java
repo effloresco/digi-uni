@@ -3,10 +3,9 @@ package university.domain;
 import university.exceptions.InvalidValue;
 import java.time.LocalDate;
 import static university.service.Utils.*;
-import university.exceptions.*;
 
 public sealed class Person implements Entity<String> permits Student, Teacher {
-    private static int counter = 0;
+    private static int idCounter = 0;
 
     private String id;
     private String lastName;
@@ -17,7 +16,7 @@ public sealed class Person implements Entity<String> permits Student, Teacher {
     private String phone;
 
     public Person() {
-        id = String.valueOf(++counter);
+        id = String.valueOf(++idCounter);
     }
 
     public Person(String id, String lastName, String firstName, String middleName, LocalDate birthDate, String email, String phone) throws InvalidValue {

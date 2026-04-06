@@ -7,6 +7,8 @@ import static university.service.Utils.containsNonLetter;
 
 @Getter
 public class Faculty implements Entity<String> {
+    private static int idCounter = 0;
+
     private String code;
     private String name;
     private String shortName;
@@ -14,21 +16,15 @@ public class Faculty implements Entity<String> {
     private String contacts;
 
     public Faculty() {
+        code = String.valueOf(idCounter++);
     }
 
     public Faculty(String code, String name, String shortName, Teacher dean, String contacts) throws InvalidValue {
-        setId(code);
+        this.code = code;
         setName(name);
         setShortName(shortName);
         setDean(dean);
         setContacts(contacts);
-    }
-
-    public void setId(String code) throws InvalidValue {
-        if (containsNonDigit(code)) {
-            throw new InvalidValue("Code може містити лише літери");
-        }
-        this.code = code;
     }
 
     public void setName(String name) throws InvalidValue {
