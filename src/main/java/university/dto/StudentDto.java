@@ -8,21 +8,22 @@ import java.time.LocalDate;
 @Getter
 public class StudentDto {
 
-    private int id;
-    private String lastName;
-    private String firstName;
-    private String middleName;
-    private LocalDate birthDate;
-    private String email;
-    private String phone;
-    private String studentId;
-    private int course;
-    private String group;
-    private int enrollmentYear;
-    private Student.StudyForm form;
-    private Student.StudentStatus status;
+    private final String id;
+    private final String lastName;
+    private final String firstName;
+    private final String middleName;
+    private final LocalDate birthDate;
+    private final String email;
+    private final String phone;
+    private final String studentId;
+    private final int course;
+    private final String group;
+    private final int enrollmentYear;
+    private final Student.StudyForm form;
+    private final Student.StudentStatus status;
 
-    public StudentDto(String lastName, String firstName, String middleName, LocalDate birthDate, String email, String phone, String studentId, int course, String group, int enrollmentYear, Student.StudyForm form, Student.StudentStatus status) {
+    public StudentDto(String id, String lastName, String firstName, String middleName, LocalDate birthDate, String email, String phone, String studentId, int course, String group, int enrollmentYear, Student.StudyForm form, Student.StudentStatus status) {
+        this.id = id;
         this.studentId = studentId;
         this.course = course;
         this.group = group;
