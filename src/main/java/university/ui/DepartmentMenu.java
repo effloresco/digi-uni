@@ -104,7 +104,7 @@ public class DepartmentMenu {
         System.out.println("Введіть кабінет");
         department.setLocation(scanner.nextLine());
 
-        return new Department();
+        return department;
     }
 
 

@@ -113,7 +113,7 @@ public class FacultyMenu {
 
         } while (!resume);
 
-        return new Faculty();
+        return faculty;
 
     }
 
