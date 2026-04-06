@@ -1,10 +1,13 @@
 package university.domain;
 
+import lombok.Getter;
 import university.exceptions.InvalidValue;
 import java.time.LocalDate;
 import static university.service.Utils.*;
 
+@Getter
 public sealed class Person implements Entity<String> permits Student, Teacher {
+    @Getter
     private static int idCounter = 0;
 
     private String id;
@@ -29,24 +32,11 @@ public sealed class Person implements Entity<String> permits Student, Teacher {
         setPhone(phone);
     }
 
-
-    public String getId() {
-        return id;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
     public void setLastName(String lastName) throws InvalidValue {
         if (containsNonLetter(lastName)) {
             throw new InvalidValue("Прізвище може містити лише літери");
         }
         this.lastName = lastName;
-    }
-
-    public String getFirstName() {
-        return firstName;
     }
 
     public void setFirstName(String firstName) throws InvalidValue {
@@ -56,10 +46,6 @@ public sealed class Person implements Entity<String> permits Student, Teacher {
         this.firstName = firstName;
     }
 
-    public String getMiddleName() {
-        return middleName;
-    }
-
     public void setMiddleName(String middleName) throws InvalidValue {
         if (containsNonLetter(middleName)) {
             throw new InvalidValue("По батькові може містити лише літери");
@@ -67,16 +53,8 @@ public sealed class Person implements Entity<String> permits Student, Teacher {
         this.middleName = middleName;
     }
 
-    public LocalDate getBirthDate() {
-        return birthDate;
-    }
-
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     public void setEmail(String email) throws InvalidValue {
@@ -84,10 +62,6 @@ public sealed class Person implements Entity<String> permits Student, Teacher {
             throw new InvalidValue("Електронна пошта має містити '@' та '.'");
         }
         this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
     }
 
     public void setPhone(String phone) throws InvalidValue {

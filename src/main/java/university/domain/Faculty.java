@@ -7,6 +7,7 @@ import static university.service.Utils.containsNonLetter;
 
 @Getter
 public class Faculty implements Entity<String> {
+    @Getter
     private static int idCounter = 0;
 
     private String code;

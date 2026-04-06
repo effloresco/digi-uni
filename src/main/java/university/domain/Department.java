@@ -11,6 +11,7 @@ import static university.service.Utils.*;
 
 @Getter
 public class Department implements Entity<String> {
+    @Getter
     private static int idCounter = 0;
 
     protected final FacultyRepository facultyRepository = FacultyRepository.get(FacultyRepository.class);
