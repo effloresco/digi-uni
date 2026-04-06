@@ -5,10 +5,10 @@ import java.time.LocalDate;
 import static university.service.Utils.*;
 import university.exceptions.*;
 
-public sealed class Person implements Entity<Integer> permits Student, Teacher {
+public sealed class Person implements Entity<String> permits Student, Teacher {
     private static int counter = 0;
 
-    private Integer id;
+    private String id;
     private String lastName;
     private String firstName;
     private String middleName;
@@ -17,11 +17,11 @@ public sealed class Person implements Entity<Integer> permits Student, Teacher {
     private String phone;
 
     public Person() {
-        id = ++counter;
+        id = String.valueOf(++counter);
     }
 
     public Person(String lastName, String firstName, String middleName, LocalDate birthDate, String email, String phone) throws InvalidValue {
-        id = ++counter;
+        id = String.valueOf(++counter);
         setLastName(lastName);
         setFirstName(firstName);
         setMiddleName(middleName);
@@ -31,7 +31,7 @@ public sealed class Person implements Entity<Integer> permits Student, Teacher {
     }
 
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -104,7 +104,7 @@ public sealed class Person implements Entity<Integer> permits Student, Teacher {
     }
 
     @Override
-    public Integer getID() {
+    public String getID() {
         return id;
     }
 
