@@ -6,6 +6,7 @@ import university.exceptions.FacultyNotFoundException;
 import university.exceptions.PersonAlreadyExistsException;
 import university.exceptions.PersonNotFoundException;
 import university.repository.Repository;
+import university.storage.ServiceStorageManager;
 import university.storage.TeacherStorageManager;
 
 import java.util.Optional;
@@ -13,6 +14,7 @@ import java.util.Optional;
 public class TeacherService {
     private final Repository<Teacher, String> personRepository;
     private final TeacherStorageManager teacherStorageManager = new TeacherStorageManager();
+    private final ServiceStorageManager serviceStorageManager = new ServiceStorageManager();
 
     public TeacherService(Repository<Teacher, String> repository) {
         this.personRepository = repository;
@@ -25,6 +27,7 @@ public class TeacherService {
         );
         personRepository.add(person);
         teacherStorageManager.saveAllData();
+        serviceStorageManager.saveAllData();
     }
     public void deleteTeacher(Teacher person){
         Optional<Teacher> testCopy = personRepository.findById(person.getID());
@@ -33,6 +36,7 @@ public class TeacherService {
         );
         personRepository.deleteByID(person.getID());
         teacherStorageManager.saveAllData();
+        serviceStorageManager.saveAllData();
     }
     public void updateTeacher(String currentId, Teacher person){
         Optional<Teacher> testCopy = personRepository.findById(currentId);
@@ -48,5 +52,6 @@ public class TeacherService {
         personRepository.deleteByID(currentId);
         personRepository.add(person);
         teacherStorageManager.saveAllData();
+        serviceStorageManager.saveAllData();
     }
 }
