@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import university.domain.Department;
 import university.domain.Faculty;
 import university.domain.Person;
+import university.domain.User;
 import university.dto.ServiceDto;
 import university.mapper.Mapper;
 import university.repository.Repository;
@@ -52,6 +53,7 @@ public class ServiceStorageManager {
                 Person.setIdCounter(serviceDto.getPersonCounter());
                 Department.setIdCounter(serviceDto.getDepartmentCounter());
                 Faculty.setIdCounter(serviceDto.getFacultyCounter());
+                User.setIdCounter(serviceDto.getUserCounter());
 
                 System.out.println("Дані успішно завантажено з: " + path.getFileName());
             }

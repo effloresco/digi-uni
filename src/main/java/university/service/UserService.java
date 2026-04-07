@@ -5,6 +5,8 @@ import university.domain.User;
 import university.exceptions.UserAlreadyExistsException;
 import university.exceptions.UserNotFoundException;
 import university.repository.Repository;
+import university.storage.ServiceStorageManager;
+import university.storage.UserStorageManager;
 
 import java.util.Optional;
 
@@ -12,6 +14,8 @@ public class UserService {
     public static Integer currentUser = null;
 
     private final Repository<User, Integer> userRepository;
+    private final UserStorageManager userStorageManager = new UserStorageManager();
+    private final ServiceStorageManager serviceStorageManager = new ServiceStorageManager();
 
     public UserService(Repository<User, Integer> repository) {
         this.userRepository = repository;
@@ -23,6 +27,7 @@ public class UserService {
                 exists -> {throw new UserAlreadyExistsException("Не вдалось додати користувача з id " + user.getID() + " причина: користувач вже існує");}
         );
         userRepository.add(user);
+        saveAllData();
     }
     public void deleteUser(User user){
         Optional<User> testCopy = userRepository.findById(user.getID());
@@ -30,6 +35,7 @@ public class UserService {
                 () -> new UserNotFoundException("Не вдалось видалити користувача з id " + user.getID() + " причина: не знайдено в репозиторії")
         );
         userRepository.deleteByID(user.getID());
+        saveAllData();
     }
     public void updateUser(int currentId, User user){
         Optional<User> testCopy = userRepository.findById(currentId);
@@ -45,5 +51,10 @@ public class UserService {
         }
         userRepository.deleteByID(currentId);
         userRepository.add(user);
+        saveAllData();
+    }
+    public void saveAllData(){
+        userStorageManager.saveAllData();
+        serviceStorageManager.saveAllData();
     }
 }

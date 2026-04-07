@@ -86,7 +86,7 @@ public class UserMenu {
                 System.out.println("Введіть коректне значення");
             }
         }
-        if (id != 0) return new User(username, password, role, id);
+        if (id != 0) return new User(id, username, password, role);
         return new User(username, password, role);
     }
 

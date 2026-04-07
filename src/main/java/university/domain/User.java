@@ -1,11 +1,16 @@
 package university.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
 public class User implements Entity<Integer>{
     public static final int PERMISSION_MANAGE_USERS = 4;
     public static int PERMISSION_EDIT = 2;
     public static final int PERMISSION_VIEW = 1;
 
-    private static int currentId = 1;
+    @Getter @Setter
+    private static int idCounter = 1;
 
     private final int id;
     private String username;
@@ -14,14 +19,14 @@ public class User implements Entity<Integer>{
 
 
     public User(String username, String password, int userPermissions) {
-        this.id = currentId;
-        currentId++;
+        this.id = idCounter;
+        idCounter++;
         this.username = username;
         this.password = password;
         this.userPermissions = userPermissions;
     }
 
-    public User(String username, String password, int userPermissions, int id) {
+    public User(int id, String username, String password, int userPermissions) {
         this.id = id;
         this.username = username;
         this.password = password;
