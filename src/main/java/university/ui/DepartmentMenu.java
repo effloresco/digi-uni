@@ -11,7 +11,7 @@ import java.util.Optional;
 import static university.service.SearchService.scanner;
 
 public class DepartmentMenu {
-    protected final DepartmentRepository departmentRepository = new DepartmentRepository();
+    protected final DepartmentRepository departmentRepository = DepartmentRepository.get(DepartmentRepository.class);
     protected final DepartmentService departmentService = new DepartmentService(departmentRepository);
     boolean resume;
     String exitOpt = null;
@@ -79,7 +79,7 @@ public class DepartmentMenu {
             } catch (InvalidValue e) {
                 System.out.println(e.getMessage());
                 resume = false;
-                System.out.println("0 - Вихід");
+                System.out.println("0 - Пропустити");
                 exitOpt = scanner.nextLine();
                 if (exitOpt.equals("0")) break;
             }
@@ -94,7 +94,7 @@ public class DepartmentMenu {
             } catch (InvalidValue e) {
                 System.out.println(e.getMessage());
                 resume = false;
-                System.out.println("0 - Вихід");
+                System.out.println("0 - Пропустити");
                 exitOpt = scanner.nextLine();
                 if (exitOpt.equals("0")) break;
             }
