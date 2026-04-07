@@ -94,7 +94,7 @@ public class FacultyMenu {
             } catch (InvalidValue e) {
                 System.out.println(e.getMessage());
                 resume = false;
-                System.out.println("0 - Вихід");
+                System.out.println("0 - Пропустити");
                 exitOpt = scanner.nextLine();
                 if (exitOpt.equals("0")) break;
             }
