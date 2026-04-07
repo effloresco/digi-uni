@@ -112,18 +112,21 @@ public class DepartmentMenu {
         boolean found = false;
         Department department = null;
         while (!found) {
-            System.out.println("Введіть ідентифікатор кафедри, що треба видалити");
+            System.out.println("Введіть ідентифікатор кафедри, що треба видалити (нуль, щоб вийти)");
             String departmentId = scanner.nextLine();
-
+            if (departmentId.equals("0")) {
+                return;
+            }
             Optional<Department> optionalDepartment = departmentRepository.findById(departmentId);
 
             if (optionalDepartment.isPresent()) {
                 department = optionalDepartment.get();
                 found = true;
+                departmentService.deleteDepartment(department);
             } else
                 System.out.println("Кафедри з таким ID не знайдено.");
         }
-        departmentService.deleteDepartment(department);
+
     }
 
     protected void changeDepartment() {

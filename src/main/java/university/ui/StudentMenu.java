@@ -239,19 +239,22 @@ public class StudentMenu {
         boolean found = false;
         Student student = null;
         while (!found) {
-            System.out.println("Введіть ідентифікатор студента, якого треба видалити");
+            System.out.println("Введіть ідентифікатор студента, якого треба видалити (нуль, щоб вийти)");
             String studentId = scanner.nextLine();
+            if (studentId.equals("0")) {
+                return;
+            }
 
             Optional<Student> optionalStudent = studentRepository.findById(studentId);
             if (optionalStudent.isPresent()) {
                 student = optionalStudent.get();
                 found = true;
+                studentService.deleteStudent(student);
             } else {
                 System.out.println("Студента з таким ID не знайдено.");
-                break;
             }
         }
-        studentService.deleteStudent(student);
+
     }
 
     protected void changeStudent() {
