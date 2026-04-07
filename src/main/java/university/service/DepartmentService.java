@@ -27,8 +27,7 @@ public class DepartmentService {
                 exists -> {throw new DepartmentAlreadyExistsException("Не вдалось додати кафедру з id " + department.getID() + " причина: кафедра вже існує");}
         );
         departmentRepository.add(department);
-        departmentStorageManager.saveAllData();
-        serviceStorageManager.saveAllData();
+        saveAllData();
     }
     public void deleteDepartment(Department department){
         Optional<Department> testCopy = departmentRepository.findById(department.getID());
@@ -36,8 +35,7 @@ public class DepartmentService {
                 () -> new DepartmentNotFoundException("Не вдалось видалити кафедру з id " + department.getID() + " причина: не знайдено в репозиторії")
         );
         departmentRepository.deleteByID(department.getID());
-        departmentStorageManager.saveAllData();
-        serviceStorageManager.saveAllData();
+        saveAllData();
     }
     public void updateDepartment(String currentId, Department department){
         Optional<Department> testCopy = departmentRepository.findById(currentId);
@@ -53,6 +51,9 @@ public class DepartmentService {
         }
         departmentRepository.deleteByID(currentId);
         departmentRepository.add(department);
+        saveAllData();
+    }
+    public void saveAllData(){
         departmentStorageManager.saveAllData();
         serviceStorageManager.saveAllData();
     }

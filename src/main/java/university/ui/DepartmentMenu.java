@@ -134,7 +134,7 @@ public class DepartmentMenu {
         String departmentId;
         Department department;
         while (!found) {
-            System.out.println("Введіть ідентифікатор кафедри, що треба замінити");
+            System.out.println("Введіть ідентифікатор кафедри, яку треба змінити");
             departmentId = scanner.nextLine();
 
             Optional<Department> optionalDepartment = departmentRepository.findById(departmentId);
@@ -156,6 +156,7 @@ public class DepartmentMenu {
                                     try {
                                         department.setName(scanner.nextLine());
                                         resume = true;
+                                        departmentService.saveAllData();
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
                                         resume = false;
@@ -168,6 +169,7 @@ public class DepartmentMenu {
                                     try {
                                         department.setFaculty(scanner.nextLine());
                                         resume = true;
+                                        departmentService.saveAllData();
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
                                         resume = false;
@@ -184,6 +186,7 @@ public class DepartmentMenu {
                                     try {
                                         department.setHead(scanner.nextLine());
                                         resume = true;
+                                        departmentService.saveAllData();
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
                                         resume = false;
@@ -199,6 +202,7 @@ public class DepartmentMenu {
                                     try {
                                         department.setLocation(scanner.nextLine());
                                         resume = true;
+                                        departmentService.saveAllData();
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
                                         resume = false;

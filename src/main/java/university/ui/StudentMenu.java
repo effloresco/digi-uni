@@ -283,6 +283,7 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setFirstName(scanner.nextLine());
+                                        studentService.saveAllData();
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
@@ -296,6 +297,7 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setLastName(scanner.nextLine());
+                                        studentService.saveAllData();
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
@@ -308,6 +310,7 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setMiddleName(scanner.nextLine());
+                                        studentService.saveAllData();
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
@@ -320,6 +323,7 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setBirthDate(LocalDate.parse(SearchService.scanner.nextLine(), formatter));
+                                        studentService.saveAllData();
                                         resume = true;
                                     } catch (DateTimeParseException e) {
                                         System.out.println("Введіть коректну дату");
@@ -332,6 +336,7 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setEmail(scanner.nextLine());
+                                        studentService.saveAllData();
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
@@ -344,6 +349,7 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setPhone(scanner.nextLine());
+                                        studentService.saveAllData();
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
@@ -356,6 +362,7 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setStudentId(scanner.nextLine());
+                                        studentService.saveAllData();
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
@@ -368,6 +375,7 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setCourse(Integer.parseInt(SearchService.scanner.nextLine()));
+                                        studentService.saveAllData();
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
@@ -378,6 +386,7 @@ public class StudentMenu {
                             case 9:
                                 System.out.println("Введіть групу");
                                 student.setGroup(scanner.nextLine());
+                                studentService.saveAllData();
                                 resume = true;
                                 break;
                             case 10:
@@ -385,6 +394,7 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setEnrollmentYear(Integer.parseInt(SearchService.scanner.nextLine()));
+                                        studentService.saveAllData();
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
@@ -404,9 +414,11 @@ public class StudentMenu {
                                         switch (inputLocal) {
                                             case 1:
                                                 student.setStudyForm(BUDGET);
+                                                studentService.saveAllData();
                                                 break;
                                             case 2:
                                                 student.setStudyForm(CONTRACT);
+                                                studentService.saveAllData();
                                                 break;
                                             case 0:
                                                 status = false;
@@ -429,14 +441,17 @@ public class StudentMenu {
                                         switch (inputLocal) {
                                             case 1:
                                                 student.setStudentStatus(STUDYING);
+                                                studentService.saveAllData();
                                                 status = false;
                                                 break;
                                             case 2:
                                                 student.setStudentStatus(ACADEMIC_LEAVE);
+                                                studentService.saveAllData();
                                                 status = false;
                                                 break;
                                             case 3:
                                                 student.setStudentStatus(EXPELLED);
+                                                studentService.saveAllData();
                                                 status = false;
                                             case 0:
                                                 status = false;

@@ -26,8 +26,7 @@ public class TeacherService {
                 exists -> {throw new PersonAlreadyExistsException("Не вдалось додати викладача з id " + person.getID() + " причина: викладач вже існує");}
         );
         personRepository.add(person);
-        teacherStorageManager.saveAllData();
-        serviceStorageManager.saveAllData();
+        saveAllData();
     }
     public void deleteTeacher(Teacher person){
         Optional<Teacher> testCopy = personRepository.findById(person.getID());
@@ -35,8 +34,7 @@ public class TeacherService {
                 () -> new PersonNotFoundException("Не вдалось видалити викладача з id " + person.getID() + " причина: не знайдено в репозиторії")
         );
         personRepository.deleteByID(person.getID());
-        teacherStorageManager.saveAllData();
-        serviceStorageManager.saveAllData();
+        saveAllData();
     }
     public void updateTeacher(String currentId, Teacher person){
         Optional<Teacher> testCopy = personRepository.findById(currentId);
@@ -51,6 +49,9 @@ public class TeacherService {
         }
         personRepository.deleteByID(currentId);
         personRepository.add(person);
+        saveAllData();
+    }
+    public void saveAllData(){
         teacherStorageManager.saveAllData();
         serviceStorageManager.saveAllData();
     }

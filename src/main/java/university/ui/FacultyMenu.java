@@ -196,6 +196,7 @@ public class FacultyMenu {
                                         do {
                                             try {
                                                 faculty.setName(scanner.nextLine());
+                                                facultyService.saveAllData();
                                                 resume = true;
                                             } catch (InvalidValue e) {
                                                 System.out.println(e.getMessage());
@@ -208,6 +209,7 @@ public class FacultyMenu {
                                         do {
                                             try {
                                                 faculty.setShortName(scanner.nextLine());
+                                                facultyService.saveAllData();
                                                 resume = true;
                                             } catch (InvalidValue e) {
                                                 System.out.println(e.getMessage());
@@ -219,6 +221,7 @@ public class FacultyMenu {
                                         do {
                                             try {
                                                 faculty.setDean(receiveDean());
+                                                facultyService.saveAllData();
                                                 resume = true;
                                             } catch (InvalidValue e) {
                                                 System.out.println(e.getMessage());
@@ -234,6 +237,7 @@ public class FacultyMenu {
                                         do {
                                             try {
                                                 faculty.setContacts(scanner.nextLine());
+                                                facultyService.saveAllData();
                                                 resume = true;
                                             } catch (InvalidValue e) {
                                                 System.out.println(e.getMessage());

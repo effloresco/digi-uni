@@ -25,8 +25,7 @@ public class FacultyService{
                 exists -> {throw new FacultyAlreadyExistsException("Не вдалось додати факультет з id " + faculty.getID() + " причина: факультет вже існує"
         );});
         facultyRepository.add(faculty);
-        facultyStorageManager.saveAllData();
-        serviceStorageManager.saveAllData();
+        saveAllData();
     }
     public void deleteFaculty(Faculty faculty){
         Optional<Faculty> testCopy = facultyRepository.findById(faculty.getID());
@@ -34,8 +33,7 @@ public class FacultyService{
                 () -> new FacultyNotFoundException("Не вдалось видалити факультет з id " + faculty.getID() + " причина: не знайдено в репозиторії")
         );
         facultyRepository.deleteByID(faculty.getID());
-        facultyStorageManager.saveAllData();
-        serviceStorageManager.saveAllData();
+        saveAllData();
     }
     public void updateFaculty(String currentId, Faculty faculty){
         Optional<Faculty> testCopy = facultyRepository.findById(currentId);
@@ -51,6 +49,9 @@ public class FacultyService{
         }
         facultyRepository.deleteByID(currentId);
         facultyRepository.add(faculty);
+        saveAllData();
+    }
+    public void saveAllData(){
         facultyStorageManager.saveAllData();
         serviceStorageManager.saveAllData();
     }
