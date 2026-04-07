@@ -30,8 +30,10 @@ public class Department implements Entity<String> {
     public Department(String id, String name, Faculty faculty, Person head, String location) throws InvalidValue {
         this.id = id;
         setName(name);
-        setFaculty(faculty.getID());
-        setHead(head.getID());
+        if (faculty == null) this.faculty = null;
+        else setFaculty(faculty.getID());
+        if (head == null) this.head = null;
+        else setHead(head.getID());
         setLocation(location);
     }
 

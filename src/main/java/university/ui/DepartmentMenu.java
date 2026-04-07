@@ -35,10 +35,10 @@ public class DepartmentMenu {
                         addDepartment();
                         break;
                     case 2:
-                        deleteDepartment();
+                        changeDepartment();
                         break;
                     case 3:
-                        changeDepartment();
+                        deleteDepartment();
                         break;
                     case 0:
                         status = false;
