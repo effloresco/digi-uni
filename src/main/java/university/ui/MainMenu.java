@@ -1,6 +1,8 @@
 package university.ui;
 
 import university.domain.User;
+import university.exceptions.UserAlreadyExistsException;
+import university.exceptions.UsernameAlreadyUsedException;
 import university.repository.UserRepository;
 import university.service.UserService;
 import university.storage.*;
@@ -20,16 +22,20 @@ public class MainMenu {
     private static final DepartmentStorageManager departmentStorageManager = new DepartmentStorageManager();
     private static final FacultyStorageManager facultyStorageManager = new FacultyStorageManager();
     private static final ServiceStorageManager serviceStorageManager = new ServiceStorageManager();
+    private static final UserStorageManager userStorageManager = new UserStorageManager();
 
     static {
-        //adds default admin user
-        userService.createUser(new User("admin", "12345678", User.PERMISSION_VIEW | User.PERMISSION_EDIT | User.PERMISSION_MANAGE_USERS));
         //loads all data from the storage
         studentStorageManager.loadAllData();
         teacherStorageManager.loadAllData();
         departmentStorageManager.loadAllData();
         facultyStorageManager.loadAllData();
         serviceStorageManager.loadAllData();
+        userStorageManager.loadAllData();
+        //adds default admin user
+        try {
+            userService.createUser(new User("admin", "12345678", User.PERMISSION_VIEW | User.PERMISSION_EDIT | User.PERMISSION_MANAGE_USERS));
+        } catch(UserAlreadyExistsException | UsernameAlreadyUsedException _){}
     }
 
 
