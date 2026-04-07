@@ -26,7 +26,7 @@ public final class Utils {
             return false;
 
         for (char c : s.toCharArray()) {
-            if (!Character.isLetter(c)) {
+            if (!Character.isLetter(c) && !Character.isSpaceChar(c)) {
                 return true;
             }
         }

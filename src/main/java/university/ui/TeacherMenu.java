@@ -164,7 +164,7 @@ public class TeacherMenu {
         System.out.println("Введіть дату влаштування на роботу");
         do {
             try {
-                teacher.setHireDate(LocalDate.parse(SearchService.scanner.nextLine(), formatter));
+                teacher.setHireDate(LocalDate.parse(scanner.nextLine(), formatter));
                 resume = true;
             } catch (DateTimeParseException e) {
                 System.out.println("Введіть коректну дату");
@@ -175,13 +175,18 @@ public class TeacherMenu {
         System.out.println("Введіть ставку");
         do {
             try {
-                teacher.setRate(Double.parseDouble(SearchService.scanner.nextLine()));
+                double inputRate = Double.parseDouble(scanner.nextLine());
+                teacher.setRate(inputRate);
                 resume = true;
+            } catch (NumberFormatException e) {
+                System.out.println("Помилка: введіть коректне число");
+                resume = false;
             } catch (InvalidValue e) {
                 System.out.println(e.getMessage());
                 resume = false;
             }
         } while (!resume);
+
         System.out.println("Викладача " + teacher.getFullName() + " створено");
         return teacher;
     }

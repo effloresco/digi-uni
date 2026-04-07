@@ -56,8 +56,8 @@ public non-sealed class Teacher extends Person {
     }
 
     public void setRate(double rate) throws InvalidValue {
-        if (containsNonDigit(String.valueOf(rate))) {
-            throw new InvalidValue("Сума може містити лише числа");
+        if (rate < 0) {
+            throw new InvalidValue("Ставка не може бути від’ємною");
         }
         this.rate = rate;
     }
