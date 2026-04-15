@@ -1,6 +1,7 @@
 package university.dto;
 
 import lombok.Getter;
+import university.domain.Faculty;
 
 import java.time.LocalDate;
 
@@ -18,8 +19,9 @@ public class TeacherDto {
     private final String title;
     private final LocalDate hireDate;
     private final double rate;
+    private final Faculty faculty;
 
-    public TeacherDto(String id, String lastName, String firstName, String middleName, LocalDate birthDate, String email, String phone, String position, String degree, String title, LocalDate hireDate, double rate) {
+    public TeacherDto(String id, String lastName, String firstName, String middleName, LocalDate birthDate, String email, String phone, String position, String degree, String title, LocalDate hireDate, double rate, Faculty faculty) {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
@@ -32,5 +34,6 @@ public class TeacherDto {
         this.title = title;
         this.hireDate = hireDate;
         this.rate = rate;
+        this.faculty = faculty;
     }
 }

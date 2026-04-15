@@ -2,11 +2,17 @@ package university.domain;
 
 import lombok.Getter;
 import university.exceptions.InvalidValue;
+import university.repository.FacultyRepository;
+import university.repository.Repository;
+
 import java.time.LocalDate;
+import java.util.Optional;
+
 import static university.service.Utils.*;
 
 @Getter
 public non-sealed class Student extends Person {
+    protected final FacultyRepository facultyRepository = FacultyRepository.get(FacultyRepository.class);
     public enum StudyForm {BUDGET, CONTRACT}
 
     public enum StudentStatus {STUDYING, ACADEMIC_LEAVE, EXPELLED}
@@ -17,10 +23,12 @@ public non-sealed class Student extends Person {
     private int enrollmentYear;
     private StudyForm form;
     private StudentStatus status;
+    private Faculty faculty;
+    private String specialty;
 
     public Student() {}
 
-    public Student(String id, String lastName, String firstName, String middleName, LocalDate birthDate, String email, String phone, String studentId, int course, String group, int enrollmentYear, StudyForm form, StudentStatus status) {
+    public Student(String id, String lastName, String firstName, String middleName, LocalDate birthDate, String email, String phone, String studentId, int course, String group, int enrollmentYear, StudyForm form, StudentStatus status, Faculty faculty, String specialty) throws InvalidValue {
         super(id, lastName, firstName, middleName, birthDate, email, phone);
         setStudentId(studentId);
         setCourse(course);
@@ -28,6 +36,32 @@ public non-sealed class Student extends Person {
         setEnrollmentYear(enrollmentYear);
         setStudyForm(form);
         setStudentStatus(status);
+        this.faculty = faculty;
+        setSpecialty(specialty);
+    }
+
+    public void setFaculty(String facultyId) throws InvalidValue{
+        Optional<Faculty> optionalFaculty = facultyRepository.findById(facultyId);
+
+        if (!optionalFaculty.isPresent()) {
+            throw new InvalidValue("Факультет з таким ID не знайдено.");
+        }
+        this.faculty = optionalFaculty.get();
+    }
+
+    public Faculty getFaculty() {
+        return faculty;
+    }
+
+    public String getSpecialty() {
+        return specialty;
+    }
+
+    public void setSpecialty(String specialty) throws InvalidValue{
+        if (containsNonLetter(String.valueOf(specialty))) {
+            throw new InvalidValue("Назва спеціальносі може містити лише літери");
+        }
+        this.specialty = specialty;
     }
 
     public void setStudentId(String studentId) throws InvalidValue {
@@ -49,7 +83,7 @@ public non-sealed class Student extends Person {
     }
 
     public void setEnrollmentYear(int year) throws InvalidValue {
-        if (containsNonDigit(String.valueOf(year)) || String.valueOf(year).length() != 4) {
+        if (containsNonDigit(String.valueOf(year)) || (String.valueOf(year).length() != 4) || (year < 1900 || year > 2100)) {
             throw new InvalidValue("Некоректний рік");
         }
         this.enrollmentYear = year;
