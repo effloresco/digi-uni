@@ -27,7 +27,11 @@ public class ReportsMenu {
 
     );
 
-    private final List<String> teacherOptions = List.of("1. За алфавітом", opt0);
+    private final List<String> teacherOptions = List.of(
+            "1. Усі за алфавітом",
+            "2. Факультет: за алфавітом",
+            "3. Кафедра: за алфавітом",
+            opt0);
 
 
     protected void reports() {
@@ -121,6 +125,7 @@ public class ReportsMenu {
             teacherOptions.forEach(System.out::println);
             System.out.print("Виберіть опцію: ");
 
+            try{
             String choice = scanner.nextLine();
 
             int input = Integer.parseInt(choice);
@@ -128,12 +133,25 @@ public class ReportsMenu {
                 case 1:
                     printAllTeachersAlphabetically();
                     break;
+                case 2:
+                    System.out.print("Введіть ID факультету: ");
+                    String facultyId = scanner.nextLine();
+                    printTeachersByFacultyAlphabetically(facultyId);
+                    break;
+                case 3:
+                    System.out.print("Введіть ID кафедри: ");
+                    String departmentId = scanner.nextLine();
+                    printTeachersByDepartmentAlphabetically(departmentId);
+                    break;
                 case 0:
                     status = false;
                     break;
                 default:
                     System.out.println("Введіть коректне значення");
             }
+        } catch (NumberFormatException e) {
+            System.out.println("Помилка: введіть коректне число.");
+        }
         }
     }
 }
