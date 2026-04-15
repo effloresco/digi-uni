@@ -124,5 +124,33 @@ public class ReportService {public static void printAllStudentsAlphabetically() 
         }
     }
 
+    public static void printTeachersByFacultyAlphabetically(String facultyId) {
+        List<Teacher> teachers = teacherRepository.findAll().stream()
+                .filter(t -> t.getFaculty() != null && t.getFaculty().getID().equals(facultyId))
+                .sorted(Comparator.comparing(Person::getFullName))
+                .toList();
+
+        if (teachers.isEmpty()) {
+            System.out.println("На факультеті з ID '" + facultyId + "' викладачів не знайдено.");
+        } else {
+            System.out.println("\n--- Викладачі факультету (" + facultyId + ") за алфавітом ---");
+            teachers.forEach(System.out::println);
+        }
+    }
+
+    public static void printTeachersByDepartmentAlphabetically(String departmentId) {
+        List<Teacher> teachers = teacherRepository.findAll().stream()
+                .filter(t -> t.getDepartment() != null && t.getDepartment().getID().equals(departmentId))
+                .sorted(Comparator.comparing(Person::getFullName))
+                .toList();
+
+        if (teachers.isEmpty()) {
+            System.out.println("На кафедрі з ID '" + departmentId + "' викладачів не знайдено.");
+        } else {
+            System.out.println("\n--- Викладачі кафедри (" + departmentId + ") за алфавітом ---");
+            teachers.forEach(System.out::println);
+        }
+    }
+
 }
 

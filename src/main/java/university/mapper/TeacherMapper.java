@@ -21,7 +21,8 @@ public class TeacherMapper implements Mapper<Teacher, TeacherDto> {
                 teacher.getTitle(),
                 teacher.getHireDate(),
                 teacher.getRate(),
-                teacher.getFaculty()
+                teacher.getFaculty(),
+                teacher.getDepartment()
         );
     }
 
@@ -41,7 +42,8 @@ public class TeacherMapper implements Mapper<Teacher, TeacherDto> {
                 dto.getTitle(),
                 dto.getHireDate(),
                 dto.getRate(),
-                dto.getFaculty()
+                dto.getFaculty(),
+                dto.getDepartment()
         );
     }
 }
