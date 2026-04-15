@@ -1,6 +1,7 @@
 package university.dto;
 
 import lombok.Getter;
+import university.domain.Department;
 import university.domain.Faculty;
 import university.domain.Student;
 
@@ -24,8 +25,9 @@ public class StudentDto {
     private final Student.StudentStatus status;
     private final Faculty faculty;
     private final String specialty;
+    private final Department department;
 
-    public StudentDto(String id, String lastName, String firstName, String middleName, LocalDate birthDate, String email, String phone, String studentId, int course, String group, int enrollmentYear, Student.StudyForm form, Student.StudentStatus status, Faculty  faculty, String specialty) {
+    public StudentDto(String id, String lastName, String firstName, String middleName, LocalDate birthDate, String email, String phone, String studentId, int course, String group, int enrollmentYear, Student.StudyForm form, Student.StudentStatus status, Faculty  faculty, String specialty, Department department) {
         this.id = id;
         this.studentId = studentId;
         this.course = course;
@@ -41,8 +43,7 @@ public class StudentDto {
         this.email = email;
         this.faculty = faculty;
         this.specialty = specialty;
+        this.department = department;
     }
-
-
 
 }

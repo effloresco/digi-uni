@@ -2,8 +2,8 @@ package university.domain;
 
 import lombok.Getter;
 import university.exceptions.InvalidValue;
+import university.repository.DepartmentRepository;
 import university.repository.FacultyRepository;
-import university.repository.Repository;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -13,6 +13,7 @@ import static university.service.Utils.*;
 @Getter
 public non-sealed class Student extends Person {
     protected final FacultyRepository facultyRepository = FacultyRepository.get(FacultyRepository.class);
+    protected final DepartmentRepository departmentRepository = DepartmentRepository.get(DepartmentRepository.class);
     public enum StudyForm {BUDGET, CONTRACT}
 
     public enum StudentStatus {STUDYING, ACADEMIC_LEAVE, EXPELLED}
@@ -25,10 +26,11 @@ public non-sealed class Student extends Person {
     private StudentStatus status;
     private Faculty faculty;
     private String specialty;
+    private Department department;
 
     public Student() {}
 
-    public Student(String id, String lastName, String firstName, String middleName, LocalDate birthDate, String email, String phone, String studentId, int course, String group, int enrollmentYear, StudyForm form, StudentStatus status, Faculty faculty, String specialty) throws InvalidValue {
+    public Student(String id, String lastName, String firstName, String middleName, LocalDate birthDate, String email, String phone, String studentId, int course, String group, int enrollmentYear, StudyForm form, StudentStatus status, Faculty faculty, String specialty, Department department) throws InvalidValue {
         super(id, lastName, firstName, middleName, birthDate, email, phone);
         setStudentId(studentId);
         setCourse(course);
@@ -38,6 +40,16 @@ public non-sealed class Student extends Person {
         setStudentStatus(status);
         this.faculty = faculty;
         setSpecialty(specialty);
+        this.department = department;
+    }
+
+    public void setDepartment(String departmentId) throws InvalidValue{
+        Optional<Department> optionalDepartment = departmentRepository.findById(departmentId);
+
+        if (!optionalDepartment.isPresent()) {
+            throw new InvalidValue("Кафедри з таким ID не знайдено.");
+        }
+        this.department = optionalDepartment.get();
     }
 
     public void setFaculty(String facultyId) throws InvalidValue{
@@ -53,9 +65,6 @@ public non-sealed class Student extends Person {
         return faculty;
     }
 
-    public String getSpecialty() {
-        return specialty;
-    }
 
     public void setSpecialty(String specialty) throws InvalidValue{
         if (containsNonLetter(String.valueOf(specialty))) {
