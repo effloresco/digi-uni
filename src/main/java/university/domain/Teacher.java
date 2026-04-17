@@ -2,29 +2,60 @@ package university.domain;
 
 import lombok.Getter;
 import university.exceptions.InvalidValue;
+import university.repository.DepartmentRepository;
+import university.repository.FacultyRepository;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static university.service.Utils.*;
 
 @Getter
 public non-sealed class Teacher extends Person {
+    protected final FacultyRepository facultyRepository = FacultyRepository.get(FacultyRepository.class);
+    protected final DepartmentRepository departmentRepository = DepartmentRepository.get(DepartmentRepository.class);
     private String position;
     private String degree;
     private String title;
     private LocalDate hireDate;
     private double rate;
+    private Faculty faculty;
+    private Department department;
 
     public Teacher() {
     }
 
-    public Teacher(String id, String lastName, String firstName, String middleName, LocalDate birthDate, String email, String phone, String position, String degree, String title, LocalDate hireDate, double rate) throws InvalidValue {
+    public Teacher(String id, String lastName, String firstName, String middleName, LocalDate birthDate, String email, String phone, String position, String degree, String title, LocalDate hireDate, double rate, Faculty faculty, Department department) throws InvalidValue {
         super(id, lastName, firstName, middleName, birthDate, email, phone);
         setPosition(position);
         setDegree(degree);
         setTitle(title);
         setHireDate(hireDate);
         setRate(rate);
+        this.faculty = faculty;
+        this.department = department;
+    }
+
+    public void setDepartment(String departmentId) throws InvalidValue{
+        Optional<Department> optionalDepartment = departmentRepository.findById(departmentId);
+
+        if (!optionalDepartment.isPresent()) {
+            throw new InvalidValue("Кафедри з таким ID не знайдено.");
+        }
+        this.department = optionalDepartment.get();
+    }
+
+    public void setFaculty(String facultyId) throws InvalidValue{
+        Optional<Faculty> optionalFaculty = facultyRepository.findById(facultyId);
+
+        if (!optionalFaculty.isPresent()) {
+            throw new InvalidValue("Факультет з таким ID не знайдено.");
+        }
+        this.faculty = optionalFaculty.get();
+    }
+
+    public Faculty getFaculty() {
+        return faculty;
     }
 
     public void setPosition(String position) throws InvalidValue {

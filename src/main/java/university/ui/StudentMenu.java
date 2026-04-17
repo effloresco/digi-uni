@@ -22,15 +22,43 @@ public class StudentMenu {
     protected final StudentService studentService = new StudentService(studentRepository);
     boolean resume;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    String exitOpt = null;
 
     private final String opt0 = "0 - Вихід";
-    private List<String> changeList = List.of( "1 - Ім'я", "2 - Прізвище", "3 - По батькові", "4 - Дату народження", "5 - Електронну пошту", "6 - Номер телефону", "6 - Ідентифікатор студента", "8 - Курс", "9 - Групу", "10 - Рік вступу", "11 - форму навчання", "12 - Статус студента", opt0);
+    private List<String> changeList = List.of(
+            "1 - Ім'я",
+            "2 - Прізвище",
+            "3 - По батькові",
+            "4 - Дату народження",
+            "5 - Електронну пошту",
+            "6 - Номер телефону",
+            "6 - Ідентифікатор студента",
+            "8 - Курс",
+            "9 - Групу",
+            "10 - Рік вступу",
+            "11 - форму навчання",
+            "12 - Статус студента",
+            "13 - Факультет",
+            "14 - Спеціальність",
+            "15 - Кафедру",
+            opt0);
 
-    private final List<String> studentStatuses = List.of("1 - Вчиться", "2 - У академічній відпустці", "3 - Відрахований", opt0);
+    private final List<String> studentStatuses = List.of(
+            "1 - Вчиться",
+            "2 - У академічній відпустці",
+            "3 - Відрахований",
+            opt0);
 
-    private final List<String> studyForms = List.of("1 - Бюджет", "2 - Контракт", opt0);
+    private final List<String> studyForms = List.of(
+            "1 - Бюджет",
+            "2 - Контракт",
+            opt0);
 
-    private final List<String> menuOptions = List.of("1 - Додати студента", "2 - Змінити інформацію про студент а", "3 - Видалити студента з бази даних", opt0);
+    private final List<String> menuOptions = List.of(
+            "1 - Додати студента",
+            "2 - Змінити інформацію про студента",
+            "3 - Видалити студента з бази даних",
+            opt0);
 
     protected void studentManagement() {
         boolean status = true;
@@ -160,6 +188,48 @@ public class StudentMenu {
         System.out.println("Введіть групу");
         student.setGroup(scanner.nextLine());
         resume = true;
+
+        System.out.println("Введіть ID факультету");
+        do {
+            try {
+                student.setFaculty(scanner.nextLine());
+                resume = true;
+            } catch (InvalidValue e) {
+                System.out.println(e.getMessage());
+                resume = false;
+                System.out.println("0 - Вихід");
+                exitOpt = scanner.nextLine();
+                if (exitOpt.equals("0")) break;
+            }
+        } while (!resume);
+
+
+
+
+        System.out.println("Введіть назву спеціальності");
+        do {
+            try {
+                student.setSpecialty(scanner.nextLine());
+                resume = true;
+            } catch (InvalidValue e) {
+                System.out.println(e.getMessage());
+                resume = false;
+            }
+        } while (!resume);
+
+        System.out.println("Введіть ID кафедри");
+        do {
+            try {
+                student.setDepartment(scanner.nextLine());
+                resume = true;
+            } catch (InvalidValue e) {
+                System.out.println(e.getMessage());
+                resume = false;
+                System.out.println("0 - Вихід");
+                exitOpt = scanner.nextLine();
+                if (exitOpt.equals("0")) break;
+            }
+        } while (!resume);
 
 
         System.out.println("Введіть рік вступу");
@@ -464,6 +534,47 @@ public class StudentMenu {
                                     }
                                 } while (status);
                                 break;
+
+                            case 13:
+                                System.out.println("Введіть ID факультету");
+                                do {
+                                    try {
+                                        student.setFaculty(scanner.nextLine());
+                                        studentService.saveAllData();
+                                        resume = true;
+                                    } catch (InvalidValue e) {
+                                        System.out.println(e.getMessage());
+                                        resume = false;
+                                    }
+                                } while (!resume);
+                                break;
+                            case 14:
+                                System.out.println("Введіть назву спеціальності");
+                                do {
+                                    try {
+                                        student.setSpecialty(scanner.nextLine());
+                                        studentService.saveAllData();
+                                        resume = true;
+                                    } catch (InvalidValue e) {
+                                        System.out.println(e.getMessage());
+                                        resume = false;
+                                    }
+                                } while (!resume);
+                                break;
+                            case 15:
+                                System.out.println("Введіть ID кафедри");
+                                do {
+                                    try {
+                                        student.setDepartment(scanner.nextLine());
+                                        studentService.saveAllData();
+                                        resume = true;
+                                    } catch (InvalidValue e) {
+                                        System.out.println(e.getMessage());
+                                        resume = false;
+                                    }
+                                } while (!resume);
+                                break;
+
                             case 0:
                                 status = false;
                                 break;

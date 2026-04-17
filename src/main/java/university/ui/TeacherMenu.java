@@ -20,10 +20,28 @@ public class TeacherMenu {
     protected final TeacherService teacherService = new TeacherService(teacherRepository);
     boolean resume;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-
+    String exitOpt = null;
     private final String opt0 = "0 - Вихід";
-    private List<String> changeList = List.of("1 - Ім'я", "2 - Прізвище", "3 - По батькові", "4 - Дату народження", "5 - Електронну пошту", "6 - Номер телефону", "7 - Посаду", "8 - Науковий ступінь", "9 - Вчене звання", "10 - Дату влаштування на роботу", "11 - Ставку", opt0);
-    private List<String> menuOptions = List.of("1 - Додати викладача", "2 - Змінити інформацію про викладача", "3 - Видалити викладача з бази даних", opt0);
+    private List<String> changeList = List.of(
+            "1 - Ім'я",
+            "2 - Прізвище",
+            "3 - По батькові",
+            "4 - Дату народження",
+            "5 - Електронну пошту",
+            "6 - Номер телефону",
+            "7 - Посаду",
+            "8 - Науковий ступінь",
+            "9 - Вчене звання",
+            "10 - Дату влаштування на роботу",
+            "11 - Ставку",
+            "12 - Факультет", "13 - Кафедра",
+            opt0);
+
+    private List<String> menuOptions = List.of(
+            "1 - Додати викладача",
+            "2 - Змінити інформацію про викладача",
+            "3 - Видалити викладача з бази даних",
+            opt0);
 
     protected void teacherManagement() {
         boolean status = true;
@@ -161,6 +179,34 @@ public class TeacherMenu {
             }
         } while (!resume);
 
+        System.out.println("Введіть ID факультету");
+        do {
+            try {
+                teacher.setFaculty(scanner.nextLine());
+                resume = true;
+            } catch (InvalidValue e) {
+                System.out.println(e.getMessage());
+                resume = false;
+                System.out.println("0 - Вихід");
+                exitOpt = scanner.nextLine();
+                if (exitOpt.equals("0")) break;
+            }
+        } while (!resume);
+
+        System.out.println("Введіть ID кафедри");
+        do {
+            try {
+                teacher.setDepartment(scanner.nextLine());
+                resume = true;
+            } catch (InvalidValue e) {
+                System.out.println(e.getMessage());
+                resume = false;
+                System.out.println("0 - Вихід");
+                exitOpt = scanner.nextLine();
+                if (exitOpt.equals("0")) break;
+            }
+        } while (!resume);
+
         System.out.println("Введіть дату влаштування на роботу");
         do {
             try {
@@ -227,13 +273,11 @@ public class TeacherMenu {
                 found = true;
                 teacher = optionalTeacher.get();
                 boolean status = true;
-                changeList.forEach(System.out::println);
 
                 while (status) {
                     System.out.println("\n*-Оберіть, що змінити-*");
-                    for (String option : menuOptions) {
-                        System.out.println(option);
-                    }
+                    changeList.forEach(System.out::println);
+
                     String inputLine = scanner.nextLine();
                     try {
                         int input = Integer.parseInt(inputLine);
@@ -381,6 +425,35 @@ public class TeacherMenu {
                                     }
                                 } while (!resume);
                                 break;
+
+                            case 12:
+                                System.out.println("Введіть ID нового факультету");
+                                do {
+                                    try {
+                                        teacher.setFaculty(scanner.nextLine());
+                                        teacherService.saveAllData();
+                                        resume = true;
+                                    } catch (InvalidValue e) {
+                                        System.out.println(e.getMessage());
+                                        resume = false;
+                                    }
+                                } while (!resume);
+                                break;
+
+                            case 13:
+                                System.out.println("Введіть ID нової кафедри");
+                                do {
+                                    try {
+                                        teacher.setDepartment(scanner.nextLine());
+                                        teacherService.saveAllData();
+                                        resume = true;
+                                    } catch (InvalidValue e) {
+                                        System.out.println(e.getMessage());
+                                        resume = false;
+                                    }
+                                } while (!resume);
+                                break;
+
                             case 0:
                                 status = false;
                                 break;

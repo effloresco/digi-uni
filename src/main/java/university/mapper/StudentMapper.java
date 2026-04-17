@@ -20,7 +20,11 @@ public class StudentMapper implements Mapper<Student, StudentDto>{
                 student.getGroup(),
                 student.getEnrollmentYear(),
                 student.getForm(),
-                student.getStatus()
+                student.getStatus(),
+                student.getFaculty(),
+                student.getSpecialty(),
+                student.getDepartment()
+
         );
     }
 
@@ -40,7 +44,10 @@ public class StudentMapper implements Mapper<Student, StudentDto>{
                 dto.getGroup(),
                 dto.getEnrollmentYear(),
                 dto.getForm(),
-                dto.getStatus()
+                dto.getStatus(),
+                dto.getFaculty(),
+                dto.getSpecialty(),
+                dto.getDepartment()
         );
     }
 }
