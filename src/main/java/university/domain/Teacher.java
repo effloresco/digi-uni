@@ -19,43 +19,39 @@ public non-sealed class Teacher extends Person {
     private String title;
     private LocalDate hireDate;
     private double rate;
-    private Faculty faculty;
-    private Department department;
+    private String facultyId;
+    private String departmentId;
 
     public Teacher() {
     }
 
-    public Teacher(String id, String lastName, String firstName, String middleName, LocalDate birthDate, String email, String phone, String position, String degree, String title, LocalDate hireDate, double rate, Faculty faculty, Department department) throws InvalidValue {
+    public Teacher(String id, String lastName, String firstName, String middleName, LocalDate birthDate, String email, String phone, String position, String degree, String title, LocalDate hireDate, double rate, String facultyId, String departmentId) throws InvalidValue {
         super(id, lastName, firstName, middleName, birthDate, email, phone);
         setPosition(position);
         setDegree(degree);
         setTitle(title);
         setHireDate(hireDate);
         setRate(rate);
-        this.faculty = faculty;
-        this.department = department;
+        this.facultyId = facultyId;
+        this.departmentId = departmentId;
     }
 
-    public void setDepartment(String departmentId) throws InvalidValue{
+    public void setDepartmentId(String departmentId) throws InvalidValue{
         Optional<Department> optionalDepartment = departmentRepository.findById(departmentId);
 
-        if (!optionalDepartment.isPresent()) {
+        if (optionalDepartment.isEmpty()) {
             throw new InvalidValue("Кафедри з таким ID не знайдено.");
         }
-        this.department = optionalDepartment.get();
+        this.departmentId = departmentId;
     }
 
-    public void setFaculty(String facultyId) throws InvalidValue{
+    public void setFacultyId(String facultyId) throws InvalidValue{
         Optional<Faculty> optionalFaculty = facultyRepository.findById(facultyId);
 
-        if (!optionalFaculty.isPresent()) {
+        if (optionalFaculty.isEmpty()) {
             throw new InvalidValue("Факультет з таким ID не знайдено.");
         }
-        this.faculty = optionalFaculty.get();
-    }
-
-    public Faculty getFaculty() {
-        return faculty;
+        this.facultyId = facultyId;
     }
 
     public void setPosition(String position) throws InvalidValue {

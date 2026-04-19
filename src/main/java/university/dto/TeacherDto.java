@@ -19,10 +19,10 @@ public class TeacherDto {
     private final String title;
     private final LocalDate hireDate;
     private final double rate;
-    private final Faculty faculty;
-    private final Department department;
+    private final String facultyId;
+    private final String departmentId;
 
-    public TeacherDto(String id, String lastName, String firstName, String middleName, LocalDate birthDate, String email, String phone, String position, String degree, String title, LocalDate hireDate, double rate, Faculty faculty, Department department) {
+    public TeacherDto(String id, String lastName, String firstName, String middleName, LocalDate birthDate, String email, String phone, String position, String degree, String title, LocalDate hireDate, double rate, String facultyId, String departmentId) {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
@@ -35,7 +35,7 @@ public class TeacherDto {
         this.title = title;
         this.hireDate = hireDate;
         this.rate = rate;
-        this.faculty = faculty;
-        this.department = department;
+        this.facultyId = facultyId;
+        this.departmentId = departmentId;
     }
 }

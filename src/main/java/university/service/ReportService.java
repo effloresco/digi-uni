@@ -37,7 +37,7 @@ public class ReportService {public static void printAllStudentsAlphabetically() 
 
     public static void printStudentsByFacultyAlphabetically(String facultyId) {
         List<Student> students = studentRepository.findAll().stream()
-                .filter(s -> s.getFaculty() != null && s.getFaculty().getID().equals(facultyId))
+                .filter(s -> s.getFacultyId() != null && s.getFacultyId().equals(facultyId))
                 .sorted(Comparator.comparing(Person::getFullName))
                 .toList();
 
@@ -51,7 +51,7 @@ public class ReportService {public static void printAllStudentsAlphabetically() 
 
     public static void printStudentsByDepartmentByCourse(String departmentId) {
         List<Student> students = studentRepository.findAll().stream()
-                .filter(s -> s.getDepartment() != null && s.getDepartment().getID().equals(departmentId))
+                .filter(s -> s.getDepartmentId() != null && s.getDepartmentId().equals(departmentId))
                 .sorted(Comparator.comparing(Student::getCourse)
                         .thenComparing(Person::getFullName))
                 .toList();
@@ -68,7 +68,7 @@ public class ReportService {public static void printAllStudentsAlphabetically() 
 
     public static void printStudentsByDepartmentAlphabetically(String departmentId) {
         List<Student> students = studentRepository.findAll().stream()
-                .filter(s -> s.getDepartment() != null && s.getDepartment().getID().equals(departmentId))
+                .filter(s -> s.getDepartmentId() != null && s.getDepartmentId().equals(departmentId))
                 .sorted(Comparator.comparing(Person::getFullName))
                 .toList();
 
@@ -87,7 +87,7 @@ public class ReportService {public static void printAllStudentsAlphabetically() 
         }
 
         List<Student> students = studentRepository.findAll().stream()
-                .filter(s -> s.getDepartment() != null && s.getDepartment().getID().equals(departmentId))
+                .filter(s -> s.getDepartmentId() != null && s.getDepartmentId().equals(departmentId))
                 .filter(s -> s.getCourse() == course)
                 .toList();
 
@@ -126,7 +126,7 @@ public class ReportService {public static void printAllStudentsAlphabetically() 
 
     public static void printTeachersByFacultyAlphabetically(String facultyId) {
         List<Teacher> teachers = teacherRepository.findAll().stream()
-                .filter(t -> t.getFaculty() != null && t.getFaculty().getID().equals(facultyId))
+                .filter(t -> t.getFacultyId() != null && t.getFacultyId().equals(facultyId))
                 .sorted(Comparator.comparing(Person::getFullName))
                 .toList();
 
@@ -140,7 +140,7 @@ public class ReportService {public static void printAllStudentsAlphabetically() 
 
     public static void printTeachersByDepartmentAlphabetically(String departmentId) {
         List<Teacher> teachers = teacherRepository.findAll().stream()
-                .filter(t -> t.getDepartment() != null && t.getDepartment().getID().equals(departmentId))
+                .filter(t -> t.getDepartmentId() != null && t.getDepartmentId().equals(departmentId))
                 .sorted(Comparator.comparing(Person::getFullName))
                 .toList();
 

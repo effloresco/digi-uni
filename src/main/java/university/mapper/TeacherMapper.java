@@ -1,7 +1,6 @@
 package university.mapper;
 
 import university.domain.Teacher;
-import university.dto.StudentDto;
 import university.dto.TeacherDto;
 
 public class TeacherMapper implements Mapper<Teacher, TeacherDto> {
@@ -21,8 +20,8 @@ public class TeacherMapper implements Mapper<Teacher, TeacherDto> {
                 teacher.getTitle(),
                 teacher.getHireDate(),
                 teacher.getRate(),
-                teacher.getFaculty(),
-                teacher.getDepartment()
+                teacher.getFacultyId(),
+                teacher.getDepartmentId()
         );
     }
 
@@ -42,8 +41,8 @@ public class TeacherMapper implements Mapper<Teacher, TeacherDto> {
                 dto.getTitle(),
                 dto.getHireDate(),
                 dto.getRate(),
-                dto.getFaculty(),
-                dto.getDepartment()
+                dto.getFacultyId(),
+                dto.getDepartmentId()
         );
     }
 }

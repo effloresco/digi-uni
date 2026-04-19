@@ -23,11 +23,11 @@ public class StudentDto {
     private final int enrollmentYear;
     private final Student.StudyForm form;
     private final Student.StudentStatus status;
-    private final Faculty faculty;
+    private final String facultyId;
     private final String specialty;
-    private final Department department;
+    private final String departmentId;
 
-    public StudentDto(String id, String lastName, String firstName, String middleName, LocalDate birthDate, String email, String phone, String studentId, int course, String group, int enrollmentYear, Student.StudyForm form, Student.StudentStatus status, Faculty  faculty, String specialty, Department department) {
+    public StudentDto(String id, String lastName, String firstName, String middleName, LocalDate birthDate, String email, String phone, String studentId, int course, String group, int enrollmentYear, Student.StudyForm form, Student.StudentStatus status, String facultyId, String specialty, String departmentId) {
         this.id = id;
         this.studentId = studentId;
         this.course = course;
@@ -41,9 +41,9 @@ public class StudentDto {
         this.birthDate = birthDate;
         this.phone = phone;
         this.email = email;
-        this.faculty = faculty;
+        this.facultyId = facultyId;
         this.specialty = specialty;
-        this.department = department;
+        this.departmentId = departmentId;
     }
 
 }

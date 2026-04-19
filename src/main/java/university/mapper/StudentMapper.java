@@ -21,9 +21,9 @@ public class StudentMapper implements Mapper<Student, StudentDto>{
                 student.getEnrollmentYear(),
                 student.getForm(),
                 student.getStatus(),
-                student.getFaculty(),
+                student.getFacultyId(),
                 student.getSpecialty(),
-                student.getDepartment()
+                student.getDepartmentId()
 
         );
     }
@@ -45,9 +45,9 @@ public class StudentMapper implements Mapper<Student, StudentDto>{
                 dto.getEnrollmentYear(),
                 dto.getForm(),
                 dto.getStatus(),
-                dto.getFaculty(),
+                dto.getFacultyId(),
                 dto.getSpecialty(),
-                dto.getDepartment()
+                dto.getDepartmentId()
         );
     }
 }

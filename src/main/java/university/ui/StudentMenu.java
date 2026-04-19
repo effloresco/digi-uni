@@ -5,7 +5,6 @@ import university.repository.StudentRepository;
 import university.service.SearchService;
 import university.service.StudentService;
 import university.exceptions.*;
-import university.service.Utils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -192,7 +191,7 @@ public class StudentMenu {
         System.out.println("Введіть ID факультету");
         do {
             try {
-                student.setFaculty(scanner.nextLine());
+                student.setFacultyId(scanner.nextLine());
                 resume = true;
             } catch (InvalidValue e) {
                 System.out.println(e.getMessage());
@@ -220,7 +219,7 @@ public class StudentMenu {
         System.out.println("Введіть ID кафедри");
         do {
             try {
-                student.setDepartment(scanner.nextLine());
+                student.setDepartmentId(scanner.nextLine());
                 resume = true;
             } catch (InvalidValue e) {
                 System.out.println(e.getMessage());
@@ -539,7 +538,7 @@ public class StudentMenu {
                                 System.out.println("Введіть ID факультету");
                                 do {
                                     try {
-                                        student.setFaculty(scanner.nextLine());
+                                        student.setFacultyId(scanner.nextLine());
                                         studentService.saveAllData();
                                         resume = true;
                                     } catch (InvalidValue e) {
@@ -565,7 +564,7 @@ public class StudentMenu {
                                 System.out.println("Введіть ID кафедри");
                                 do {
                                     try {
-                                        student.setDepartment(scanner.nextLine());
+                                        student.setDepartmentId(scanner.nextLine());
                                         studentService.saveAllData();
                                         resume = true;
                                     } catch (InvalidValue e) {

@@ -182,7 +182,7 @@ public class TeacherMenu {
         System.out.println("Введіть ID факультету");
         do {
             try {
-                teacher.setFaculty(scanner.nextLine());
+                teacher.setFacultyId(scanner.nextLine());
                 resume = true;
             } catch (InvalidValue e) {
                 System.out.println(e.getMessage());
@@ -196,7 +196,7 @@ public class TeacherMenu {
         System.out.println("Введіть ID кафедри");
         do {
             try {
-                teacher.setDepartment(scanner.nextLine());
+                teacher.setDepartmentId(scanner.nextLine());
                 resume = true;
             } catch (InvalidValue e) {
                 System.out.println(e.getMessage());
@@ -430,7 +430,7 @@ public class TeacherMenu {
                                 System.out.println("Введіть ID нового факультету");
                                 do {
                                     try {
-                                        teacher.setFaculty(scanner.nextLine());
+                                        teacher.setFacultyId(scanner.nextLine());
                                         teacherService.saveAllData();
                                         resume = true;
                                     } catch (InvalidValue e) {
@@ -444,7 +444,7 @@ public class TeacherMenu {
                                 System.out.println("Введіть ID нової кафедри");
                                 do {
                                     try {
-                                        teacher.setDepartment(scanner.nextLine());
+                                        teacher.setDepartmentId(scanner.nextLine());
                                         teacherService.saveAllData();
                                         resume = true;
                                     } catch (InvalidValue e) {
