@@ -5,6 +5,7 @@ import university.exceptions.InvalidValue;
 import university.repository.DepartmentRepository;
 import university.repository.FacultyRepository;
 
+import javax.swing.*;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -14,6 +15,7 @@ import static university.service.Utils.*;
 public non-sealed class Student extends Person {
     protected final FacultyRepository facultyRepository = FacultyRepository.get(FacultyRepository.class);
     protected final DepartmentRepository departmentRepository = DepartmentRepository.get(DepartmentRepository.class);
+
     public enum StudyForm {BUDGET, CONTRACT}
 
     public enum StudentStatus {STUDYING, ACADEMIC_LEAVE, EXPELLED}
@@ -27,6 +29,9 @@ public non-sealed class Student extends Person {
     private String facultyId;
     private String specialty;
     private String departmentId;
+
+    private Faculty faculty;
+    private Department department;
 
     public Student() {}
 
@@ -99,6 +104,24 @@ public non-sealed class Student extends Person {
 
     public void setStudentStatus(StudentStatus status) {
         this.status = status;
+    }
+
+    public StudentStatus getStudentStatus() {
+    return status;
+    }
+
+    public String getFacultyName() {
+        if (facultyId == null || facultyId.isEmpty()) return "---";
+        return facultyRepository.findById(facultyId)
+                .map(Faculty::getName)
+                .orElse("ID не знайдено (" + facultyId + ")");
+    }
+
+    public String getDepartmentName() {
+        if (departmentId == null || departmentId.isEmpty()) return "---";
+        return departmentRepository.findById(departmentId)
+                .map(Department::getName)
+                .orElse("ID не знайдено (" + departmentId + ")");
     }
 
     @Override
