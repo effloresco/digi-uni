@@ -39,7 +39,7 @@ public class MainMenu {
     }
 
 
-static void main() {
+public static void main() {
         MainMenu ui = new MainMenu();
         ui.run();
     }
