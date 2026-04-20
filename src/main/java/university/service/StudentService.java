@@ -20,7 +20,12 @@ public class StudentService {
     public StudentService(Repository<Student, String> repository) {
         this.personRepository = repository;
     }
-
+    public Student getStudent(String id) {
+        Optional<Student> studentOpt = personRepository.findById(id);
+        return studentOpt.orElseThrow(
+                () -> new PersonNotFoundException("Не знайдено студента з id: " + id)
+        );
+    }
     public void createStudent(Student person){
         Optional<Student> testCopy = personRepository.findById(person.getID());
         testCopy.ifPresent(

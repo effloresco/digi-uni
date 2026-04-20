@@ -1,7 +1,9 @@
 package university.ui;
 
 import university.domain.Student;
+import university.network.Client;
 import university.repository.StudentRepository;
+import university.service.RemoteStudentService;
 import university.service.SearchService;
 import university.service.StudentService;
 import university.exceptions.*;
@@ -17,8 +19,9 @@ import static university.domain.Student.StudyForm.*;
 import static university.service.SearchService.*;
 
 public class StudentMenu {
+    private final Client client;
     protected final StudentRepository studentRepository = StudentRepository.get(StudentRepository.class);
-    protected final StudentService studentService = new StudentService(studentRepository);
+    protected final RemoteStudentService studentService;
     boolean resume;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     String exitOpt = null;
@@ -58,6 +61,11 @@ public class StudentMenu {
             "2 - Змінити інформацію про студента",
             "3 - Видалити студента з бази даних",
             opt0);
+
+    public StudentMenu(Client client) {
+        this.client = client;
+        studentService = new RemoteStudentService(client);
+    }
 
     protected void studentManagement() {
         boolean status = true;
@@ -331,14 +339,11 @@ public class StudentMenu {
         String studentId;
         Student student;
         while (!found) {
-            System.out.println("Введіть ідентифікатор студента, що треба замінити");
-            studentId = scanner.nextLine();
-
-            Optional<Student> optionalStudent = studentRepository.findById(studentId);
-
-            if (optionalStudent.isPresent()) {
+            try {
+                System.out.println("Введіть ідентифікатор студента, що треба замінити");
+                studentId = scanner.nextLine();
+                student = studentService.getStudent(studentId);
                 found = true;
-                student = optionalStudent.get();
                 boolean status = true;
                 while (status) {
                     System.out.println("\n*-Оберіть, що змінити-*");
@@ -352,7 +357,7 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setFirstName(scanner.nextLine());
-                                        studentService.saveAllData();
+                                        studentService.updateStudent(student);
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
@@ -366,7 +371,7 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setLastName(scanner.nextLine());
-                                        studentService.saveAllData();
+                                        studentService.updateStudent(student);
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
@@ -379,7 +384,7 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setMiddleName(scanner.nextLine());
-                                        studentService.saveAllData();
+                                        studentService.updateStudent(student);
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
@@ -392,7 +397,7 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setBirthDate(LocalDate.parse(SearchService.scanner.nextLine(), formatter));
-                                        studentService.saveAllData();
+                                        studentService.updateStudent(student);
                                         resume = true;
                                     } catch (DateTimeParseException e) {
                                         System.out.println("Введіть коректну дату");
@@ -405,7 +410,7 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setEmail(scanner.nextLine());
-                                        studentService.saveAllData();
+                                        studentService.updateStudent(student);
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
@@ -418,7 +423,7 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setPhone(scanner.nextLine());
-                                        studentService.saveAllData();
+                                        studentService.updateStudent(student);
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
@@ -431,7 +436,7 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setStudentId(scanner.nextLine());
-                                        studentService.saveAllData();
+                                        studentService.updateStudent(student);
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
@@ -444,7 +449,7 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setCourse(Integer.parseInt(SearchService.scanner.nextLine()));
-                                        studentService.saveAllData();
+                                        studentService.updateStudent(student);
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
@@ -455,7 +460,7 @@ public class StudentMenu {
                             case 9:
                                 System.out.println("Введіть групу");
                                 student.setGroup(scanner.nextLine());
-                                studentService.saveAllData();
+                                studentService.updateStudent(student);
                                 resume = true;
                                 break;
                             case 10:
@@ -463,7 +468,7 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setEnrollmentYear(Integer.parseInt(SearchService.scanner.nextLine()));
-                                        studentService.saveAllData();
+                                        studentService.updateStudent(student);
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
@@ -483,11 +488,11 @@ public class StudentMenu {
                                         switch (inputLocal) {
                                             case 1:
                                                 student.setStudyForm(BUDGET);
-                                                studentService.saveAllData();
+                                                studentService.updateStudent(student);
                                                 break;
                                             case 2:
                                                 student.setStudyForm(CONTRACT);
-                                                studentService.saveAllData();
+                                                studentService.updateStudent(student);
                                                 break;
                                             case 0:
                                                 status = false;
@@ -510,17 +515,17 @@ public class StudentMenu {
                                         switch (inputLocal) {
                                             case 1:
                                                 student.setStudentStatus(STUDYING);
-                                                studentService.saveAllData();
+                                                studentService.updateStudent(student);
                                                 status = false;
                                                 break;
                                             case 2:
                                                 student.setStudentStatus(ACADEMIC_LEAVE);
-                                                studentService.saveAllData();
+                                                studentService.updateStudent(student);
                                                 status = false;
                                                 break;
                                             case 3:
                                                 student.setStudentStatus(EXPELLED);
-                                                studentService.saveAllData();
+                                                studentService.updateStudent(student);
                                                 status = false;
                                             case 0:
                                                 status = false;
@@ -539,7 +544,7 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setFacultyId(scanner.nextLine());
-                                        studentService.saveAllData();
+                                        studentService.updateStudent(student);
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
@@ -552,7 +557,7 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setSpecialty(scanner.nextLine());
-                                        studentService.saveAllData();
+                                        studentService.updateStudent(student);
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
@@ -565,7 +570,7 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setDepartmentId(scanner.nextLine());
-                                        studentService.saveAllData();
+                                        studentService.updateStudent(student);
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
@@ -584,7 +589,9 @@ public class StudentMenu {
                         System.out.println("Введіть коректне значення");
                     }
                 }
-            } else System.out.println("Кафедри з таким ID не знайдено.");
+            } catch (PersonNotFoundException e) {
+                System.out.println("Студента з таким ID не знайдено.");
+            }
         }
     }
 

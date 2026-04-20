@@ -45,11 +45,9 @@ public class Server {
                 .create();
     }
 
-    // Головний метод запуску сервера
     public void start(int port) {
         System.out.println("Ініціалізація сервера DigiUni...");
 
-        // 2. ЗАВАНТАЖЕННЯ ДАНИХ (Те, що раніше робилося в MainMenu)
         System.out.println("Зчитування локальної бази даних з файлів...");
         studentStorageManager.loadAllData();
         studentStorageManager.loadAllData();
@@ -110,9 +108,10 @@ public class Server {
 
     private String processRequest(String request) {
         try {
-            String[] parts = request.split("\\|", 2);
+            String[] parts = request.split("\\|", 3);
             String command = parts[0];
             String payload = parts.length > 1 ? parts[1] : "";
+            String additionalPayload = parts.length > 2 ? parts[2] : "";
 
             System.out.println("Обробка команди: " + command);
 
@@ -132,6 +131,16 @@ public class Server {
                     studentService.deleteStudent(studentToDelete);
                     studentStorageManager.saveAllData();
                     return "OK|Студента видалено";
+
+                case "UPDATE_STUDENT":
+                    Student updatedStudent = networkGson.fromJson(payload, Student.class);
+                    studentService.updateStudent(updatedStudent.getID(), updatedStudent);
+                    return "OK|Студента успішно оновлено!";
+
+                case "GET_STUDENT":
+                    Student student = studentService.getStudent(payload);
+                    return "OK|" + networkGson.toJson(student);
+
                 default:
                     return "ERROR|Невідома команда: " + command;
             }

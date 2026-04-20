@@ -1,26 +1,28 @@
 package university.ui;
 
 import university.domain.User;
+import university.network.Client;
 import university.service.UserService;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class ManagementMenu {
-    protected final Scanner scanner = new Scanner(System.in);
+    private final Client client;
 
-    static void main() {
-        ManagementMenu management = new ManagementMenu();
-    }
+    protected final Scanner scanner = new Scanner(System.in);
 
     private final String opt0 = "0 - Вихід";
 
     private final List<String> menuOptions = List.of("1 - Управління факультетами", "2 - Управління кафедрами", "3 - Управління студентами", "4 - Управління викладачами", opt0);
 
+    public ManagementMenu(Client client) {
+        this.client = client;
+    }
 
     public void management() {
         FacultyMenu fcManagement = new FacultyMenu();
-        StudentMenu stManagement = new StudentMenu();
+        StudentMenu stManagement = new StudentMenu(client);
         DepartmentMenu dpManagement = new DepartmentMenu();
         TeacherMenu tcManagement = new TeacherMenu();
         UserMenu usManagment = new UserMenu();
