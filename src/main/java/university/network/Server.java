@@ -142,8 +142,11 @@ public class Server {
                     return "OK|" + networkGson.toJson(student);
 
                 case "AUTH_USER":
-                    String[] authParts = payload.split("\\|");
-                    if (authParts.length != 2) return "FAIL|Невірний формат даних";
+                    String[] authParts = networkGson.fromJson(payload, String[].class);
+
+                    if (authParts == null || authParts.length != 2) {
+                        return "FAIL|Невірний формат даних";
+                    }
 
                     String reqUsername = authParts[0];
                     String reqPassword = authParts[1];
