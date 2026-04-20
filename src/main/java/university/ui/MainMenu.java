@@ -3,6 +3,7 @@ package university.ui;
 import university.domain.User;
 import university.exceptions.UserAlreadyExistsException;
 import university.exceptions.UsernameAlreadyUsedException;
+import university.network.Client;
 import university.repository.UserRepository;
 import university.service.UserService;
 import university.storage.*;
@@ -11,14 +12,14 @@ import java.util.Scanner;
 
 public class MainMenu {
     private final Scanner scanner = new Scanner(System.in);
-    private final ManagementMenu management = new ManagementMenu();
+    private final ManagementMenu management;
     private final AuthMenu auth = new AuthMenu();
     private final ReportsMenu reportsMenu = new ReportsMenu();
     private final SearchMenu searchMenu = new SearchMenu();
-
-public static void main() {
-        MainMenu ui = new MainMenu();
-        ui.run();
+    private final Client client;
+    public MainMenu(Client client) {
+        this.client = client;
+        management = new ManagementMenu(client);
     }
 
     public void run() {

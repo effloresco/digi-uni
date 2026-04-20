@@ -1,5 +1,6 @@
 package university;
 
+import university.network.Client;
 import university.network.Server;
 import university.ui.MainMenu;
 import java.util.Scanner;
@@ -18,8 +19,9 @@ public class Main {
             Server server = new Server();
             server.start(5555);
         } else {
-            // Запускаємо звичне меню
-            MainMenu.main();
+            Client client = new Client("localhost", 5555);
+            MainMenu menu = new MainMenu(client);
+            menu.run();
         }
     }
 }
