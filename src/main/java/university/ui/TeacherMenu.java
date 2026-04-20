@@ -1,5 +1,7 @@
 package university.ui;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import university.domain.*;
 import university.repository.TeacherRepository;
 import university.service.*;
@@ -16,11 +18,15 @@ import static university.service.SearchService.*;
 
 public class TeacherMenu {
 
+    private static final Logger logger = LoggerFactory.getLogger(TeacherMenu.class);
+
     protected final TeacherRepository teacherRepository = TeacherRepository.get(TeacherRepository.class);
     protected final TeacherService teacherService = new TeacherService(teacherRepository);
+    
     boolean resume;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     String exitOpt = null;
+    
     private final String opt0 = "0 - Вихід";
     private List<String> changeList = List.of(
             "1 - Ім'я",
@@ -44,6 +50,7 @@ public class TeacherMenu {
             opt0);
 
     protected void teacherManagement() {
+        logger.info("Відкрито меню управління викладачами");
         boolean status = true;
         while (status) {
             System.out.println("\n*-Управління викладачами-*");
@@ -60,22 +67,25 @@ public class TeacherMenu {
                         changeTeacher();
                         break;
                     case 3:
-
                         deleteTeacher();
                         break;
                     case 0:
+                        logger.info("Користувач вийшов з меню управління викладачами");
                         status = false;
                         break;
                     default:
+                        logger.warn("Користувач ввів неіснуючий пункт меню: {}", input);
                         System.out.println("Введіть коректне значення");
                 }
             } catch (NumberFormatException e) {
+                logger.error("Помилка формату числа при виборі меню: {}", inputLine);
                 System.out.println("Введіть коректне значення");
             }
         }
     }
 
     protected Teacher teacherGenerator() {
+        logger.debug("Запущено генератор нового викладача");
         Teacher teacher = new Teacher();
 
         System.out.println("Ідентифікатор викладача: " + teacher.getID());
@@ -86,6 +96,7 @@ public class TeacherMenu {
                 teacher.setFirstName(scanner.nextLine());
                 resume = true;
             } catch (InvalidValue e) {
+                logger.warn("Валідація імені не пройдена: {}", e.getMessage());
                 System.out.println(e.getMessage());
                 resume = false;
             }
@@ -97,6 +108,7 @@ public class TeacherMenu {
                 teacher.setLastName(scanner.nextLine());
                 resume = true;
             } catch (InvalidValue e) {
+                logger.warn("Валідація прізвища не пройдена: {}", e.getMessage());
                 System.out.println(e.getMessage());
                 resume = false;
             }
@@ -108,6 +120,7 @@ public class TeacherMenu {
                 teacher.setMiddleName(scanner.nextLine());
                 resume = true;
             } catch (InvalidValue e) {
+                logger.warn("Валідація по батькові не пройдена: {}", e.getMessage());
                 System.out.println(e.getMessage());
                 resume = false;
             }
@@ -119,6 +132,7 @@ public class TeacherMenu {
                 teacher.setBirthDate(LocalDate.parse(SearchService.scanner.nextLine(), formatter));
                 resume = true;
             } catch (DateTimeParseException e) {
+                logger.warn("Помилка парсингу дати народження");
                 System.out.println("Введіть коректну дату");
                 resume = false;
             }
@@ -130,6 +144,7 @@ public class TeacherMenu {
                 teacher.setEmail(scanner.nextLine());
                 resume = true;
             } catch (InvalidValue e) {
+                logger.warn("Некоректний email викладача: {}", e.getMessage());
                 System.out.println(e.getMessage());
                 resume = false;
             }
@@ -141,6 +156,7 @@ public class TeacherMenu {
                 teacher.setPhone(scanner.nextLine());
                 resume = true;
             } catch (InvalidValue e) {
+                logger.warn("Некоректний номер телефону викладача: {}", e.getMessage());
                 System.out.println(e.getMessage());
                 resume = false;
             }
@@ -152,17 +168,19 @@ public class TeacherMenu {
                 teacher.setPosition(scanner.nextLine());
                 resume = true;
             } catch (InvalidValue e) {
+                logger.warn("Некоректна посада: {}", e.getMessage());
                 System.out.println(e.getMessage());
                 resume = false;
             }
         } while (!resume);
 
-        System.out.println("Введіть  науковий ступінь");
+        System.out.println("Введіть науковий ступінь");
         do {
             try {
                 teacher.setDegree(scanner.nextLine());
                 resume = true;
             } catch (InvalidValue e) {
+                logger.warn("Некоректний науковий ступінь: {}", e.getMessage());
                 System.out.println(e.getMessage());
                 resume = false;
             }
@@ -174,6 +192,7 @@ public class TeacherMenu {
                 teacher.setTitle(scanner.nextLine());
                 resume = true;
             } catch (InvalidValue e) {
+                logger.warn("Некоректне вчене звання: {}", e.getMessage());
                 System.out.println(e.getMessage());
                 resume = false;
             }
@@ -185,6 +204,7 @@ public class TeacherMenu {
                 teacher.setFaculty(scanner.nextLine());
                 resume = true;
             } catch (InvalidValue e) {
+                logger.warn("Некоректний ID факультету: {}", e.getMessage());
                 System.out.println(e.getMessage());
                 resume = false;
                 System.out.println("0 - Вихід");
@@ -199,6 +219,7 @@ public class TeacherMenu {
                 teacher.setDepartment(scanner.nextLine());
                 resume = true;
             } catch (InvalidValue e) {
+                logger.warn("Некоректний ID кафедри: {}", e.getMessage());
                 System.out.println(e.getMessage());
                 resume = false;
                 System.out.println("0 - Вихід");
@@ -213,6 +234,7 @@ public class TeacherMenu {
                 teacher.setHireDate(LocalDate.parse(scanner.nextLine(), formatter));
                 resume = true;
             } catch (DateTimeParseException e) {
+                logger.warn("Помилка парсингу дати влаштування");
                 System.out.println("Введіть коректну дату");
                 resume = false;
             }
@@ -225,21 +247,22 @@ public class TeacherMenu {
                 teacher.setRate(inputRate);
                 resume = true;
             } catch (NumberFormatException e) {
+                logger.error("Помилка введення ставки (не число)");
                 System.out.println("Помилка: введіть коректне число");
                 resume = false;
             } catch (InvalidValue e) {
+                logger.warn("Некоректна ставка: {}", e.getMessage());
                 System.out.println(e.getMessage());
                 resume = false;
             }
         } while (!resume);
-
         System.out.println("Викладача " + teacher.getFullName() + " створено");
+        logger.info("Об'єкт викладача згенеровано: {} (ID: {})", teacher.getFullName(), teacher.getID());
         return teacher;
     }
 
     protected void deleteTeacher() {
         boolean found = false;
-        Teacher teacher = null;
         while (!found) {
             System.out.println("Введіть ідентифікатор вчителя, якого треба видалити (нуль, щоб вийти)");
             String teacherId = scanner.nextLine();
@@ -249,29 +272,31 @@ public class TeacherMenu {
 
             Optional<Teacher> optionalTeacher = teacherRepository.findById(teacherId);
             if (optionalTeacher.isPresent()) {
-                teacher = optionalTeacher.get();
-                found = true;
+                Teacher teacher = optionalTeacher.get();
                 teacherService.deleteTeacher(teacher);
+                logger.info("Викладача {} (ID: {}) успішно видалено", teacher.getFullName(), teacherId);
+                found = true;
             } else {
+                logger.warn("Спроба видалення: викладача з ID {} не знайдено", teacherId);
                 System.out.println("Викладача з таким ID не знайдено.");
                 break;
             }
         }
-
     }
 
     protected void changeTeacher() {
         boolean found = false;
-        String teachertId;
-        Teacher teacher;
         while (!found) {
-            System.out.println("Введіть ідентифікатор викладача, що треба замінити");
-            teachertId = scanner.nextLine();
+            System.out.println("Введіть ідентифікатор викладача, що треба замінити (0 для виходу)");
+            String teachertId = scanner.nextLine();
+            if ("0".equals(teachertId)) return;
+
             Optional<Teacher> optionalTeacher = teacherRepository.findById(teachertId);
 
             if (optionalTeacher.isPresent()) {
                 found = true;
-                teacher = optionalTeacher.get();
+                Teacher teacher = optionalTeacher.get();
+                logger.info("Початок редагування викладача: {} (ID: {})", teacher.getFullName(), teachertId);
                 boolean status = true;
 
                 while (status) {
@@ -288,8 +313,10 @@ public class TeacherMenu {
                                     try {
                                         teacher.setFirstName(scanner.nextLine());
                                         teacherService.saveAllData();
+                                        logger.info("Поле 'ім'я' викладача з ID {} оновлено", teachertId);
                                         resume = true;
                                     } catch (InvalidValue e) {
+                                        logger.warn("Помилка зміни імені: {}", e.getMessage());
                                         System.out.println(e.getMessage());
                                         resume = false;
                                     }
@@ -301,8 +328,10 @@ public class TeacherMenu {
                                     try {
                                         teacher.setLastName(scanner.nextLine());
                                         teacherService.saveAllData();
+                                        logger.info("Поле 'прізвище' викладача з ID {} оновлено", teachertId);
                                         resume = true;
                                     } catch (InvalidValue e) {
+                                        logger.warn("Помилка зміни прізвища: {}", e.getMessage());
                                         System.out.println(e.getMessage());
                                         resume = false;
                                     }
@@ -314,8 +343,10 @@ public class TeacherMenu {
                                     try {
                                         teacher.setMiddleName(scanner.nextLine());
                                         teacherService.saveAllData();
+                                        logger.info("Поле 'по батькові' викладача з ID {} оновлено", teachertId);
                                         resume = true;
                                     } catch (InvalidValue e) {
+                                        logger.warn("Помилка зміни по батькові: {}", e.getMessage());
                                         System.out.println(e.getMessage());
                                         resume = false;
                                     }
@@ -326,8 +357,10 @@ public class TeacherMenu {
                                     try {
                                         teacher.setBirthDate(LocalDate.parse(SearchService.scanner.nextLine(), formatter));
                                         teacherService.saveAllData();
+                                        logger.info("Поле 'дата народження' викладача з ID {} оновлено", teachertId);
                                         resume = true;
                                     } catch (DateTimeParseException e) {
+                                        logger.warn("Помилка дати");
                                         System.out.println("Введіть коректну дату");
                                         resume = false;
                                     }
@@ -340,8 +373,10 @@ public class TeacherMenu {
                                     try {
                                         teacher.setEmail(scanner.nextLine());
                                         teacherService.saveAllData();
+                                        logger.info("Поле 'електронну пошту' викладача з ID {} оновлено", teachertId);
                                         resume = true;
                                     } catch (InvalidValue e) {
+                                        logger.warn("Помилка зміни електронної пошти: {}", e.getMessage());
                                         System.out.println(e.getMessage());
                                         resume = false;
                                     }
@@ -353,8 +388,10 @@ public class TeacherMenu {
                                     try {
                                         teacher.setPhone(scanner.nextLine());
                                         teacherService.saveAllData();
+                                        logger.info("Поле 'номер телефону' викладача з ID {} оновлено", teachertId);
                                         resume = true;
                                     } catch (InvalidValue e) {
+                                        logger.warn("Помилка зміни номеру телефону: {}", e.getMessage());
                                         System.out.println(e.getMessage());
                                         resume = false;
                                     }
@@ -366,9 +403,11 @@ public class TeacherMenu {
                                     try {
                                         teacher.setPosition(scanner.nextLine());
                                         teacherService.saveAllData();
+                                        logger.info("Поле 'посаду' викладача з ID {} оновлено", teachertId);
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
+                                        logger.warn("Помилка зміни посади: {}", e.getMessage());
                                         resume = false;
                                     }
                                 } while (!resume);
@@ -379,8 +418,10 @@ public class TeacherMenu {
                                     try {
                                         teacher.setDegree(scanner.nextLine());
                                         teacherService.saveAllData();
+                                        logger.info("Поле 'науковий ступінь' викладача з ID {} оновлено", teachertId);
                                         resume = true;
                                     } catch (InvalidValue e) {
+                                        logger.warn("Помилка зміни наукового ступеню: {}", e.getMessage());
                                         System.out.println(e.getMessage());
                                         resume = false;
                                     }
@@ -392,8 +433,10 @@ public class TeacherMenu {
                                     try {
                                         teacher.setTitle(scanner.nextLine());
                                         teacherService.saveAllData();
+                                        logger.info("Поле 'вчене звання' викладача з ID {} оновлено", teachertId);
                                         resume = true;
                                     } catch (InvalidValue e) {
+                                        logger.warn("Помилка зміни вченого звання: {}", e.getMessage());
                                         System.out.println(e.getMessage());
                                         resume = false;
                                     }
@@ -405,8 +448,10 @@ public class TeacherMenu {
                                     try {
                                         teacher.setHireDate(LocalDate.parse(SearchService.scanner.nextLine(), formatter));
                                         teacherService.saveAllData();
+                                        logger.info("Поле 'дата влаштування на роботу' викладача з ID {} оновлено", teachertId);
                                         resume = true;
                                     } catch (DateTimeParseException e) {
+                                        logger.warn("Помилка дати");
                                         System.out.println("Введіть коректну дату");
                                         resume = false;
                                     }
@@ -418,8 +463,10 @@ public class TeacherMenu {
                                     try {
                                         teacher.setRate(Double.parseDouble(SearchService.scanner.nextLine()));
                                         teacherService.saveAllData();
+                                        logger.info("Поле 'ставка' викладача з ID {} оновлено", teachertId);
                                         resume = true;
                                     } catch (InvalidValue e) {
+                                        logger.warn("Помилка зміни ставки: {}", e.getMessage());
                                         System.out.println(e.getMessage());
                                         resume = false;
                                     }
@@ -432,8 +479,10 @@ public class TeacherMenu {
                                     try {
                                         teacher.setFaculty(scanner.nextLine());
                                         teacherService.saveAllData();
+                                        logger.info("Поле 'ID факультету' викладача з ID {} оновлено", teachertId);
                                         resume = true;
                                     } catch (InvalidValue e) {
+                                        logger.warn("Помилка зміни ID факультету: {}", e.getMessage());
                                         System.out.println(e.getMessage());
                                         resume = false;
                                     }
@@ -446,6 +495,7 @@ public class TeacherMenu {
                                     try {
                                         teacher.setDepartment(scanner.nextLine());
                                         teacherService.saveAllData();
+                                        logger.info("Поле 'ID кафедри' викладача з ID {} оновлено", teachertId);
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
@@ -453,7 +503,6 @@ public class TeacherMenu {
                                     }
                                 } while (!resume);
                                 break;
-
                             case 0:
                                 status = false;
                                 break;
@@ -461,17 +510,21 @@ public class TeacherMenu {
                                 System.out.println("Введіть коректне значення");
                         }
                     } catch (NumberFormatException e) {
+                        logger.error("Помилка введення при редагуванні викладача: {}", inputLine);
                         System.out.println("Введіть коректне значення");
                     }
                 }
-            } else System.out.println("Кафедри з таким ID не знайдено.");
+            } else {
+                logger.warn("Викладача з ID {} не знайдено для редагування", teachertId);
+                System.out.println("Викладача з таким ID не знайдено.");
+                break;
+            }
         }
     }
 
     protected void addTeacher() {
-        teacherService.createTeacher(teacherGenerator());
+        Teacher teacher = teacherGenerator();
+        teacherService.createTeacher(teacher);
+        logger.info("Викладача '{}' успішно збережено в базу", teacher.getFullName());
     }
-
 }
-
-

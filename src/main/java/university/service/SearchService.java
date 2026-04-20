@@ -8,7 +8,7 @@ import java.util.*;
 
 public class SearchService {
     public static StudentRepository studentRepository = StudentRepository.get(StudentRepository.class);
-    protected static final TeacherRepository teacherRepository = TeacherRepository.get(TeacherRepository.class);
+    public static TeacherRepository teacherRepository = TeacherRepository.get(TeacherRepository.class);
     public static Scanner scanner = new Scanner(System.in);
 
     public static void searchStudentByFullName() {
