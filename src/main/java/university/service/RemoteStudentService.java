@@ -1,0 +1,37 @@
+package university.service;
+
+import com.google.gson.reflect.TypeToken;
+import university.domain.Student;
+import university.network.Client;
+import java.util.List;
+
+public class RemoteStudentService {
+    private final Client client;
+
+    public RemoteStudentService(Client client) {
+        this.client = client;
+    }
+
+    public void createStudent(Student student) {
+        String response = client.sendRequest("ADD_STUDENT", student);
+        handleResponse(response);
+    }
+
+    public List<Student> getAllStudents() {
+        String response = client.sendRequest("GET_ALL_STUDENTS", null);
+        String[] parts = response.split("\\|", 2);
+
+        if (parts[0].equals("OK")) {
+            return client.getGson().fromJson(parts[1], new TypeToken<List<Student>>(){}.getType());
+        } else {
+            throw new RuntimeException("Помилка сервера: " + parts[1]);
+        }
+    }
+
+    private void handleResponse(String response) {
+        String[] parts = response.split("\\|", 2);
+        if (!parts[0].equals("OK")) {
+            System.out.println("Сервер повернув помилку: " + parts[1]);
+        }
+    }
+}
