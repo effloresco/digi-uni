@@ -11,6 +11,13 @@ public class ReportService {
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
+    // Поля: ID, ПІБ, ДатаН, Email, Тел, Посада, Ступінь, Звання, ДатаПрийому, Ставка, Факультет, Кафедра
+    private static final String TEACHER_TABLE_FORMAT = "| %-3s | %-40s | %-10s | %-35s | %-12s | %-25s | %-30s | %-30s | %-10s | %-10s | %-30s | %-30s |%n";
+    private static final String TEACHER_SEPARATOR = "+" + "-".repeat(5) + "+" + "-".repeat(42) + "+" + "-".repeat(12) + "+" +
+            "-".repeat(37) + "+" + "-".repeat(14) + "+" + "-".repeat(27) + "+" +
+            "-".repeat(32) + "+" + "-".repeat(32) + "+" + "-".repeat(12) + "+" +
+            "-".repeat(12) + "+" + "-".repeat(32) + "+" + "-".repeat(32) + "+";
+
     // Формат: ID, ПІБ, ДатаН, Email, Тел, Квиток, К, Гр, Рік, Форма, Статус, Фак, Спец, Каф
     private static final String TABLE_FORMAT = "| %-3s | %-50s | %-10s | %-40s | %-12s | %-20s | %-4s | %-15s | %-5s | %-15s | %-15s | %-30s | %-30s | %-30s |%n";
 
@@ -33,11 +40,23 @@ public class ReportService {
         System.out.println("Загальна кількість: " + students.size());
     }
 
+    private static void renderTeacherTable(List<Teacher> teachers, String reportName) {
+        if (teachers.isEmpty()) {
+            System.out.println("\n[!] За вказаними критеріями викладачів не знайдено.");
+            return;
+        }
+        System.out.println("\n" + " ".repeat(60) + ">>> " + reportName.toUpperCase() + " <<<");
+        printTeacherHeader();
+        teachers.forEach(ReportService::printTeacherRow);
+        System.out.println(TEACHER_SEPARATOR);
+        System.out.println("Загальна кількість викладачів: " + teachers.size());
+    }
+
     public static void printAllStudentsAlphabetically() {
         List<Student> students = studentRepository.findAll().stream()
                 .sorted(Comparator.comparing(Person::getFullName, String.CASE_INSENSITIVE_ORDER))
                 .toList();
-        renderStudentTable(students, "Повний звіт студентів (алфавіт)");
+        renderStudentTable(students, "Повний звіт студентів (за алфавітом)");
     }
 
     public static void printAllStudentsByCourse() {
@@ -102,46 +121,27 @@ public class ReportService {
 
     public static void printAllTeachersAlphabetically() {
         List<Teacher> teachers = teacherRepository.findAll().stream()
-                .filter(t -> t instanceof Teacher)
-                .map(t -> (Teacher) t)
-                .sorted(Comparator.comparing(Person::getFullName))
+                .sorted(Comparator.comparing(Person::getFullName, String.CASE_INSENSITIVE_ORDER))
                 .toList();
-
-        if (teachers.isEmpty()) {
-            System.out.println("Список викладачів порожній.");
-        } else {
-            System.out.println("\n--- Список викладачів за алфавітом ---");
-            teachers.forEach(System.out::println);
-        }
+        renderTeacherTable(teachers, "Повний звіт викладачів (за алфавітом)");
     }
 
     public static void printTeachersByFacultyAlphabetically(String facultyId) {
         List<Teacher> teachers = teacherRepository.findAll().stream()
                 .filter(t -> t.getFaculty() != null && t.getFaculty().getID().equals(facultyId))
-                .sorted(Comparator.comparing(Person::getFullName))
+                .sorted(Comparator.comparing(Person::getFullName, String.CASE_INSENSITIVE_ORDER))
                 .toList();
-
-        if (teachers.isEmpty()) {
-            System.out.println("На факультеті з ID '" + facultyId + "' викладачів не знайдено.");
-        } else {
-            System.out.println("\n--- Викладачі факультету (" + facultyId + ") за алфавітом ---");
-            teachers.forEach(System.out::println);
-        }
+        renderTeacherTable(teachers, "Викладачі факультету: " + facultyId);
     }
 
     public static void printTeachersByDepartmentAlphabetically(String departmentId) {
         List<Teacher> teachers = teacherRepository.findAll().stream()
                 .filter(t -> t.getDepartment() != null && t.getDepartment().getID().equals(departmentId))
-                .sorted(Comparator.comparing(Person::getFullName))
+                .sorted(Comparator.comparing(Person::getFullName, String.CASE_INSENSITIVE_ORDER))
                 .toList();
-
-        if (teachers.isEmpty()) {
-            System.out.println("На кафедрі з ID '" + departmentId + "' викладачів не знайдено.");
-        } else {
-            System.out.println("\n--- Викладачі кафедри (" + departmentId + ") за алфавітом ---");
-            teachers.forEach(System.out::println);
-        }
+        renderTeacherTable(teachers, "Викладачі кафедри: " + departmentId);
     }
+
 
 
     private static String truncate(String text, int length) {
@@ -189,6 +189,31 @@ public class ReportService {
                 truncate(s.getDepartment() != null ? s.getDepartment().getName() : "---", 30)
         );
     }
+
+    private static void printTeacherHeader() {
+        System.out.println(TEACHER_SEPARATOR);
+        System.out.printf(TEACHER_TABLE_FORMAT,
+                "ID", "ПІБ", "Дата Нар.", "Email", "Телефон", "Посада", "Ступінь", "Вчене звання", "Прийом", "Ставка", "Факультет", "Кафедра");
+        System.out.println(TEACHER_SEPARATOR);
+    }
+
+    private static void printTeacherRow(Teacher t) {
+        System.out.printf(TEACHER_TABLE_FORMAT,
+                t.getID(),
+                truncate(t.getFullName(), 40),
+                t.getBirthDate().format(DATE_FORMATTER),
+                truncate(t.getEmail(), 35),
+                t.getPhone(),
+                truncate(t.getPosition(), 20),
+                truncate(t.getDegree(), 15),
+                truncate(t.getTitle(), 15),
+                t.getHireDate().format(DATE_FORMATTER),
+                String.format("%.2f", t.getRate()),
+                truncate(t.getFaculty() != null ? t.getFaculty().getName() : "---", 25),
+                truncate(t.getDepartment() != null ? t.getDepartment().getName() : "---", 25)
+        );
+    }
+
 
 }
 
