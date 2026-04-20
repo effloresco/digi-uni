@@ -1,5 +1,7 @@
 package university.ui;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import university.domain.*;
 import university.exceptions.InvalidValue;
 import university.repository.FacultyRepository;
@@ -12,6 +14,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class FacultyMenu {
+    private static final Logger logger = LoggerFactory.getLogger(FacultyMenu.class);
+
     protected final FacultyRepository facultyRepository = FacultyRepository.get(FacultyRepository.class);
     protected final FacultyService facultyService = new FacultyService(facultyRepository);
     protected final TeacherRepository teacherRepository = TeacherRepository.get(TeacherRepository.class);
@@ -24,7 +28,8 @@ public class FacultyMenu {
     private final List<String> changeList = List.of("1 - Назва", "2 - Коротка назва", "3 - Декан", "4 - Контакти", opt0);
     private String exitOpt = null;
 
-    protected void facultyManaging() {
+    public void facultyManaging() {
+        logger.info("Відкрито меню управління факультетами");
         boolean status = true;
         while (status) {
             System.out.println("\n*-Управління факультетами-*");
@@ -44,20 +49,22 @@ public class FacultyMenu {
                         deleteFaculty();
                         break;
                     case 0:
+                        logger.info("Користувач вийшов з меню управління факультетами");
                         status = false;
                         break;
                     default:
+                        logger.warn("Користувач ввів неіснуючий пункт меню: {}", input);
                         System.out.println("Введіть коректне значення");
                 }
             } catch (NumberFormatException e) {
+                logger.error("Помилка формату числа при виборі меню: {}", inputLine);
                 System.out.println("Введіть коректне значення");
             }
         }
-
     }
 
-
     protected Faculty facultyGenerator() {
+        logger.debug("Запущено генератор нового факультету");
         Faculty faculty = new Faculty();
 
         System.out.println("Ідентифікатор факультету: " + faculty.getID());
@@ -68,10 +75,10 @@ public class FacultyMenu {
                 faculty.setName(scanner.nextLine());
                 resume = true;
             } catch (InvalidValue e) {
+                logger.warn("Валідація назви факультету не пройдена: {}", e.getMessage());
                 System.out.println(e.getMessage());
                 resume = false;
             }
-
         } while (!resume);
 
         System.out.println("Введіть коротку назву факультету");
@@ -80,25 +87,24 @@ public class FacultyMenu {
                 faculty.setShortName(scanner.nextLine());
                 resume = true;
             } catch (InvalidValue e) {
+                logger.warn("Валідація короткої назви факультету не пройдена: {}", e.getMessage());
                 System.out.println(e.getMessage());
                 resume = false;
             }
-
         } while (!resume);
-
 
         do {
             try {
                 faculty.setDean(receiveDean());
                 resume = true;
             } catch (InvalidValue e) {
+                logger.warn("Помилка при призначенні декана: {}", e.getMessage());
                 System.out.println(e.getMessage());
                 resume = false;
                 System.out.println("0 - Пропустити");
                 exitOpt = scanner.nextLine();
                 if (exitOpt.equals("0")) break;
             }
-
         } while (!resume);
 
         System.out.println("Введіть контакти");
@@ -107,17 +113,17 @@ public class FacultyMenu {
                 faculty.setContacts(scanner.nextLine());
                 resume = true;
             } catch (InvalidValue e) {
+                logger.warn("Валідація контактів не пройдена: {}", e.getMessage());
                 System.out.println(e.getMessage());
                 resume = false;
             }
-
         } while (!resume);
 
+        logger.info("Об'єкт факультету згенеровано (ID: {}, Назва: {})", faculty.getID(), faculty.getName());
         return faculty;
-
     }
 
-    protected Teacher receiveDean() {
+    public Teacher receiveDean() {
         Teacher dean = null;
         boolean found = false;
         while (!found) {
@@ -131,6 +137,7 @@ public class FacultyMenu {
                     dean = optionalPerson.get();
                     found = true;
                 } else {
+                    logger.warn("Спроба пошуку декана: особу з ID {} не знайдено", teacherId);
                     System.out.println("Особу з таким ID не знайдено.");
                 }
             } else found = true;
@@ -138,11 +145,13 @@ public class FacultyMenu {
         return dean;
     }
 
-    protected void addFaculty() {
-        facultyService.createFaculty(facultyGenerator());
+    public void addFaculty() {
+        Faculty faculty = facultyGenerator();
+        facultyService.createFaculty(faculty);
+        logger.info("Новий факультет '{}' успішно додано в базу даних", faculty.getName());
     }
 
-    protected void deleteFaculty() {
+    public void deleteFaculty() {
         boolean found = false;
         boolean exit = false;
         Faculty faculty = null;
@@ -157,13 +166,17 @@ public class FacultyMenu {
                 if (optionalFaculty.isPresent()) {
                     faculty = optionalFaculty.get();
                     found = true;
-                } else System.out.println("Факультет з таким ID не знайдено.");
+                    facultyService.deleteFaculty(faculty);
+                    logger.info("Факультет з ID {} та назвою '{}' успішно видалено", facultyId, faculty.getName());
+                } else {
+                    logger.warn("Спроба видалення: факультет з ID {} не знайдено", facultyId);
+                    System.out.println("Факультет з таким ID не знайдено.");
+                }
             }
         }
-        if (!exit) facultyService.deleteFaculty(faculty);
     }
 
-    protected void changeFaculty() {
+    public void changeFaculty() {
         boolean found = false;
         boolean exit = false;
         String facultyId;
@@ -183,6 +196,7 @@ public class FacultyMenu {
                     if (optionalFaculty.isPresent()) {
                         found = true;
                         faculty = optionalFaculty.get();
+                        logger.info("Початок редагування факультету: {} (ID: {})", faculty.getName(), facultyId);
                         boolean status = true;
                         while (status) {
                             System.out.println("\n*-Оберіть, що змінити-*");
@@ -197,8 +211,10 @@ public class FacultyMenu {
                                             try {
                                                 faculty.setName(scanner.nextLine());
                                                 facultyService.saveAllData();
+                                                logger.info("Поле 'назва' факультету оновлено");
                                                 resume = true;
                                             } catch (InvalidValue e) {
+                                                logger.warn("Помилка оновлення назви: {}", e.getMessage());
                                                 System.out.println(e.getMessage());
                                                 resume = false;
                                             }
@@ -210,8 +226,10 @@ public class FacultyMenu {
                                             try {
                                                 faculty.setShortName(scanner.nextLine());
                                                 facultyService.saveAllData();
+                                                logger.info("Поле 'коротка назва' факультету оновлено");
                                                 resume = true;
                                             } catch (InvalidValue e) {
+                                                logger.warn("Помилка оновлення короткої назви: {}", e.getMessage());
                                                 System.out.println(e.getMessage());
                                                 resume = false;
                                             }
@@ -222,8 +240,10 @@ public class FacultyMenu {
                                             try {
                                                 faculty.setDean(receiveDean());
                                                 facultyService.saveAllData();
+                                                logger.info("Поле 'декан' факультету оновлено");
                                                 resume = true;
                                             } catch (InvalidValue e) {
+                                                logger.warn("Помилка оновлення декана: {}", e.getMessage());
                                                 System.out.println(e.getMessage());
                                                 resume = false;
                                                 System.out.println("0 - Вихід");
@@ -238,8 +258,10 @@ public class FacultyMenu {
                                             try {
                                                 faculty.setContacts(scanner.nextLine());
                                                 facultyService.saveAllData();
+                                                logger.info("Поле 'контакти' факультету оновлено");
                                                 resume = true;
                                             } catch (InvalidValue e) {
+                                                logger.warn("Помилка оновлення контактів: {}", e.getMessage());
                                                 System.out.println(e.getMessage());
                                                 resume = false;
                                             }
@@ -252,10 +274,14 @@ public class FacultyMenu {
                                         System.out.println("Введіть коректне значення");
                                 }
                             } catch (NumberFormatException e) {
+                                logger.error("Помилка формату числа при редагуванні факультету: {}", inputLine);
                                 System.out.println("Введіть коректне значення");
                             }
                         }
-                    } else System.out.println("Кафедри з таким ID не знайдено.");
+                    } else {
+                        logger.warn("Факультет для зміни з ID {} не знайдено", facultyId);
+                        System.out.println("Факультет з таким ID не знайдено.");
+                    }
                 }
             }
         }
