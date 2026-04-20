@@ -106,6 +106,10 @@ public non-sealed class Student extends Person {
         this.status = status;
     }
 
+    public Object getStudentStatus() {
+    return status;
+    }
+
     @Override
     public String toString() {
         return "Student{" + "details=" + super.toString() + // Виклик toString() з Person
