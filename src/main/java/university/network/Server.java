@@ -141,6 +141,27 @@ public class Server {
                     Student student = studentService.getStudent(payload);
                     return "OK|" + networkGson.toJson(student);
 
+                case "AUTH_USER":
+                    String[] authParts = payload.split("\\|");
+                    if (authParts.length != 2) return "FAIL|Невірний формат даних";
+
+                    String reqUsername = authParts[0];
+                    String reqPassword = authParts[1];
+
+                    List<User> results = userRepository.findAll().stream()
+                            .filter(p -> p.getUserName().equals(reqUsername))
+                            .toList();
+
+                    if (results.isEmpty()) {
+                        return "FAIL|Користувача не знайдено";
+                    }
+
+                    User targetUser = results.get(0);
+                    if (!targetUser.getPassword().equals(reqPassword)) {
+                        return "FAIL|Неправильний пароль";
+                    }
+
+                    return "OK|" + targetUser.getRole();
                 default:
                     return "ERROR|Невідома команда: " + command;
             }

@@ -13,13 +13,14 @@ import java.util.Scanner;
 public class MainMenu {
     private final Scanner scanner = new Scanner(System.in);
     private final ManagementMenu management;
-    private final AuthMenu auth = new AuthMenu();
+    private final AuthMenu auth;
     private final ReportsMenu reportsMenu = new ReportsMenu();
     private final SearchMenu searchMenu = new SearchMenu();
     private final Client client;
     public MainMenu(Client client) {
         this.client = client;
         management = new ManagementMenu(client);
+        auth = new AuthMenu(client);
     }
 
     public void run() {
