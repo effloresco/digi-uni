@@ -185,7 +185,7 @@ public class StudentMenu {
                 logger.warn("Некоректний ID факультету: {}", e.getMessage());
                 System.out.println(e.getMessage());
                 resume = false;
-                System.out.println("0 - Вихід");
+                System.out.println("0 - Пропустити");
                 exitOpt = scanner.nextLine();
                 if (exitOpt.equals("0")) break;
             }
@@ -212,7 +212,7 @@ public class StudentMenu {
                 logger.warn("Некоректний ID кафедри: {}", e.getMessage());
                 System.out.println(e.getMessage());
                 resume = false;
-                System.out.println("0 - Вихід");
+                System.out.println("0 - Пропустити");
                 exitOpt = scanner.nextLine();
                 if (exitOpt.equals("0")) break;
             }

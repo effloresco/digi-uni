@@ -236,6 +236,7 @@ public class FacultyMenu {
                                         } while (!resume);
                                         break;
                                     case 3:
+                                        System.out.println("Введіть ID декана факультету");
                                         do {
                                             try {
                                                 faculty.setDean(receiveDean());

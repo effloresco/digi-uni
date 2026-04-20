@@ -106,7 +106,7 @@ public non-sealed class Student extends Person {
         this.status = status;
     }
 
-    public Object getStudentStatus() {
+    public StudentStatus getStudentStatus() {
     return status;
     }
 
