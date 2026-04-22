@@ -4,6 +4,7 @@ import university.domain.*;
 import university.exceptions.*;
 import university.repository.DepartmentRepository;
 import university.service.DepartmentService;
+import university.storage.DepartmentStorageManager;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,7 @@ import static university.service.SearchService.scanner;
 public class DepartmentMenu {
     protected final DepartmentRepository departmentRepository = DepartmentRepository.get(DepartmentRepository.class);
     protected final DepartmentService departmentService = new DepartmentService(departmentRepository);
+    private final DepartmentStorageManager departmentStorageManager = new DepartmentStorageManager();
     boolean resume;
     String exitOpt = null;
 
@@ -156,7 +158,7 @@ public class DepartmentMenu {
                                     try {
                                         department.setName(scanner.nextLine());
                                         resume = true;
-                                        departmentService.saveAllData();
+                                        departmentStorageManager.saveAllData();
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
                                         resume = false;
@@ -169,7 +171,7 @@ public class DepartmentMenu {
                                     try {
                                         department.setFaculty(scanner.nextLine());
                                         resume = true;
-                                        departmentService.saveAllData();
+                                        departmentStorageManager.saveAllData();
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
                                         resume = false;
@@ -186,7 +188,7 @@ public class DepartmentMenu {
                                     try {
                                         department.setHead(scanner.nextLine());
                                         resume = true;
-                                        departmentService.saveAllData();
+                                        departmentStorageManager.saveAllData();
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
                                         resume = false;
@@ -202,7 +204,7 @@ public class DepartmentMenu {
                                     try {
                                         department.setLocation(scanner.nextLine());
                                         resume = true;
-                                        departmentService.saveAllData();
+                                        departmentStorageManager.saveAllData();
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
                                         resume = false;

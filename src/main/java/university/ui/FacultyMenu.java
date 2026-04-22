@@ -5,6 +5,7 @@ import university.exceptions.InvalidValue;
 import university.repository.FacultyRepository;
 import university.repository.TeacherRepository;
 import university.service.FacultyService;
+import university.storage.FacultyStorageManager;
 
 import static university.service.SearchService.*;
 
@@ -15,6 +16,7 @@ public class FacultyMenu {
     protected final FacultyRepository facultyRepository = FacultyRepository.get(FacultyRepository.class);
     protected final FacultyService facultyService = new FacultyService(facultyRepository);
     protected final TeacherRepository teacherRepository = TeacherRepository.get(TeacherRepository.class);
+    protected final FacultyStorageManager facultyStorageManager = new FacultyStorageManager();
 
     boolean resume;
 
@@ -196,7 +198,7 @@ public class FacultyMenu {
                                         do {
                                             try {
                                                 faculty.setName(scanner.nextLine());
-                                                facultyService.saveAllData();
+                                                facultyStorageManager.saveAllData();
                                                 resume = true;
                                             } catch (InvalidValue e) {
                                                 System.out.println(e.getMessage());
@@ -209,7 +211,7 @@ public class FacultyMenu {
                                         do {
                                             try {
                                                 faculty.setShortName(scanner.nextLine());
-                                                facultyService.saveAllData();
+                                                facultyStorageManager.saveAllData();
                                                 resume = true;
                                             } catch (InvalidValue e) {
                                                 System.out.println(e.getMessage());
@@ -221,7 +223,7 @@ public class FacultyMenu {
                                         do {
                                             try {
                                                 faculty.setDean(receiveDean());
-                                                facultyService.saveAllData();
+                                                facultyStorageManager.saveAllData();
                                                 resume = true;
                                             } catch (InvalidValue e) {
                                                 System.out.println(e.getMessage());
@@ -237,7 +239,7 @@ public class FacultyMenu {
                                         do {
                                             try {
                                                 faculty.setContacts(scanner.nextLine());
-                                                facultyService.saveAllData();
+                                                facultyStorageManager.saveAllData();
                                                 resume = true;
                                             } catch (InvalidValue e) {
                                                 System.out.println(e.getMessage());

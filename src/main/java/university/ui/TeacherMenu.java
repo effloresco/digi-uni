@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import university.exceptions.*;
+import university.storage.TeacherStorageManager;
 
 import static university.service.SearchService.*;
 
@@ -18,6 +19,7 @@ public class TeacherMenu {
 
     protected final TeacherRepository teacherRepository = TeacherRepository.get(TeacherRepository.class);
     protected final TeacherService teacherService = new TeacherService(teacherRepository);
+    protected final TeacherStorageManager teacherStorageManager = new TeacherStorageManager();
     boolean resume;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     String exitOpt = null;
@@ -287,7 +289,7 @@ public class TeacherMenu {
                                 do {
                                     try {
                                         teacher.setFirstName(scanner.nextLine());
-                                        teacherService.saveAllData();
+                                        teacherStorageManager.saveAllData();
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
@@ -300,7 +302,7 @@ public class TeacherMenu {
                                 do {
                                     try {
                                         teacher.setLastName(scanner.nextLine());
-                                        teacherService.saveAllData();
+                                        teacherStorageManager.saveAllData();
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
@@ -313,7 +315,7 @@ public class TeacherMenu {
                                 do {
                                     try {
                                         teacher.setMiddleName(scanner.nextLine());
-                                        teacherService.saveAllData();
+                                        teacherStorageManager.saveAllData();
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
@@ -325,7 +327,7 @@ public class TeacherMenu {
                                 do {
                                     try {
                                         teacher.setBirthDate(LocalDate.parse(SearchService.scanner.nextLine(), formatter));
-                                        teacherService.saveAllData();
+                                        teacherStorageManager.saveAllData();
                                         resume = true;
                                     } catch (DateTimeParseException e) {
                                         System.out.println("Введіть коректну дату");
@@ -339,7 +341,7 @@ public class TeacherMenu {
                                 do {
                                     try {
                                         teacher.setEmail(scanner.nextLine());
-                                        teacherService.saveAllData();
+                                        teacherStorageManager.saveAllData();
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
@@ -352,7 +354,7 @@ public class TeacherMenu {
                                 do {
                                     try {
                                         teacher.setPhone(scanner.nextLine());
-                                        teacherService.saveAllData();
+                                        teacherStorageManager.saveAllData();
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
@@ -365,7 +367,7 @@ public class TeacherMenu {
                                 do {
                                     try {
                                         teacher.setPosition(scanner.nextLine());
-                                        teacherService.saveAllData();
+                                        teacherStorageManager.saveAllData();
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
@@ -378,7 +380,7 @@ public class TeacherMenu {
                                 do {
                                     try {
                                         teacher.setDegree(scanner.nextLine());
-                                        teacherService.saveAllData();
+                                        teacherStorageManager.saveAllData();
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
@@ -391,7 +393,7 @@ public class TeacherMenu {
                                 do {
                                     try {
                                         teacher.setTitle(scanner.nextLine());
-                                        teacherService.saveAllData();
+                                        teacherStorageManager.saveAllData();
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
@@ -404,7 +406,7 @@ public class TeacherMenu {
                                 do {
                                     try {
                                         teacher.setHireDate(LocalDate.parse(SearchService.scanner.nextLine(), formatter));
-                                        teacherService.saveAllData();
+                                        teacherStorageManager.saveAllData();
                                         resume = true;
                                     } catch (DateTimeParseException e) {
                                         System.out.println("Введіть коректну дату");
@@ -417,7 +419,7 @@ public class TeacherMenu {
                                 do {
                                     try {
                                         teacher.setRate(Double.parseDouble(SearchService.scanner.nextLine()));
-                                        teacherService.saveAllData();
+                                        teacherStorageManager.saveAllData();
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
@@ -431,7 +433,7 @@ public class TeacherMenu {
                                 do {
                                     try {
                                         teacher.setFacultyId(scanner.nextLine());
-                                        teacherService.saveAllData();
+                                        teacherStorageManager.saveAllData();
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
@@ -445,7 +447,7 @@ public class TeacherMenu {
                                 do {
                                     try {
                                         teacher.setDepartmentId(scanner.nextLine());
-                                        teacherService.saveAllData();
+                                        teacherStorageManager.saveAllData();
                                         resume = true;
                                     } catch (InvalidValue e) {
                                         System.out.println(e.getMessage());
