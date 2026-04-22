@@ -18,8 +18,8 @@ public class RemoteStudentService {
         handleResponse(response);
     }
 
-    public void deleteStudent(Student student) {
-        String response = client.sendRequest("DELETE_STUDENT", student);
+    public void deleteStudent(String studentId) {
+        String response = client.sendRequest("DELETE_STUDENT", studentId);
         handleResponse(response);
     }
 

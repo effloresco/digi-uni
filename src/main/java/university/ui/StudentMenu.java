@@ -314,7 +314,6 @@ public class StudentMenu {
 
     protected void deleteStudent() {
         boolean found = false;
-        Student student = null;
         while (!found) {
             System.out.println("Введіть ідентифікатор студента, якого треба видалити (нуль, щоб вийти)");
             String studentId = scanner.nextLine();
@@ -322,7 +321,7 @@ public class StudentMenu {
                 return;
             }
 
-            studentService.deleteStudent(student);
+            studentService.deleteStudent(studentId);
         }
 
     }
