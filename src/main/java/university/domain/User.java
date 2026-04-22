@@ -9,18 +9,15 @@ public class User implements Entity<Integer>{
     public static int PERMISSION_EDIT = 2;
     public static final int PERMISSION_VIEW = 1;
 
-    @Getter @Setter
-    private static int idCounter = 1;
-
-    private final int id;
+    @Setter
+    private int id;
     private String username;
     private String password;
     private int userPermissions;
 
 
     public User(String username, String password, int userPermissions) {
-        this.id = idCounter;
-        idCounter++;
+        this.id = 0;
         this.username = username;
         this.password = password;
         this.userPermissions = userPermissions;

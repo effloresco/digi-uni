@@ -1,16 +1,12 @@
 package university.domain;
 
 import lombok.Getter;
-import lombok.Setter;
 import university.exceptions.InvalidValue;
-import static university.service.Utils.containsNonDigit;
+import java.util.UUID;
 import static university.service.Utils.containsNonLetter;
 
 @Getter
 public class Faculty implements Entity<String> {
-    @Getter @Setter
-    private static int idCounter = 0;
-
     private String code;
     private String name;
     private String shortName;
@@ -18,7 +14,7 @@ public class Faculty implements Entity<String> {
     private String contacts;
 
     public Faculty() {
-        code = String.valueOf(++idCounter);
+        code = UUID.randomUUID().toString();
     }
 
     public Faculty(String code, String name, String shortName, Teacher dean, String contacts) throws InvalidValue {

@@ -6,7 +6,6 @@ import university.exceptions.FacultyNotFoundException;
 import university.exceptions.PersonAlreadyExistsException;
 import university.exceptions.PersonNotFoundException;
 import university.repository.Repository;
-import university.storage.ServiceStorageManager;
 import university.storage.TeacherStorageManager;
 
 import java.util.Optional;
@@ -14,7 +13,6 @@ import java.util.Optional;
 public class TeacherService {
     private final Repository<Teacher, String> personRepository;
     private final TeacherStorageManager teacherStorageManager = new TeacherStorageManager();
-    private final ServiceStorageManager serviceStorageManager = new ServiceStorageManager();
 
     public TeacherService(Repository<Teacher, String> repository) {
         this.personRepository = repository;
@@ -26,15 +24,15 @@ public class TeacherService {
                 exists -> {throw new PersonAlreadyExistsException("Не вдалось додати викладача з id " + person.getID() + " причина: викладач вже існує");}
         );
         personRepository.add(person);
-        saveAllData();
-    }
+        teacherStorageManager.saveAllData();
+    } 
     public void deleteTeacher(Teacher person){
         Optional<Teacher> testCopy = personRepository.findById(person.getID());
         testCopy.orElseThrow(
                 () -> new PersonNotFoundException("Не вдалось видалити викладача з id " + person.getID() + " причина: не знайдено в репозиторії")
         );
         personRepository.deleteByID(person.getID());
-        saveAllData();
+        teacherStorageManager.saveAllData();
     }
     public void updateTeacher(String currentId, Teacher person){
         Optional<Teacher> testCopy = personRepository.findById(currentId);
@@ -49,10 +47,6 @@ public class TeacherService {
         }
         personRepository.deleteByID(currentId);
         personRepository.add(person);
-        saveAllData();
-    }
-    public void saveAllData(){
         teacherStorageManager.saveAllData();
-        serviceStorageManager.saveAllData();
     }
 }

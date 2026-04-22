@@ -34,7 +34,6 @@ public class Server {
     private static final TeacherStorageManager teacherStorageManager = new TeacherStorageManager();
     private static final DepartmentStorageManager departmentStorageManager = new DepartmentStorageManager();
     private static final FacultyStorageManager facultyStorageManager = new FacultyStorageManager();
-    private static final ServiceStorageManager serviceStorageManager = new ServiceStorageManager();
     private static final UserStorageManager userStorageManager = new UserStorageManager();
 
     private final Gson networkGson;
@@ -54,7 +53,6 @@ public class Server {
         teacherStorageManager.loadAllData();
         departmentStorageManager.loadAllData();
         facultyStorageManager.loadAllData();
-        serviceStorageManager.loadAllData();
         userStorageManager.loadAllData();
         try {
             userService.createUser(new User("admin", "12345678", User.PERMISSION_VIEW | User.PERMISSION_EDIT | User.PERMISSION_MANAGE_USERS));

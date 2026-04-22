@@ -1,19 +1,17 @@
 package university.domain;
 
 import lombok.Getter;
-import lombok.Setter;
 import university.exceptions.InvalidValue;
 import university.repository.FacultyRepository;
 import university.repository.TeacherRepository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static university.service.Utils.*;
 
 @Getter
 public class Department implements Entity<String> {
-    @Getter @Setter
-    private static int idCounter = 0;
 
     protected final FacultyRepository facultyRepository = FacultyRepository.get(FacultyRepository.class);
     protected final TeacherRepository teacherRepository = TeacherRepository.get(TeacherRepository.class);
@@ -24,7 +22,7 @@ public class Department implements Entity<String> {
     private String location;
 
     public Department() {
-        id = String.valueOf(++idCounter);
+        id = UUID.randomUUID().toString();
     }
 
     public Department(String id, String name, Faculty faculty, Person head, String location) throws InvalidValue {
