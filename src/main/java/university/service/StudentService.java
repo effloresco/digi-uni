@@ -31,12 +31,12 @@ public class StudentService {
         personRepository.add(person);
         studentStorageManager.saveAllData();
     }
-    public void deleteStudent(Student person){
-        Optional<Student> testCopy = personRepository.findById(person.getID());
+    public void deleteStudent(String studentId){
+        Optional<Student> testCopy = personRepository.findById(studentId);
         testCopy.orElseThrow(
-                () -> new PersonNotFoundException("Не вдалось видалити студента з id " + person.getID() + " причина: не знайдено в репозиторії")
+                () -> new PersonNotFoundException("Не вдалось видалити студента з id " + studentId + " причина: не знайдено в репозиторії")
         );
-        personRepository.deleteByID(person.getID());
+        personRepository.deleteByID(studentId);
         studentStorageManager.saveAllData();
     }
     public void updateStudent(String currentId, Student person){

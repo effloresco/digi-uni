@@ -322,14 +322,7 @@ public class StudentMenu {
                 return;
             }
 
-            Optional<Student> optionalStudent = studentRepository.findById(studentId);
-            if (optionalStudent.isPresent()) {
-                student = optionalStudent.get();
-                found = true;
-                studentService.deleteStudent(student);
-            } else {
-                System.out.println("Студента з таким ID не знайдено.");
-            }
+            studentService.deleteStudent(student);
         }
 
     }

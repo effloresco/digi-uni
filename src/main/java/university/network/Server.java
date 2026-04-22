@@ -24,7 +24,7 @@ import java.util.List;
 public class Server {
 
 
-    private final StudentRepository studentRepository = new StudentRepository();
+    private final StudentRepository studentRepository = StudentRepository.get(StudentRepository.class);
     private static final UserRepository userRepository = UserRepository.get(UserRepository.class);
 
     private final StudentService studentService = new StudentService(studentRepository);
@@ -125,7 +125,7 @@ public class Server {
                     return "OK|Студента успішно додано до бази!";
 
                 case "DELETE_STUDENT":
-                    Student studentToDelete = networkGson.fromJson(payload, Student.class);
+                    String studentToDelete = networkGson.fromJson(payload, String.class);
                     studentService.deleteStudent(studentToDelete);
                     studentStorageManager.saveAllData();
                     return "OK|Студента видалено";

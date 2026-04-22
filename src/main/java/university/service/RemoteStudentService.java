@@ -54,6 +54,8 @@ public class RemoteStudentService {
         String[] parts = response.split("\\|", 2);
         if (!parts[0].equals("OK")) {
             System.out.println("Сервер повернув помилку: " + parts[1]);
+        } else{
+            System.out.println(parts[1]);
         }
     }
 }
