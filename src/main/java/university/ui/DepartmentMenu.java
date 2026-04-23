@@ -135,14 +135,11 @@ public class DepartmentMenu {
         String departmentId;
         Department department;
         while (!found) {
-            System.out.println("Введіть ідентифікатор кафедри, яку треба змінити");
-            departmentId = scanner.nextLine();
-
-            Optional<Department> optionalDepartment = departmentRepository.findById(departmentId);
-
-            if (optionalDepartment.isPresent()) {
+            try {
+                System.out.println("Введіть ідентифікатор кафедри, яку треба змінити");
+                departmentId = scanner.nextLine();
+                department = departmentService.getDepartment(departmentId);
                 found = true;
-                department = optionalDepartment.get();
                 boolean status = true;
                 while (status) {
                     System.out.println("\n*-Оберіть, що змінити-*");
@@ -156,11 +153,14 @@ public class DepartmentMenu {
                                 do {
                                     try {
                                         department.setName(scanner.nextLine());
+                                        departmentService.updateDepartment(department);
                                         resume = true;
-                                        departmentStorageManager.saveAllData();
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         resume = false;
+                                        System.out.println("0 - Вихід");
+                                        exitOpt = scanner.nextLine();
+                                        if (exitOpt.equals("0")) break;
                                     }
                                 } while (!resume);
                                 break;
@@ -169,9 +169,9 @@ public class DepartmentMenu {
                                     System.out.println("Введіть факультет кафедри");
                                     try {
                                         department.setFaculty(scanner.nextLine());
+                                        departmentService.updateDepartment(department);
                                         resume = true;
-                                        departmentStorageManager.saveAllData();
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         resume = false;
                                         System.out.println("0 - Вихід");
@@ -186,9 +186,9 @@ public class DepartmentMenu {
                                     System.out.println("Введіть голову кафедри");
                                     try {
                                         department.setHead(scanner.nextLine());
+                                        departmentService.updateDepartment(department);
                                         resume = true;
-                                        departmentStorageManager.saveAllData();
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         resume = false;
                                         System.out.println("0 - Вихід");
@@ -202,11 +202,14 @@ public class DepartmentMenu {
                                 do {
                                     try {
                                         department.setLocation(scanner.nextLine());
+                                        departmentService.updateDepartment(department);
                                         resume = true;
-                                        departmentStorageManager.saveAllData();
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         resume = false;
+                                        System.out.println("0 - Вихід");
+                                        exitOpt = scanner.nextLine();
+                                        if (exitOpt.equals("0")) break;
                                     }
                                 } while (!resume);
                                 break;
@@ -220,7 +223,9 @@ public class DepartmentMenu {
                         System.out.println("Введіть коректне значення");
                     }
                 }
-            } else System.out.println("Кафедри з таким ID не знайдено.");
+            }catch (DepartmentNotFoundException e) {
+                System.out.println("Кафедру з таким ID не знайдено.");
+            }
         }
 
 
