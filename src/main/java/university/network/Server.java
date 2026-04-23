@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 
 // Твої існуючі імпорти з проєкту DigiUni:
 import university.domain.Student;
+import university.domain.Teacher;
 import university.domain.User;
 import university.exceptions.UniversityBaseException;
 import university.exceptions.UserAlreadyExistsException;
@@ -25,9 +26,15 @@ public class Server {
 
 
     private final StudentRepository studentRepository = StudentRepository.get(StudentRepository.class);
+    private final TeacherRepository teacherRepository = TeacherRepository.get(TeacherRepository.class);
+    private final DepartmentRepository departmentRepository = DepartmentRepository.get(DepartmentRepository.class);
+    private final FacultyRepository facultyRepository = FacultyRepository.get(FacultyRepository.class);
     private static final UserRepository userRepository = UserRepository.get(UserRepository.class);
 
     private final StudentService studentService = new StudentService(studentRepository);
+    private final TeacherService teacherService = new TeacherService(teacherRepository);
+    private final DepartmentService departmentService = new DepartmentService(departmentRepository);
+    private final FacultyService facultyService = new FacultyService(facultyRepository);
     private static final UserService userService = new UserService(userRepository);
 
     private static final StudentStorageManager studentStorageManager = new StudentStorageManager();
@@ -139,6 +146,85 @@ public class Server {
                     String studentId = networkGson.fromJson(payload, String.class);
                     Student student = studentService.getStudent(studentId);
                     return "OK|" + networkGson.toJson(student);
+
+                case "GET_ALL_TEACHERS":
+                    List<Teacher> teachers = teacherRepository.findAll();
+                    return "OK|" + networkGson.toJson(teachers);
+
+                case "ADD_TEACHER":
+                    Teacher newTeacher = networkGson.fromJson(payload, Teacher.class);
+                    teacherService.createTeacher(newTeacher);
+                    teacherStorageManager.saveAllData();
+                    return "OK|Викладача успішно додано до бази!";
+
+                case "DELETE_TEACHER":
+                    String teacherToDelete = networkGson.fromJson(payload, String.class);
+                    teacherService.deleteTeacher(teacherToDelete);
+                    teacherStorageManager.saveAllData();
+                    return "OK|Викладача видалено";
+
+                case "UPDATE_TEACHER":
+                    Teacher updatedTeacher = networkGson.fromJson(payload, Teacher.class);
+                    teacherService.updateTeacher(updatedTeacher.getID(), updatedTeacher);
+                    return "OK|Викладача успішно оновлено!";
+
+                case "GET_TEACHER":
+                    String teacherId = networkGson.fromJson(payload, String.class);
+                    Teacher teacher = teacherService.getTeacher(teacherId);
+                    return "OK|" + networkGson.toJson(teacher);
+
+                case "GET_ALL_DEPARTMENTS":
+                    List<university.domain.Department> departments = departmentRepository.findAll();
+                    return "OK|" + networkGson.toJson(departments);
+
+                case "ADD_DEPARTMENT":
+                    university.domain.Department newDepartment = networkGson.fromJson(payload, university.domain.Department.class);
+                    departmentService.createDepartment(newDepartment);
+                    departmentStorageManager.saveAllData();
+                    return "OK|Кафедру успішно додано до бази!";
+
+                case "DELETE_DEPARTMENT":
+                    String departmentToDelete = networkGson.fromJson(payload, String.class);
+                    departmentService.deleteDepartment(departmentToDelete);
+                    departmentStorageManager.saveAllData();
+                    return "OK|Кафедру видалено";
+
+                case "UPDATE_DEPARTMENT":
+                    university.domain.Department updatedDepartment = networkGson.fromJson(payload, university.domain.Department.class);
+                    departmentService.updateDepartment(updatedDepartment.getID(), updatedDepartment);
+                    return "OK|Кафедру успішно оновлено!";
+
+                case "GET_DEPARTMENT":
+                    String departmentId = networkGson.fromJson(payload, String.class);
+                    university.domain.Department department = departmentService.getDepartment(departmentId);
+                    return "OK|" + networkGson.toJson(department);
+
+                case "GET_ALL_FACULTIES":
+                    List<university.domain.Faculty> faculties = facultyRepository.findAll();
+                    return "OK|" + networkGson.toJson(faculties);
+
+                case "ADD_FACULTY":
+                    university.domain.Faculty newFaculty = networkGson.fromJson(payload, university.domain.Faculty.class);
+                    facultyService.createFaculty(newFaculty);
+                    facultyStorageManager.saveAllData();
+                    return "OK|Факультет успішно додано до бази!";
+
+                case "DELETE_FACULTY":
+                    String facultyToDelete = networkGson.fromJson(payload, String.class);
+                    facultyService.deleteFaculty(facultyToDelete);
+                    facultyStorageManager.saveAllData();
+                    return "OK|Факультет видалено";
+
+                case "UPDATE_FACULTY":
+                    university.domain.Faculty updatedFaculty = networkGson.fromJson(payload, university.domain.Faculty.class);
+                    facultyService.updateFaculty(updatedFaculty.getID(), updatedFaculty);
+                    return "OK|Факультет успішно оновлено!";
+
+                case "GET_FACULTY":
+                    String facultyId = networkGson.fromJson(payload, String.class);
+                    university.domain.Faculty faculty = facultyService.getFaculty(facultyId);
+                    return "OK|" + networkGson.toJson(faculty);
+
 
                 case "AUTH_USER":
                     String[] authParts = networkGson.fromJson(payload, String[].class);
