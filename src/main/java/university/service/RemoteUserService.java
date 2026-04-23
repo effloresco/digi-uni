@@ -19,7 +19,7 @@ public class RemoteUserService {
         handleResponse(response);
     }
 
-    public void deleteUser(String userId) {
+    public void deleteUser(Integer userId) {
         String response = client.sendRequest("DELETE_USER", userId);
         handleResponse(response);
     }

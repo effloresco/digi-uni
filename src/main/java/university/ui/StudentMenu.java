@@ -317,10 +317,7 @@ public class StudentMenu {
         while (!found) {
             System.out.println("Введіть ідентифікатор студента, якого треба видалити (нуль, щоб вийти)");
             String studentId = scanner.nextLine();
-            if (studentId.equals("0")) {
-                return;
-            }
-
+            if (studentId.equals("0")) return;
             studentService.deleteStudent(studentId);
         }
 

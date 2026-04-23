@@ -251,19 +251,8 @@ public class TeacherMenu {
         while (!found) {
             System.out.println("Введіть ідентифікатор вчителя, якого треба видалити (нуль, щоб вийти)");
             String teacherId = scanner.nextLine();
-            if (teacherId.equals("0")) {
-                return;
-            }
-
-            Optional<Teacher> optionalTeacher = teacherRepository.findById(teacherId);
-            if (optionalTeacher.isPresent()) {
-                teacher = optionalTeacher.get();
-                found = true;
-                teacherService.deleteTeacher(teacher);
-            } else {
-                System.out.println("Викладача з таким ID не знайдено.");
-                break;
-            }
+            if (teacherId.equals("0")) return;
+            teacherService.deleteTeacher(teacherId);
         }
 
     }

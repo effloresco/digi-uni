@@ -114,20 +114,12 @@ public class UserMenu {
             String input = scanner.nextLine();
             try {
                 int userId = Integer.parseInt(input);
-                if (userId == 0) exit = true;
-                else {
-                    Optional<User> optionalUser = userRepository.findById(userId);
+                userService.deleteUser(userId);
 
-                    if (optionalUser.isPresent()) {
-                        user = optionalUser.get();
-                        found = true;
-                    } else System.out.println("Користувача з таким ID не знайдено.");
-                }
             } catch (NumberFormatException e) {
                 System.out.println("Введіть коректне значення");
             }
         }
-        if (!exit) userService.deleteUser(user);
     }
 
     protected void changeUser() {

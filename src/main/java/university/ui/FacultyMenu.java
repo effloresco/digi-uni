@@ -155,23 +155,13 @@ public class FacultyMenu {
 
     protected void deleteFaculty() {
         boolean found = false;
-        boolean exit = false;
         Faculty faculty = null;
-        while (!found && !exit) {
+        while (!found) {
             System.out.println("Введіть ідентифікатор факультету, що треба видалити (нуль, щоб вийти)");
             String facultyId = scanner.nextLine();
-
-            if (facultyId.equals("0")) exit = true;
-            else {
-                Optional<Faculty> optionalFaculty = facultyRepository.findById(facultyId);
-
-                if (optionalFaculty.isPresent()) {
-                    faculty = optionalFaculty.get();
-                    found = true;
-                } else System.out.println("Факультет з таким ID не знайдено.");
-            }
+            if (facultyId.equals("0")) return;
+            facultyService.deleteFaculty(facultyId);
         }
-        if (!exit) facultyService.deleteFaculty(faculty);
     }
 
     protected void changeFaculty() {
