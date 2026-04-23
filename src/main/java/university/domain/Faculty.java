@@ -1,6 +1,7 @@
 package university.domain;
 
 import lombok.Getter;
+import lombok.Setter;
 import university.exceptions.InvalidValue;
 import java.util.UUID;
 import static university.service.Utils.containsNonLetter;
@@ -10,18 +11,18 @@ public class Faculty implements Entity<String> {
     private String code;
     private String name;
     private String shortName;
-    private Teacher dean;
+    private String deanId;
     private String contacts;
 
     public Faculty() {
         code = UUID.randomUUID().toString();
     }
 
-    public Faculty(String code, String name, String shortName, Teacher dean, String contacts) throws InvalidValue {
+    public Faculty(String code, String name, String shortName, String deanId, String contacts) throws InvalidValue {
         this.code = code;
         setName(name);
         setShortName(shortName);
-        setDean(dean);
+        setDeanId(deanId);
         setContacts(contacts);
     }
 
@@ -39,8 +40,8 @@ public class Faculty implements Entity<String> {
         this.shortName = shortName;
     }
 
-    public void setDean(Teacher dean) {
-        this.dean = dean;
+    public void setDeanId(String deanId) {
+        this.deanId = deanId;
     }
 
     public void setContacts(String contacts) {
