@@ -13,8 +13,8 @@ import static university.service.Utils.*;
 @Getter
 public class Department implements Entity<String> {
 
-    protected final FacultyRepository facultyRepository = FacultyRepository.get(FacultyRepository.class);
-    protected final TeacherRepository teacherRepository = TeacherRepository.get(TeacherRepository.class);
+    protected transient final FacultyRepository facultyRepository = FacultyRepository.get(FacultyRepository.class);
+    protected transient final TeacherRepository teacherRepository = TeacherRepository.get(TeacherRepository.class);
     private String id;
     private String name;
     private Faculty faculty;

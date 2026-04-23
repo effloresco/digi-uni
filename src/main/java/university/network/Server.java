@@ -136,7 +136,8 @@ public class Server {
                     return "OK|Студента успішно оновлено!";
 
                 case "GET_STUDENT":
-                    Student student = studentService.getStudent(payload);
+                    String studentId = networkGson.fromJson(payload, String.class);
+                    Student student = studentService.getStudent(studentId);
                     return "OK|" + networkGson.toJson(student);
 
                 case "AUTH_USER":
