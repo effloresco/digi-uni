@@ -3,9 +3,10 @@ package university.ui;
 import university.domain.User;
 import university.repository.UserRepository;
 import university.service.UserService;
-
 import java.util.List;
 import java.util.Scanner;
+
+import static university.service.Utils.*;
 
 public class AuthMenu {
     protected final Scanner scanner = new Scanner(System.in);
@@ -16,13 +17,13 @@ public class AuthMenu {
     }
 
     public void auth() {
-//        UserService userManagement = new UserService();
         boolean status = true;
         boolean success = false;
         User targetUser = null;
-        System.out.println("\n*-Вхід в DigiUni:-*");
+        printHeader("Вхід в DigiUni");
         while (status) {
-            System.out.println("Введіть ім'я користувача (для виходу введіть 0)");
+            printMessage(Mt.Warning, "Введіть ім'я користувача", "[0] Вихід");
+            printPrompt(">");
             String username = scanner.nextLine();
             if (username.equals("0")) {
                 status = false;
@@ -33,21 +34,23 @@ public class AuthMenu {
                     .toList();
 
             if (results.isEmpty()) {
-                System.out.println("Неправильне ім'я користувача. Повторіть спробу");
+                printMessage(Mt.Error, "Неправильне ім'я користувача. Повторіть спробу");
             } else {
                 targetUser = results.get(0);
-                System.out.println("Введіть пароль (для виходу введіть 0)");
+                printMessage(Mt.Warning, "Введіть пароль","[0] Вихід", true);
+                printPrompt(">");
                 String password = scanner.nextLine();
                 if (password.equals("0")) {
                     status = false;
                     continue;
                 }
                 if (!targetUser.getPassword().equals(password)) {
-                    System.out.println("Неправильний пароль. Повторіть спробу");
+                    printMessage(Mt.Error, "Неправильний пароль. Повторіть спробу");
                     continue;
                 }
 
-                System.out.println("Успішний вхід! Вітаємо, " + targetUser.getUserName());
+                printMessage(Mt.Success, "Успішний вхід! Вітаємо, " + targetUser.getUserName(), "",true);
+
                 UserService.currentUser = targetUser.getRole();
                 status = false;
                 success = true;
@@ -55,11 +58,11 @@ public class AuthMenu {
         }
         status = true;
         while(status && !success){
-            System.out.println("Вийти з програми? y/n");
+            printMessage(Mt.Warning, "Вийти з програми?", "[1] Так \n[0] Ні");
             String answer = scanner.nextLine();
-            if (answer.equals("y"))
+            if (answer.equals("1"))
                 System.exit(0);
-            else if (answer.equals("n"))
+            else if (answer.equals("0"))
                 status = false;
         }
     }
