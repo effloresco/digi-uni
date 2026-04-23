@@ -3,6 +3,7 @@ package university.service;
 import com.google.gson.reflect.TypeToken;
 import university.domain.User;
 import university.exceptions.PersonNotFoundException;
+import university.exceptions.UserNotFoundException;
 import university.network.Client;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public class RemoteUserService {
         if (parts[0].equals("OK")) {
             return client.getGson().fromJson(parts[1], User.class);
         } else {
-            throw new PersonNotFoundException(parts[1]);
+            throw new UserNotFoundException(parts[1]);
         }
     }
 

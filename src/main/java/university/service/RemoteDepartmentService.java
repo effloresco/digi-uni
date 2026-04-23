@@ -2,6 +2,7 @@ package university.service;
 
 import com.google.gson.reflect.TypeToken;
 import university.domain.Department;
+import university.exceptions.DepartmentNotFoundException;
 import university.exceptions.PersonNotFoundException;
 import university.network.Client;
 
@@ -36,7 +37,7 @@ public class RemoteDepartmentService {
         if (parts[0].equals("OK")) {
             return client.getGson().fromJson(parts[1], Department.class);
         } else {
-            throw new PersonNotFoundException(parts[1]);
+            throw new DepartmentNotFoundException(parts[1]);
         }
     }
 
