@@ -260,7 +260,7 @@ public class TeacherMenu {
         String teachertId;
         Teacher teacher;
         while (!found) {
-            System.out.println("Введіть ідентифікатор викладача, що треба замінити");
+            System.out.println("Введіть ідентифікатор викладача, якого треба змінити");
             teachertId = scanner.nextLine();
             Optional<Teacher> optionalTeacher = teacherRepository.findById(teachertId);
 
