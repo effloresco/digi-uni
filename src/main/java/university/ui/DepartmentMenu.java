@@ -5,6 +5,7 @@ import university.exceptions.*;
 import university.network.Client;
 import university.repository.DepartmentRepository;
 import university.service.RemoteDepartmentService;
+import university.service.RemoteFacultyService;
 import university.service.RemoteTeacherService;
 import university.storage.DepartmentStorageManager;
 
@@ -16,6 +17,7 @@ public class DepartmentMenu {
     private final Client client;
     protected final RemoteDepartmentService departmentService;
     protected final RemoteTeacherService teacherService;
+    protected final RemoteFacultyService facultyService;
 
     boolean resume;
     String exitOpt = null;
@@ -29,6 +31,7 @@ public class DepartmentMenu {
         this.client = client;
         departmentService = new RemoteDepartmentService(client);
         teacherService = new RemoteTeacherService(client);
+        facultyService = new RemoteFacultyService(client);
     }
 
     protected void departmentManagement() {
@@ -83,10 +86,12 @@ public class DepartmentMenu {
         do {
             System.out.println("Введіть ідентифікатор факультету");
             try {
-                department.setFacultyId(scanner.nextLine());
+                String facultyId = scanner.nextLine();
+                Faculty faculty = facultyService.getFaculty(facultyId);
+                department.setFacultyId(facultyId);
                 resume = true;
 
-            } catch (InvalidValue e) {
+            } catch (InvalidValue | FacultyNotFoundException e) {
                 System.out.println(e.getMessage());
                 resume = false;
                 System.out.println("0 - Пропустити");
@@ -168,10 +173,12 @@ public class DepartmentMenu {
                                 do {
                                     System.out.println("Введіть факультет кафедри");
                                     try {
-                                        department.setFacultyId(scanner.nextLine());
+                                        String facultyId = scanner.nextLine();
+                                        Faculty faculty = facultyService.getFaculty(facultyId);
+                                        department.setFacultyId(facultyId);
                                         departmentService.updateDepartment(department);
                                         resume = true;
-                                    } catch (InvalidValue | PersonNotFoundException e) {
+                                    } catch (InvalidValue | FacultyNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         resume = false;
                                         System.out.println("0 - Вихід");
