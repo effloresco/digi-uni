@@ -4,24 +4,21 @@ import university.domain.*;
 import university.exceptions.*;
 import university.network.Client;
 import university.repository.DepartmentRepository;
-import university.service.DepartmentService;
 import university.service.RemoteDepartmentService;
 import university.service.RemoteTeacherService;
 import university.storage.DepartmentStorageManager;
 
 import java.util.List;
-import java.util.Optional;
 
 import static university.service.SearchService.scanner;
 
 public class DepartmentMenu {
     private final Client client;
-    protected final DepartmentRepository departmentRepository = DepartmentRepository.get(DepartmentRepository.class);
     protected final RemoteDepartmentService departmentService;
-    private final DepartmentStorageManager departmentStorageManager = new DepartmentStorageManager();
+    protected final RemoteTeacherService teacherService;
+
     boolean resume;
     String exitOpt = null;
-
 
     private final String opt0 = "0 - Повернутись назад";
     private final List<String> menuOptions = List.of("1 - Додати кафедру", "2 - Змінити інформацію про кафедру", "3 - Видалити кафедру з бази даних", opt0);
@@ -31,6 +28,7 @@ public class DepartmentMenu {
     public DepartmentMenu(Client client) {
         this.client = client;
         departmentService = new RemoteDepartmentService(client);
+        teacherService = new RemoteTeacherService(client);
     }
 
     protected void departmentManagement() {
@@ -85,7 +83,7 @@ public class DepartmentMenu {
         do {
             System.out.println("Введіть ідентифікатор факультету");
             try {
-                department.setFaculty(scanner.nextLine());
+                department.setFacultyId(scanner.nextLine());
                 resume = true;
 
             } catch (InvalidValue e) {
@@ -101,9 +99,11 @@ public class DepartmentMenu {
         do {
             System.out.println("Введіть ідентифікатор викладача");
             try {
-                department.setHead(scanner.nextLine());
+                String teacherId = scanner.nextLine();
+                Teacher dean = teacherService.getTeacher(teacherId);
+                department.setHeadId(teacherId);
                 resume = true;
-            } catch (InvalidValue e) {
+            } catch (InvalidValue | PersonNotFoundException e) {
                 System.out.println(e.getMessage());
                 resume = false;
                 System.out.println("0 - Пропустити");
@@ -168,7 +168,7 @@ public class DepartmentMenu {
                                 do {
                                     System.out.println("Введіть факультет кафедри");
                                     try {
-                                        department.setFaculty(scanner.nextLine());
+                                        department.setFacultyId(scanner.nextLine());
                                         departmentService.updateDepartment(department);
                                         resume = true;
                                     } catch (InvalidValue | PersonNotFoundException e) {
@@ -185,7 +185,9 @@ public class DepartmentMenu {
                                 do {
                                     System.out.println("Введіть голову кафедри");
                                     try {
-                                        department.setHead(scanner.nextLine());
+                                        String teacherId = scanner.nextLine();
+                                        Teacher dean = teacherService.getTeacher(teacherId);
+                                        department.setHeadId(teacherId);
                                         departmentService.updateDepartment(department);
                                         resume = true;
                                     } catch (InvalidValue | PersonNotFoundException e) {

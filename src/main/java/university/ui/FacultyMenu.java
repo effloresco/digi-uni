@@ -2,12 +2,13 @@ package university.ui;
 
 import university.domain.*;
 import university.exceptions.InvalidValue;
+import university.exceptions.PersonNotFoundException;
 import university.network.Client;
 import university.repository.FacultyRepository;
 import university.repository.TeacherRepository;
-import university.service.FacultyService;
-import university.service.RemoteDepartmentService;
 import university.service.RemoteFacultyService;
+import university.service.RemoteTeacherService;
+import university.service.TeacherService;
 import university.storage.FacultyStorageManager;
 
 import static university.service.SearchService.*;
@@ -19,7 +20,7 @@ public class FacultyMenu {
     private final Client client;
     protected final FacultyRepository facultyRepository = FacultyRepository.get(FacultyRepository.class);
     protected final RemoteFacultyService facultyService;
-    protected final TeacherRepository teacherRepository = TeacherRepository.get(TeacherRepository.class);
+    protected final RemoteTeacherService teacherService;
     protected final FacultyStorageManager facultyStorageManager = new FacultyStorageManager();
 
     boolean resume;
@@ -33,6 +34,7 @@ public class FacultyMenu {
     public FacultyMenu(Client client) {
         this.client = client;
         facultyService = new RemoteFacultyService(client);
+        teacherService = new RemoteTeacherService(client);
     }
 
     protected void facultyManaging() {
@@ -100,9 +102,11 @@ public class FacultyMenu {
 
         do {
             try {
-                faculty.setDean(receiveDean());
+                String teacherId = scanner.nextLine();
+                Teacher dean = teacherService.getTeacher(teacherId);
+                faculty.setDeanId(teacherId);
                 resume = true;
-            } catch (InvalidValue e) {
+            } catch (InvalidValue | PersonNotFoundException e) {
                 System.out.println(e.getMessage());
                 resume = false;
                 System.out.println("0 - Пропустити");
@@ -126,27 +130,6 @@ public class FacultyMenu {
 
         return faculty;
 
-    }
-
-    protected Teacher receiveDean() {
-        Teacher dean = null;
-        boolean found = false;
-        while (!found) {
-            System.out.println("Введіть ідентифікатор декана(залиште поле пустим, щоб додати пізніше)");
-            String teacherId = scanner.nextLine();
-
-            if (!teacherId.isEmpty()) {
-                Optional<Teacher> optionalPerson = teacherRepository.findById(teacherId);
-
-                if (optionalPerson.isPresent()) {
-                    dean = optionalPerson.get();
-                    found = true;
-                } else {
-                    System.out.println("Особу з таким ID не знайдено.");
-                }
-            } else found = true;
-        }
-        return dean;
     }
 
     protected void addFaculty() {
@@ -219,7 +202,7 @@ public class FacultyMenu {
                                     case 3:
                                         do {
                                             try {
-                                                faculty.setDean(receiveDean());
+                                                faculty.setDeanId(receiveDean());
                                                 facultyStorageManager.saveAllData();
                                                 resume = true;
                                             } catch (InvalidValue e) {
