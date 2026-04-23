@@ -41,12 +41,12 @@ public class DepartmentService {
     public void updateDepartment(String currentId, Department department){
         Optional<Department> testCopy = departmentRepository.findById(currentId);
         testCopy.orElseThrow(
-                () -> new FacultyNotFoundException("Не вдалось оновити кафедру з id " + currentId + " причина: не знайдено в репозиторії")
+                () -> new DepartmentNotFoundException("Не вдалось оновити кафедру з id " + currentId + " причина: не знайдено в репозиторії")
         );
         String newId = department.getID();
         if(!currentId.equals(newId)){
             departmentRepository.findById(newId).ifPresent(
-                    exists -> {throw new FacultyAlreadyExistsException("Не вдалось оновити кафедру з id " + currentId + " причина: кафедра з id " + newId + " вже існує");}
+                    exists -> {throw new DepartmentAlreadyExistsException("Не вдалось оновити кафедру з id " + currentId + " причина: кафедра з id " + newId + " вже існує");}
 
             );
         }
