@@ -1,15 +1,18 @@
 package university.ui;
 
+import university.domain.Student;
 import university.domain.User;
+import university.exceptions.InvalidValue;
+import university.exceptions.PersonNotFoundException;
 import university.network.Client;
 import university.repository.UserRepository;
-import university.service.RemoteStudentService;
 import university.service.RemoteUserService;
-import university.service.UserService;
 
 import java.util.List;
 import java.util.Optional;
 
+import static university.domain.Student.StudyForm.BUDGET;
+import static university.domain.Student.StudyForm.CONTRACT;
 import static university.service.SearchService.scanner;
 
 public class UserMenu {
@@ -20,6 +23,12 @@ public class UserMenu {
     private final String opt0 = "0 - Вихід";
     private final List<String> roleOptions = List.of("1 - Користувач", "2 - Менеджер", "3 - Адміністратор", opt0);
     private final List<String> menuOptions = List.of("1 - Додати користувача", "2 - Змінити користувача", "3 - Видалити користувача", opt0);
+    private List<String> changeList = List.of(
+            "1 - Ім'я користувача",
+            "2 - Пароль",
+            "3 - Роль",
+            opt0);
+    boolean resume;
 
     public UserMenu(Client client) {
         this.client = client;
@@ -122,27 +131,98 @@ public class UserMenu {
 
     protected void changeUser() {
         boolean found = false;
-        boolean exit = false;
         String userId;
-        while (!found && !exit) {
-            System.out.println("Введіть ідентифікатор користувача, якого треба замінити (введіть 0 щоб повернутись назад)");
-            userId = scanner.nextLine();
+        User user;
+        while (!found) {
             try {
-                int id = Integer.parseInt(userId);
-                if (id == 0) exit = true;
-                else {
-                    Optional<User> optionalUser = userRepository.findById(id);
+                System.out.println("Введіть ідентифікатор користувача, якого треба змінити");
+                userId = scanner.nextLine();
+                user = userService.getUser(userId);
+                found = true;
+                boolean status = true;
+                while (status) {
+                    System.out.println("\n*-Оберіть, що змінити-*");
+                    changeList.forEach(System.out::println);
+                    String inputLine = scanner.nextLine();
+                    try {
+                        int input = Integer.parseInt(inputLine);
+                        switch (input) {
+                            case 1:
+                                System.out.println("Введіть нове ім'я користувача");
+                                do {
+                                    try {
+                                        user.setUserName(scanner.nextLine());
+                                        userService.updateUser(user);
+                                        resume = true;
+                                    } catch (InvalidValue | PersonNotFoundException e) {
+                                        System.out.println(e.getMessage());
+                                        resume = false;
+                                    }
 
-                    if (optionalUser.isPresent()) {
-                        found = true;
-                        User user = userGenerator(id, optionalUser.get().getUserName());
-                        if (user == null) return;
-                        userService.deleteUser(optionalUser.get());
-                        userService.createUser(user);
-                    } else System.out.println("Користувача з таким ID не знайдено.");
+                                } while (!resume);
+                                break;
+                            case 2:
+                                System.out.println("Введіть новий пароль");
+                                do {
+                                    try {
+                                        user.setPassword(scanner.nextLine());
+                                        userService.updateUser(user);
+                                        resume = true;
+                                    } catch (InvalidValue | PersonNotFoundException e) {
+                                        System.out.println(e.getMessage());
+                                        resume = false;
+                                    }
+                                } while (!resume);
+                                break;
+                            case 3:
+                                System.out.println("Оберіть нову роль");
+                                do {
+                                    status = true;
+                                    System.out.println("\n*-Оберіть роль користувача: -*");
+                                    roleOptions.forEach(System.out::println);
+                                    String inputLocalLine = scanner.nextLine();
+                                    try {
+                                        int inputLocal = Integer.parseInt(inputLocalLine);
+                                        switch (inputLocal) {
+                                            case 1:
+                                                user.setUserPermissions(User.PERMISSION_VIEW);
+                                                userService.updateUser(user);
+                                                break;
+                                            case 2:
+                                                user.setUserPermissions(User.PERMISSION_VIEW | User.PERMISSION_EDIT);
+                                                userService.updateUser(user);
+                                                break;
+                                            case 3:
+                                                user.setUserPermissions(User.PERMISSION_VIEW | User.PERMISSION_EDIT | User.PERMISSION_MANAGE_USERS);
+                                                userService.updateUser(user);
+                                                break;
+                                            case 0:
+                                                resume = true;
+                                                break;
+                                            default:
+                                                System.out.println("Введіть коректне значення");
+                                        }
+                                    } catch (NumberFormatException e) {
+                                        System.out.println("Введіть коректне значення");
+                                    } catch (InvalidValue | PersonNotFoundException e) {
+                                        System.out.println(e.getMessage());
+                                        resume = false;
+                                    }
+                                } while (!resume);
+                                break;
+
+                            case 0:
+                                status = false;
+                                break;
+                            default:
+                                System.out.println("Введіть коректне значення");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Введіть коректне значення");
+                    }
                 }
-            } catch (NumberFormatException e) {
-                System.out.println("Введіть коректне значення");
+            } catch (PersonNotFoundException e) {
+                System.out.println("Студента з таким ID не знайдено.");
             }
         }
     }

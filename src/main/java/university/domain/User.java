@@ -3,7 +3,7 @@ package university.domain;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
+@Getter @Setter
 public class User implements Entity<Integer>{
     public static final int PERMISSION_MANAGE_USERS = 4;
     public static int PERMISSION_EDIT = 2;

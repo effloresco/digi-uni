@@ -56,7 +56,7 @@ public class UserService {
                 () -> new UserNotFoundException("Не вдалось оновити користувача з id " + currentId + " причина: не знайдено в репозиторії")
         );
         int newId = user.getID();
-        if(currentId == newId){
+        if(currentId != newId){
             userRepository.findById(newId).ifPresent(
                     exists -> {throw new UserAlreadyExistsException("Не вдалось оновити користувача з id " + currentId + " причина: користувач з id " + newId + " вже існує");}
 
