@@ -154,9 +154,7 @@ public class FacultyMenu {
     }
 
     protected void deleteFaculty() {
-        boolean found = false;
-        Faculty faculty = null;
-        while (!found) {
+        while (true) {
             System.out.println("Введіть ідентифікатор факультету, що треба видалити (нуль, щоб вийти)");
             String facultyId = scanner.nextLine();
             if (facultyId.equals("0")) return;

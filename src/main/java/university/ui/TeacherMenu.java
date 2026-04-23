@@ -246,9 +246,7 @@ public class TeacherMenu {
     }
 
     protected void deleteTeacher() {
-        boolean found = false;
-        Teacher teacher = null;
-        while (!found) {
+        while (true) {
             System.out.println("Введіть ідентифікатор вчителя, якого треба видалити (нуль, щоб вийти)");
             String teacherId = scanner.nextLine();
             if (teacherId.equals("0")) return;

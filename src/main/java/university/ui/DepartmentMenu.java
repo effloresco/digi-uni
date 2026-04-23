@@ -121,9 +121,7 @@ public class DepartmentMenu {
 
 
     protected void deleteDepartment() {
-        boolean found = false;
-        Department department = null;
-        while (!found) {
+        while (true) {
             System.out.println("Введіть ідентифікатор кафедри, що треба видалити (нуль, щоб вийти)");
             String departmentId = scanner.nextLine();
             if (departmentId.equals("0")) return;

@@ -106,12 +106,10 @@ public class UserMenu {
     }
 
     protected void deleteUser() {
-        boolean found = false;
-        boolean exit = false;
-        User user = null;
-        while (!found && !exit) {
+        while (true) {
             System.out.println("Введіть ідентифікатор користувача, якого треба видалити (введіть 0 щоб повернутись назад)");
             String input = scanner.nextLine();
+            if (input.equals("0")) return;
             try {
                 int userId = Integer.parseInt(input);
                 userService.deleteUser(userId);
