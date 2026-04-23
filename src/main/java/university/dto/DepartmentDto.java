@@ -8,14 +8,14 @@ import university.domain.Person;
 public class DepartmentDto {
     private final String id;
     private final String name;
-    private final Faculty faculty;
-    private final Person head;
+    private final String facultyId;
+    private final String headId;
     private final String location;
-    public DepartmentDto(String id, String name, Faculty faculty, Person head, String location) {
+    public DepartmentDto(String id, String name, String facultyId, String headId, String location) {
         this.id = id;
         this.name = name;
-        this.faculty = faculty;
-        this.head = head;
+        this.facultyId = facultyId;
+        this.headId = headId;
         this.location = location;
     }
 }

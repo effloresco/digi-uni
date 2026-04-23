@@ -4,6 +4,7 @@ import lombok.Getter;
 import university.exceptions.InvalidValue;
 import university.repository.FacultyRepository;
 import university.repository.TeacherRepository;
+import university.service.FacultyService;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -15,23 +16,22 @@ public class Department implements Entity<String> {
 
     protected transient final FacultyRepository facultyRepository = FacultyRepository.get(FacultyRepository.class);
     protected transient final TeacherRepository teacherRepository = TeacherRepository.get(TeacherRepository.class);
+    private final FacultyService facultyService = new FacultyService(facultyRepository);
     private String id;
     private String name;
-    private Faculty faculty;
-    private Person head;
+    private String facultyId;
+    private String headId;
     private String location;
 
     public Department() {
         id = UUID.randomUUID().toString();
     }
 
-    public Department(String id, String name, Faculty faculty, Person head, String location) throws InvalidValue {
+    public Department(String id, String name, String facultyId, String headId, String location) throws InvalidValue {
         this.id = id;
         setName(name);
-        if (faculty == null) this.faculty = null;
-        else setFaculty(faculty.getID());
-        if (head == null) this.head = null;
-        else setHead(head.getID());
+        setFacultyId(facultyId);
+        setHeadId(headId);
         setLocation(location);
     }
 
@@ -43,27 +43,12 @@ public class Department implements Entity<String> {
         this.name = name;
     }
 
-    public void setFaculty(String facultyId) throws InvalidValue {
-        Optional<Faculty> optionalFaculty = facultyRepository.findById(facultyId);
-
-        if (!optionalFaculty.isPresent()) {
-            throw new InvalidValue("Факультет з таким ID не знайдено.");
-        }
-        this.faculty = optionalFaculty.get();
+    public void setFacultyId(String facultyId) throws InvalidValue {
+        this.facultyId = facultyId;
     }
 
-    public void setHead(String teacherId) throws InvalidValue {
-
-        Optional<Teacher> optionalPerson = teacherRepository.findById(teacherId);
-        if (optionalPerson.isPresent()) {
-            Person person = optionalPerson.get();
-            if (!(person instanceof Teacher)) {
-                throw new InvalidValue("Ця особа не є викладачем");
-            }
-        } else {
-            throw new InvalidValue("Особу з таким ID не знайдено.");
-        }
-        this.head = optionalPerson.get();
+    public void setHeadId(String teacherId) throws InvalidValue {
+        this.headId = teacherId;
     }
 
     public void setLocation(String location) throws InvalidValue {
