@@ -225,7 +225,32 @@ public class Server {
                     university.domain.Faculty faculty = facultyService.getFaculty(facultyId);
                     return "OK|" + networkGson.toJson(faculty);
 
+                case "GET_ALL_USERS":
+                    List<User> users = userRepository.findAll();
+                    return "OK|" + networkGson.toJson(users);
 
+                case "ADD_USER":
+                    User newUser = networkGson.fromJson(payload, User.class);
+                    userService.createUser(newUser);
+                    userStorageManager.saveAllData();
+                    return "OK|Користувача успішно додано до бази!";
+
+                case "DELETE_USER":
+                    Integer userToDelete = networkGson.fromJson(payload, Integer.class);
+                    userService.deleteUser(userToDelete);
+                    userStorageManager.saveAllData();
+                    return "OK|Користувача видалено";
+
+                case "UPDATE_USER":
+                    User updatedUser = networkGson.fromJson(payload, User.class);
+                    userService.updateUser(updatedUser.getID(), updatedUser);
+                    return "OK|Користувача успішно оновлено!";
+
+                case "GET_USER":
+                    Integer userId = networkGson.fromJson(payload, Integer.class);
+                    User user = userService.getUser(userId);
+                    return "OK|" + networkGson.toJson(user);
+                    
                 case "AUTH_USER":
                     String[] authParts = networkGson.fromJson(payload, String[].class);
 
