@@ -351,7 +351,7 @@ public class StudentMenu {
                                         student.setFirstName(scanner.nextLine());
                                         studentService.updateStudent(student);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         resume = false;
                                     }
@@ -365,7 +365,7 @@ public class StudentMenu {
                                         student.setLastName(scanner.nextLine());
                                         studentService.updateStudent(student);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         resume = false;
                                     }
@@ -378,7 +378,7 @@ public class StudentMenu {
                                         student.setMiddleName(scanner.nextLine());
                                         studentService.updateStudent(student);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         resume = false;
                                     }
@@ -394,6 +394,9 @@ public class StudentMenu {
                                     } catch (DateTimeParseException e) {
                                         System.out.println("Введіть коректну дату");
                                         resume = false;
+                                    } catch (PersonNotFoundException e) {
+                                        System.out.println(e.getMessage());
+                                        resume = false;
                                     }
                                 } while (!resume);
                                 break;
@@ -404,7 +407,7 @@ public class StudentMenu {
                                         student.setEmail(scanner.nextLine());
                                         studentService.updateStudent(student);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         resume = false;
                                     }
@@ -417,7 +420,7 @@ public class StudentMenu {
                                         student.setPhone(scanner.nextLine());
                                         studentService.updateStudent(student);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         resume = false;
                                     }
@@ -430,7 +433,7 @@ public class StudentMenu {
                                         student.setStudentId(scanner.nextLine());
                                         studentService.updateStudent(student);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         resume = false;
                                     }
@@ -443,7 +446,7 @@ public class StudentMenu {
                                         student.setCourse(Integer.parseInt(SearchService.scanner.nextLine()));
                                         studentService.updateStudent(student);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         resume = false;
                                     }
@@ -451,9 +454,14 @@ public class StudentMenu {
                                 break;
                             case 9:
                                 System.out.println("Введіть групу");
-                                student.setGroup(scanner.nextLine());
-                                studentService.updateStudent(student);
-                                resume = true;
+                                try {
+                                    student.setGroup(scanner.nextLine());
+                                    studentService.updateStudent(student);
+                                    resume = true;
+                                } catch (PersonNotFoundException e) {
+                                    System.out.println(e.getMessage());
+                                    resume = false;
+                                }
                                 break;
                             case 10:
                                 System.out.println("Введіть рік вступу");
@@ -462,7 +470,7 @@ public class StudentMenu {
                                         student.setEnrollmentYear(Integer.parseInt(SearchService.scanner.nextLine()));
                                         studentService.updateStudent(student);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         resume = false;
                                     }
@@ -494,6 +502,8 @@ public class StudentMenu {
                                         }
                                     } catch (NumberFormatException e) {
                                         System.out.println("Введіть коректне значення");
+                                    } catch (PersonNotFoundException e) {
+                                        System.out.println(e.getMessage());
                                     }
                                 } while (status);
                                 break;
@@ -527,6 +537,8 @@ public class StudentMenu {
                                         }
                                     } catch (NumberFormatException e) {
                                         System.out.println("Введіть коректне значення");
+                                    } catch (PersonNotFoundException e) {
+                                        System.out.println(e.getMessage());
                                     }
                                 } while (status);
                                 break;
@@ -538,7 +550,7 @@ public class StudentMenu {
                                         student.setFacultyId(scanner.nextLine());
                                         studentService.updateStudent(student);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         resume = false;
                                     }
@@ -551,7 +563,7 @@ public class StudentMenu {
                                         student.setSpecialty(scanner.nextLine());
                                         studentService.updateStudent(student);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         resume = false;
                                     }
@@ -564,7 +576,7 @@ public class StudentMenu {
                                         student.setDepartmentId(scanner.nextLine());
                                         studentService.updateStudent(student);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         resume = false;
                                     }
