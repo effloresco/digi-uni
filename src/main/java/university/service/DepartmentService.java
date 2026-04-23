@@ -1,10 +1,8 @@
 package university.service;
 
 import university.domain.Department;
-import university.exceptions.DepartmentAlreadyExistsException;
-import university.exceptions.DepartmentNotFoundException;
-import university.exceptions.FacultyAlreadyExistsException;
-import university.exceptions.FacultyNotFoundException;
+import university.domain.Student;
+import university.exceptions.*;
 import university.repository.Repository;
 import university.storage.DepartmentStorageManager;
 
@@ -18,6 +16,12 @@ public class DepartmentService {
         this.departmentRepository = repository;
     }
 
+    public Department getDepartment(String id) {
+        Optional<Department> departmentOpt = departmentRepository.findById(id);
+        return departmentOpt.orElseThrow(
+                () -> new DepartmentNotFoundException("Не знайдено кафедру з id: " + id)
+        );
+    }
     public void createDepartment(Department department){
         Optional<Department> testCopy = departmentRepository.findById(department.getID());
         testCopy.ifPresent(
@@ -26,12 +30,12 @@ public class DepartmentService {
         departmentRepository.add(department);
         departmentStorageManager.saveAllData();
     }
-    public void deleteDepartment(Department department){
-        Optional<Department> testCopy = departmentRepository.findById(department.getID());
+    public void deleteDepartment(String department){
+        Optional<Department> testCopy = departmentRepository.findById(department);
         testCopy.orElseThrow(
-                () -> new DepartmentNotFoundException("Не вдалось видалити кафедру з id " + department.getID() + " причина: не знайдено в репозиторії")
+                () -> new DepartmentNotFoundException("Не вдалось видалити кафедру з id " + department + " причина: не знайдено в репозиторії")
         );
-        departmentRepository.deleteByID(department.getID());
+        departmentRepository.deleteByID(department);
         departmentStorageManager.saveAllData();
     }
     public void updateDepartment(String currentId, Department department){

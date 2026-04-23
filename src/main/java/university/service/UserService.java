@@ -1,7 +1,9 @@
 package university.service;
 
 
+import university.domain.Teacher;
 import university.domain.User;
+import university.exceptions.PersonNotFoundException;
 import university.exceptions.UserAlreadyExistsException;
 import university.exceptions.UserNotFoundException;
 import university.repository.Repository;
@@ -19,6 +21,13 @@ public class UserService {
         this.userRepository = repository;
     }
 
+    public User getUser(Integer id) {
+        Optional<User> userOpt = userRepository.findById(id);
+        return userOpt.orElseThrow(
+                () -> new UserNotFoundException("Не знайдено користувача з id: " + id)
+        );
+    }
+    
     public void createUser(User user){
         Optional<User> testCopy = userRepository.findById(user.getID());
         testCopy.ifPresent(
@@ -33,12 +42,12 @@ public class UserService {
         userRepository.add(user);
         userStorageManager.saveAllData();
     }
-    public void deleteUser(User user){
-        Optional<User> testCopy = userRepository.findById(user.getID());
+    public void deleteUser(Integer user){
+        Optional<User> testCopy = userRepository.findById(user);
         testCopy.orElseThrow(
-                () -> new UserNotFoundException("Не вдалось видалити користувача з id " + user.getID() + " причина: не знайдено в репозиторії")
+                () -> new UserNotFoundException("Не вдалось видалити користувача з id " + user + " причина: не знайдено в репозиторії")
         );
-        userRepository.deleteByID(user.getID());
+        userRepository.deleteByID(user);
         userStorageManager.saveAllData();
     }
     public void updateUser(int currentId, User user){

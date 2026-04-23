@@ -1,8 +1,10 @@
 package university.service;
 
 import university.domain.Faculty;
+import university.domain.Student;
 import university.exceptions.FacultyAlreadyExistsException;
 import university.exceptions.FacultyNotFoundException;
+import university.exceptions.PersonNotFoundException;
 import university.repository.Repository;
 import university.storage.FacultyStorageManager;
 
@@ -17,6 +19,12 @@ public class FacultyService{
         this.facultyRepository = repository;
     }
 
+    public Faculty getFaculty(String id) {
+        Optional<Faculty> facultyOpt = facultyRepository.findById(id);
+        return facultyOpt.orElseThrow(
+                () -> new FacultyNotFoundException("Не знайдено факультет з id: " + id)
+        );
+    }
     public void createFaculty(Faculty faculty){
         Optional<Faculty> testCopy = facultyRepository.findById(faculty.getID());
         testCopy.ifPresent(
@@ -25,12 +33,12 @@ public class FacultyService{
         facultyRepository.add(faculty);
         facultyStorageManager.saveAllData();
     }
-    public void deleteFaculty(Faculty faculty){
-        Optional<Faculty> testCopy = facultyRepository.findById(faculty.getID());
+    public void deleteFaculty(String faculty){
+        Optional<Faculty> testCopy = facultyRepository.findById(faculty);
         testCopy.orElseThrow(
-                () -> new FacultyNotFoundException("Не вдалось видалити факультет з id " + faculty.getID() + " причина: не знайдено в репозиторії")
+                () -> new FacultyNotFoundException("Не вдалось видалити факультет з id " + faculty + " причина: не знайдено в репозиторії")
         );
-        facultyRepository.deleteByID(faculty.getID());
+        facultyRepository.deleteByID(faculty);
         facultyStorageManager.saveAllData();
     }
     public void updateFaculty(String currentId, Faculty faculty){
