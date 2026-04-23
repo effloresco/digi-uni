@@ -11,7 +11,7 @@ public class FacultyMapper implements Mapper<Faculty, FacultyDto> {
                 faculty.getID(),
                 faculty.getName(),
                 faculty.getShortName(),
-                faculty.getDean(),
+                faculty.getDeanId(),
                 faculty.getContacts()
         );
     }
@@ -23,7 +23,7 @@ public class FacultyMapper implements Mapper<Faculty, FacultyDto> {
                 dto.getCode(),
                 dto.getName(),
                 dto.getShortName(),
-                dto.getDean(),
+                dto.getDeanID(),
                 dto.getContacts()
         );
     }
