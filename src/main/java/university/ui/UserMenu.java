@@ -4,6 +4,7 @@ import university.domain.Student;
 import university.domain.User;
 import university.exceptions.InvalidValue;
 import university.exceptions.PersonNotFoundException;
+import university.exceptions.UserNotFoundException;
 import university.network.Client;
 import university.repository.UserRepository;
 import university.service.RemoteUserService;
@@ -221,7 +222,7 @@ public class UserMenu {
                         System.out.println("Введіть коректне значення");
                     }
                 }
-            } catch (PersonNotFoundException e) {
+            } catch (UserNotFoundException e) {
                 System.out.println("Студента з таким ID не знайдено.");
             }
         }
