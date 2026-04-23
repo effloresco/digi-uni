@@ -1,6 +1,7 @@
 package university.domain;
 
 import lombok.Getter;
+import lombok.Setter;
 import university.exceptions.InvalidValue;
 import university.repository.FacultyRepository;
 import university.repository.TeacherRepository;
@@ -19,7 +20,9 @@ public class Department implements Entity<String> {
     private final FacultyService facultyService = new FacultyService(facultyRepository);
     private String id;
     private String name;
+    @Setter
     private String facultyId;
+    @Setter
     private String headId;
     private String location;
 
@@ -41,14 +44,6 @@ public class Department implements Entity<String> {
         }
 
         this.name = name;
-    }
-
-    public void setFacultyId(String facultyId) throws InvalidValue {
-        this.facultyId = facultyId;
-    }
-
-    public void setHeadId(String teacherId) throws InvalidValue {
-        this.headId = teacherId;
     }
 
     public void setLocation(String location) throws InvalidValue {

@@ -1,6 +1,7 @@
 package university.domain;
 
 import lombok.Getter;
+import lombok.Setter;
 import university.exceptions.InvalidValue;
 import university.repository.DepartmentRepository;
 import university.repository.FacultyRepository;
@@ -20,6 +21,7 @@ public non-sealed class Teacher extends Person {
     private LocalDate hireDate;
     private double rate;
     private String facultyId;
+    @Setter
     private String departmentId;
 
     public Teacher() {
@@ -33,15 +35,6 @@ public non-sealed class Teacher extends Person {
         setHireDate(hireDate);
         setRate(rate);
         this.facultyId = facultyId;
-        this.departmentId = departmentId;
-    }
-
-    public void setDepartmentId(String departmentId) throws InvalidValue{
-        Optional<Department> optionalDepartment = departmentRepository.findById(departmentId);
-
-        if (optionalDepartment.isEmpty()) {
-            throw new InvalidValue("Кафедри з таким ID не знайдено.");
-        }
         this.departmentId = departmentId;
     }
 

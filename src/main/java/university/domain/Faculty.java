@@ -11,6 +11,7 @@ public class Faculty implements Entity<String> {
     private String code;
     private String name;
     private String shortName;
+    @Setter
     private String deanId;
     private String contacts;
 
@@ -38,10 +39,6 @@ public class Faculty implements Entity<String> {
             throw new InvalidValue("Коротке ім'я може містити лише літери");
         }
         this.shortName = shortName;
-    }
-
-    public void setDeanId(String deanId) {
-        this.deanId = deanId;
     }
 
     public void setContacts(String contacts) {
