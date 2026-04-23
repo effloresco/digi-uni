@@ -2,8 +2,11 @@ package university.ui;
 
 import university.domain.*;
 import university.exceptions.*;
+import university.network.Client;
 import university.repository.DepartmentRepository;
 import university.service.DepartmentService;
+import university.service.RemoteDepartmentService;
+import university.service.RemoteTeacherService;
 import university.storage.DepartmentStorageManager;
 
 import java.util.List;
@@ -12,8 +15,9 @@ import java.util.Optional;
 import static university.service.SearchService.scanner;
 
 public class DepartmentMenu {
+    private final Client client;
     protected final DepartmentRepository departmentRepository = DepartmentRepository.get(DepartmentRepository.class);
-    protected final DepartmentService departmentService = new DepartmentService(departmentRepository);
+    protected final RemoteDepartmentService departmentService;
     private final DepartmentStorageManager departmentStorageManager = new DepartmentStorageManager();
     boolean resume;
     String exitOpt = null;
@@ -23,6 +27,12 @@ public class DepartmentMenu {
     private final List<String> menuOptions = List.of("1 - Додати кафедру", "2 - Змінити інформацію про кафедру", "3 - Видалити кафедру з бази даних", opt0);
 
     private final List<String> changeList = List.of("1 - Назва", "2 - Факультет", "3 - Голова кафедри", "4 - Локація(кабінет)", opt0);
+
+    public DepartmentMenu(Client client) {
+        this.client = client;
+        departmentService = new RemoteDepartmentService(client);
+    }
+
     protected void departmentManagement() {
         boolean status = true;
         while (status) {

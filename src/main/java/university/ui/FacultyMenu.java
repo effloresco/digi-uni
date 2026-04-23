@@ -2,9 +2,12 @@ package university.ui;
 
 import university.domain.*;
 import university.exceptions.InvalidValue;
+import university.network.Client;
 import university.repository.FacultyRepository;
 import university.repository.TeacherRepository;
 import university.service.FacultyService;
+import university.service.RemoteDepartmentService;
+import university.service.RemoteFacultyService;
 import university.storage.FacultyStorageManager;
 
 import static university.service.SearchService.*;
@@ -13,8 +16,9 @@ import java.util.List;
 import java.util.Optional;
 
 public class FacultyMenu {
+    private final Client client;
     protected final FacultyRepository facultyRepository = FacultyRepository.get(FacultyRepository.class);
-    protected final FacultyService facultyService = new FacultyService(facultyRepository);
+    protected final RemoteFacultyService facultyService;
     protected final TeacherRepository teacherRepository = TeacherRepository.get(TeacherRepository.class);
     protected final FacultyStorageManager facultyStorageManager = new FacultyStorageManager();
 
@@ -25,6 +29,11 @@ public class FacultyMenu {
 
     private final List<String> changeList = List.of("1 - Назва", "2 - Коротка назва", "3 - Декан", "4 - Контакти", opt0);
     private String exitOpt = null;
+
+    public FacultyMenu(Client client) {
+        this.client = client;
+        facultyService = new RemoteFacultyService(client);
+    }
 
     protected void facultyManaging() {
         boolean status = true;

@@ -1,6 +1,7 @@
 package university.ui;
 
 import university.domain.*;
+import university.network.Client;
 import university.repository.TeacherRepository;
 import university.service.*;
 
@@ -16,9 +17,9 @@ import university.storage.TeacherStorageManager;
 import static university.service.SearchService.*;
 
 public class TeacherMenu {
-
+    private final Client client;
     protected final TeacherRepository teacherRepository = TeacherRepository.get(TeacherRepository.class);
-    protected final TeacherService teacherService = new TeacherService(teacherRepository);
+    protected final RemoteTeacherService teacherService;
     protected final TeacherStorageManager teacherStorageManager = new TeacherStorageManager();
     boolean resume;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
@@ -44,6 +45,11 @@ public class TeacherMenu {
             "2 - Змінити інформацію про викладача",
             "3 - Видалити викладача з бази даних",
             opt0);
+
+    public TeacherMenu(Client client) {
+        this.client = client;
+        teacherService = new RemoteTeacherService(client);
+    }
 
     protected void teacherManagement() {
         boolean status = true;

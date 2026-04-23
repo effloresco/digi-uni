@@ -1,7 +1,10 @@
 package university.ui;
 
 import university.domain.User;
+import university.network.Client;
 import university.repository.UserRepository;
+import university.service.RemoteStudentService;
+import university.service.RemoteUserService;
 import university.service.UserService;
 
 import java.util.List;
@@ -10,12 +13,18 @@ import java.util.Optional;
 import static university.service.SearchService.scanner;
 
 public class UserMenu {
+    private final Client client;
     protected final UserRepository userRepository = UserRepository.get(UserRepository.class);
-    protected final UserService userService = new UserService(userRepository);
+    protected final RemoteUserService userService;
 
     private final String opt0 = "0 - Вихід";
     private final List<String> roleOptions = List.of("1 - Користувач", "2 - Менеджер", "3 - Адміністратор", opt0);
     private final List<String> menuOptions = List.of("1 - Додати користувача", "2 - Змінити користувача", "3 - Видалити користувача", opt0);
+
+    public UserMenu(Client client) {
+        this.client = client;
+        userService = new RemoteUserService(client);
+    }
 
     protected void userManagement() {
         boolean status = true;

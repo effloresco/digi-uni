@@ -21,11 +21,11 @@ public class ManagementMenu {
     }
 
     public void management() {
-        FacultyMenu fcManagement = new FacultyMenu();
+        FacultyMenu fcManagement = new FacultyMenu(client);
         StudentMenu stManagement = new StudentMenu(client);
-        DepartmentMenu dpManagement = new DepartmentMenu();
-        TeacherMenu tcManagement = new TeacherMenu();
-        UserMenu usManagment = new UserMenu();
+        DepartmentMenu dpManagement = new DepartmentMenu(client);
+        TeacherMenu tcManagement = new TeacherMenu(client);
+        UserMenu usManagment = new UserMenu(client);
 
         boolean status = true;
         while (status) {
