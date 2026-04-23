@@ -42,12 +42,12 @@ public class StudentService {
     public void updateStudent(String currentId, Student person){
         Optional<Student> testCopy = personRepository.findById(currentId);
         testCopy.orElseThrow(
-                () -> new FacultyNotFoundException("Не вдалось оновити студента з id " + currentId + " причина: не знайдено в репозиторії")
+                () -> new PersonNotFoundException("Не вдалось оновити студента з id " + currentId + " причина: не знайдено в репозиторії")
         );
         String newId = person.getID();
         if(!currentId.equals(newId)){
             personRepository.findById(newId).ifPresent(
-                    exists -> {throw new FacultyAlreadyExistsException("Не вдалось оновити студента з id " + currentId + " причина: студент з id " + newId + " вже існує");}
+                    exists -> {throw new PersonAlreadyExistsException("Не вдалось оновити студента з id " + currentId + " причина: студент з id " + newId + " вже існує");}
 
             );
         }
