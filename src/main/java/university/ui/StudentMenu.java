@@ -328,8 +328,9 @@ public class StudentMenu {
         Student student;
         while (!found) {
             try {
-                System.out.println("Введіть ідентифікатор студента, якого треба змінити");
+                System.out.println("Введіть ідентифікатор студента, якого треба змінити (нуль, щоб вийти)");
                 studentId = scanner.nextLine();
+                if (studentId.equals("0")) return;
                 student = studentService.getStudent(studentId);
                 found = true;
                 boolean status = true;
