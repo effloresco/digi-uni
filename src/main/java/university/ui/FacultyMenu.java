@@ -75,9 +75,9 @@ public class FacultyMenu {
         Faculty faculty = new Faculty();
 
         System.out.println("Ідентифікатор факультету: " + faculty.getID());
-        
-        System.out.println("Введіть назву факультету");
+
         do {
+            System.out.println("Введіть назву факультету");
             try {
                 faculty.setName(scanner.nextLine());
                 resume = true;
@@ -88,8 +88,8 @@ public class FacultyMenu {
 
         } while (!resume);
 
-        System.out.println("Введіть коротку назву факультету");
         do {
+            System.out.println("Введіть коротку назву факультету");
             try {
                 faculty.setShortName(scanner.nextLine());
                 resume = true;
@@ -102,6 +102,7 @@ public class FacultyMenu {
 
 
         do {
+            System.out.println("Введіть id декана факультету");
             try {
                 String teacherId = scanner.nextLine();
                 Teacher dean = teacherService.getTeacher(teacherId);
@@ -117,8 +118,8 @@ public class FacultyMenu {
 
         } while (!resume);
 
-        System.out.println("Введіть контакти");
         do {
+            System.out.println("Введіть контакти");
             try {
                 faculty.setContacts(scanner.nextLine());
                 resume = true;
