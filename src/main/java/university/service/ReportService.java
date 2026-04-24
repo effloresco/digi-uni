@@ -227,9 +227,9 @@ public class ReportService {
                 s.getEnrollmentYear(),
                 translateForm(s.getForm()),
                 translateStatus(s.getStudentStatus()),
-                truncate(s.getFacultyId() != null ? facultyService.getFaculty(s.getFacultyId()).getName() : "---", 30),
+                truncate(s.getFacultyId() != null ? getSafeFacultyName(s.getFacultyId()) : "---", 30),
                 truncate(s.getSpecialty() != null ? s.getSpecialty() : "---", 30),
-                truncate(s.getDepartmentId() != null ? departmentService.getDepartment(s.getDepartmentId()).getName(): "---", 30)
+                truncate(s.getDepartmentId() != null ? getSafeDepartmentName(s.getDepartmentId()) : "---", 30)
         );
     }
 
@@ -252,9 +252,26 @@ public class ReportService {
                 truncate(t.getTitle(), 15),
                 t.getHireDate().format(DATE_FORMATTER),
                 String.format("%.2f", t.getRate()),
-                truncate(t.getFacultyId() != null ? facultyService.getFaculty(t.getFacultyId()).getName() : "---", 25),
-                truncate(t.getDepartmentId() != null ? departmentService.getDepartment(t.getDepartmentId()).getName() : "---", 25)
+                truncate(t.getFacultyId() != null ? getSafeFacultyName(t.getFacultyId()) : "---", 25),
+                truncate(t.getDepartmentId() != null ? getSafeDepartmentName(t.getDepartmentId()) : "---", 25)
         );
+    }
+    private String getSafeFacultyName(String facultyId) {
+        if (facultyId == null || facultyId.isEmpty()) return "---";
+        try {
+            return facultyService.getFaculty(facultyId).getName();
+        } catch (Exception e) {
+            return "[Видалено/Помилка]";
+        }
+    }
+
+    private String getSafeDepartmentName(String deptId) {
+        if (deptId == null || deptId.isEmpty()) return "---";
+        try {
+            return departmentService.getDepartment(deptId).getName();
+        } catch (Exception e) {
+            return "[Видалено/Помилка]";
+        }
     }
 }
 
