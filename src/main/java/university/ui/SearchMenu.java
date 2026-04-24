@@ -1,5 +1,7 @@
 package university.ui;
 
+import university.network.Client;
+
 import java.util.List;
 
 import static university.service.SearchService.*;
@@ -15,6 +17,9 @@ public class SearchMenu {
 
     private final List<String> teacherOptions = List.of("1. Пошук за ПІБ", "2. Пошук за курсом", "3. Пошук за групою", opt0);
 
+    public SearchMenu(Client client) {
+
+    }
 
     protected void searchOptions() {
         boolean status = true;
