@@ -14,10 +14,6 @@ import static university.service.Utils.*;
 
 @Getter
 public class Department implements Entity<String> {
-
-    protected transient final FacultyRepository facultyRepository = FacultyRepository.get(FacultyRepository.class);
-    protected transient final TeacherRepository teacherRepository = TeacherRepository.get(TeacherRepository.class);
-    private final FacultyService facultyService = new FacultyService(facultyRepository);
     private String id;
     private String name;
     @Setter

@@ -13,8 +13,6 @@ import static university.service.Utils.*;
 
 @Getter
 public non-sealed class Student extends Person {
-    protected transient final FacultyRepository facultyRepository = FacultyRepository.get(FacultyRepository.class);
-    protected transient final DepartmentRepository departmentRepository = DepartmentRepository.get(DepartmentRepository.class);
     public enum StudyForm {BUDGET, CONTRACT}
 
     public enum StudentStatus {STUDYING, ACADEMIC_LEAVE, EXPELLED}

@@ -13,8 +13,6 @@ import static university.service.Utils.*;
 
 @Getter
 public non-sealed class Teacher extends Person {
-    protected final transient FacultyRepository facultyRepository = FacultyRepository.get(FacultyRepository.class);
-    protected final transient DepartmentRepository departmentRepository = DepartmentRepository.get(DepartmentRepository.class);
     private String position;
     private String degree;
     private String title;
