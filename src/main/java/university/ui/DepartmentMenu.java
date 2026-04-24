@@ -179,7 +179,7 @@ public class DepartmentMenu {
                                         departmentService.updateDepartment(department);
                                         resume = true;
                                         logger.info("Поле 'назва' успішно оновлено");
-                                    } catch (InvalidValue | PersonNotFoundException e) {
+                                    } catch (InvalidValue | DepartmentNotFoundException e) {
                                         logger.warn("Помилка оновлення поля 'назва': {}", e.getMessage());
                                         System.out.println(e.getMessage());
                                         resume = false;
@@ -198,7 +198,7 @@ public class DepartmentMenu {
                                         department.setFacultyId(facultyId);
                                         departmentService.updateDepartment(department);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | DepartmentNotFoundException e) {
                                         logger.warn("Помилка оновлення поля 'факультет': {}", e.getMessage());
                                         System.out.println(e.getMessage());
                                         resume = false;
@@ -218,7 +218,7 @@ public class DepartmentMenu {
                                         department.setHeadId(teacherId);
                                         departmentService.updateDepartment(department);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | DepartmentNotFoundException | PersonNotFoundException e) {
                                         logger.warn("Помилка оновлення поля 'голова кафедри': {}", e.getMessage());
                                         System.out.println(e.getMessage());
                                         resume = false;
@@ -235,7 +235,7 @@ public class DepartmentMenu {
                                         department.setLocation(scanner.nextLine());
                                         departmentService.updateDepartment(department);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | DepartmentNotFoundException e) {
                                         logger.warn("Помилка оновлення поля 'головний кабінет кафедри': {}", e.getMessage());
                                         System.out.println(e.getMessage());
                                         resume = false;
