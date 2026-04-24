@@ -141,8 +141,9 @@ public class DepartmentMenu {
         Department department;
         while (!found) {
             try {
-                System.out.println("Введіть ідентифікатор кафедри, яку треба змінити");
+                System.out.println("Введіть ідентифікатор кафедри, яку треба змінити (нуль, щоб вийти)");
                 departmentId = scanner.nextLine();
+                if (departmentId.equals("0")) return;
                 department = departmentService.getDepartment(departmentId);
                 found = true;
                 boolean status = true;
