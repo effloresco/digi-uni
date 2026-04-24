@@ -3,18 +3,15 @@ package university.ui;
 import university.domain.*;
 import university.exceptions.*;
 import university.network.Client;
-import university.repository.DepartmentRepository;
 import university.service.RemoteDepartmentService;
 import university.service.RemoteFacultyService;
 import university.service.RemoteTeacherService;
-import university.storage.DepartmentStorageManager;
-
 import java.util.List;
 import java.util.Scanner;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import static university.service.Utils.*;
 
 public class DepartmentMenu {
     private static final Logger logger = LoggerFactory.getLogger(DepartmentMenu.class);
@@ -24,14 +21,19 @@ public class DepartmentMenu {
     protected final RemoteFacultyService facultyService;
     private final Scanner scanner = new Scanner(System.in);
 
-
     boolean resume;
     String exitOpt = null;
-
-    private final String opt0 = "0 - Повернутись назад";
-    private final List<String> menuOptions = List.of("1 - Додати кафедру", "2 - Змінити інформацію про кафедру", "3 - Видалити кафедру з бази даних", opt0);
-
-    private final List<String> changeList = List.of("1 - Назва", "2 - Факультет", "3 - Голова кафедри", "4 - Локація(кабінет)", opt0);
+    private final List<String> menuOptions = List.of(
+            "[1] Додати кафедру",
+            "[2] Змінити інформацію про кафедру",
+            "[3] Видалити кафедру з бази даних",
+            OPT0);
+    private final List<String> changeList = List.of(
+            "[1] Назва",
+            "[2] Факультет",
+            "[3] Голова кафедри",
+            "[4] Локація(кабінет)",
+            OPT0);
 
     public DepartmentMenu(Client client) {
         this.client = client;
@@ -179,7 +181,7 @@ public class DepartmentMenu {
                                         departmentService.updateDepartment(department);
                                         resume = true;
                                         logger.info("Поле 'назва' успішно оновлено");
-                                    } catch (InvalidValue | DepartmentNotFoundException e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         logger.warn("Помилка оновлення поля 'назва': {}", e.getMessage());
                                         System.out.println(e.getMessage());
                                         resume = false;
@@ -198,6 +200,7 @@ public class DepartmentMenu {
                                         department.setFacultyId(facultyId);
                                         departmentService.updateDepartment(department);
                                         resume = true;
+                                        logger.info("Поле 'факультет' успішно оновлено");
                                     } catch (InvalidValue | DepartmentNotFoundException e) {
                                         logger.warn("Помилка оновлення поля 'факультет': {}", e.getMessage());
                                         System.out.println(e.getMessage());
@@ -218,6 +221,7 @@ public class DepartmentMenu {
                                         department.setHeadId(teacherId);
                                         departmentService.updateDepartment(department);
                                         resume = true;
+                                        logger.info("Поле 'голова кафедри' успішно оновлено");
                                     } catch (InvalidValue | DepartmentNotFoundException | PersonNotFoundException e) {
                                         logger.warn("Помилка оновлення поля 'голова кафедри': {}", e.getMessage());
                                         System.out.println(e.getMessage());
@@ -235,7 +239,8 @@ public class DepartmentMenu {
                                         department.setLocation(scanner.nextLine());
                                         departmentService.updateDepartment(department);
                                         resume = true;
-                                    } catch (InvalidValue | DepartmentNotFoundException e) {
+                                        logger.info("Поле 'головний кабінет кафедри' успішно оновлено");
+                                    } catch (InvalidValue| DepartmentNotFoundException e) {
                                         logger.warn("Помилка оновлення поля 'головний кабінет кафедри': {}", e.getMessage());
                                         System.out.println(e.getMessage());
                                         resume = false;
