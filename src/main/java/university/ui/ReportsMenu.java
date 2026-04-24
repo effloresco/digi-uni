@@ -1,12 +1,17 @@
 package university.ui;
 
+import university.network.Client;
+import university.service.ReportService;
+import university.service.SearchService;
+
 import java.util.List;
+import java.util.Scanner;
 
 import static university.service.ReportService.*;
-import static university.service.SearchService.*;
 
 public class ReportsMenu {
-
+    private final ReportService reportService;
+    public static Scanner scanner = new Scanner(System.in);
     private final String opt0 = "0 - Вихід";
 
     private final List<String> menuOptions = List.of(
@@ -33,6 +38,9 @@ public class ReportsMenu {
             "3. Кафедра: за алфавітом",
             opt0);
 
+    public ReportsMenu(Client client) {
+        reportService = new ReportService(client);
+    }
 
     protected void reports() {
         boolean status = true;
@@ -75,27 +83,27 @@ public class ReportsMenu {
                 int input = Integer.parseInt(choice);
                 switch (input) {
                     case 1:
-                        printAllStudentsAlphabetically();
+                        reportService.printAllStudentsAlphabetically();
                         break;
                     case 2:
-                        printAllStudentsByCourse();
+                        reportService.printAllStudentsByCourse();
                         break;
                     case 3:
                         System.out.print("Введіть ID факультету: ");
                         String facultyId = scanner.nextLine();
-                        printStudentsByFacultyAlphabetically(facultyId);
+                        reportService.printStudentsByFacultyAlphabetically(facultyId);
                         break;
 
                     case 4: {
                         System.out.print("Введіть ID кафедри: ");
                         String departmentId = scanner.nextLine();
-                        printStudentsByDepartmentAlphabetically(departmentId);
+                        reportService.printStudentsByDepartmentAlphabetically(departmentId);
                         break;
                     }
                     case 5: {
                         System.out.print("Введіть ID кафедри: ");
                         String departmentId = scanner.nextLine();
-                        printStudentsByDepartmentByCourse(departmentId);
+                        reportService.printStudentsByDepartmentByCourse(departmentId);
                         break;
                     }
                     case 6: {
@@ -103,7 +111,7 @@ public class ReportsMenu {
                         String departmentId = scanner.nextLine();
                         System.out.print("Введіть курс (1-6): ");
                         int course = Integer.parseInt(scanner.nextLine());
-                        printStudentsByDeptAndCourse(departmentId, course);
+                        reportService.printStudentsByDeptAndCourse(departmentId, course);
                         break;
                     }
                     case 0:
@@ -131,17 +139,17 @@ public class ReportsMenu {
             int input = Integer.parseInt(choice);
             switch (input) {
                 case 1:
-                    printAllTeachersAlphabetically();
+                    reportService.printAllTeachersAlphabetically();
                     break;
                 case 2:
                     System.out.print("Введіть ID факультету: ");
                     String facultyId = scanner.nextLine();
-                    printTeachersByFacultyAlphabetically(facultyId);
+                    reportService.printTeachersByFacultyAlphabetically(facultyId);
                     break;
                 case 3:
                     System.out.print("Введіть ID кафедри: ");
                     String departmentId = scanner.nextLine();
-                    printTeachersByDepartmentAlphabetically(departmentId);
+                    reportService.printTeachersByDepartmentAlphabetically(departmentId);
                     break;
                 case 0:
                     status = false;

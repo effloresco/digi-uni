@@ -1,27 +1,36 @@
 package university.service;
+
 import university.domain.*;
+import university.network.Client;
+
 import java.util.*;
 
-import static university.service.SearchService.studentRepository;
-import static university.service.SearchService.teacherRepository;
+public class ReportService {
+    private final RemoteStudentService studentService;
+    private final RemoteTeacherService teacherService;
 
-public class ReportService {public static void printAllStudentsAlphabetically() {
-    List<Student> students = studentRepository.findAll().stream()
-            .filter(p -> p instanceof Student)
-            .map(p -> (Student) p)
-            .sorted(Comparator.comparing(Person::getFullName))
-            .toList();
-
-    if (students.isEmpty()) {
-        System.out.println("Список студентів порожній.");
-    } else {
-        System.out.println("\n--- Список студентів за алфавітом ---");
-        students.forEach(System.out::println);
+    public ReportService(Client client) {
+        studentService = new RemoteStudentService(client);
+        teacherService = new RemoteTeacherService(client);
     }
-}
 
-    public static void printAllStudentsByCourse() {
-        List<Student> students = studentRepository.findAll().stream()
+    public void printAllStudentsAlphabetically() {
+        List<Student> students = studentService.getAllStudents().stream()
+                .filter(p -> p instanceof Student)
+                .map(p -> (Student) p)
+                .sorted(Comparator.comparing(Person::getFullName))
+                .toList();
+
+        if (students.isEmpty()) {
+            System.out.println("Список студентів порожній.");
+        } else {
+            System.out.println("\n--- Список студентів за алфавітом ---");
+            students.forEach(System.out::println);
+        }
+    }
+
+    public void printAllStudentsByCourse() {
+        List<Student> students = studentService.getAllStudents().stream()
                 .filter(p -> p instanceof Student)
                 .map(p -> (Student) p)
                 .sorted(Comparator.comparing(Student::getCourse).thenComparing(Person::getFullName))
@@ -35,8 +44,8 @@ public class ReportService {public static void printAllStudentsAlphabetically() 
         }
     }
 
-    public static void printStudentsByFacultyAlphabetically(String facultyId) {
-        List<Student> students = studentRepository.findAll().stream()
+    public void printStudentsByFacultyAlphabetically(String facultyId) {
+        List<Student> students = studentService.getAllStudents().stream()
                 .filter(s -> s.getFacultyId() != null && s.getFacultyId().equals(facultyId))
                 .sorted(Comparator.comparing(Person::getFullName))
                 .toList();
@@ -49,8 +58,8 @@ public class ReportService {public static void printAllStudentsAlphabetically() 
         }
     }
 
-    public static void printStudentsByDepartmentByCourse(String departmentId) {
-        List<Student> students = studentRepository.findAll().stream()
+    public void printStudentsByDepartmentByCourse(String departmentId) {
+        List<Student> students = studentService.getAllStudents().stream()
                 .filter(s -> s.getDepartmentId() != null && s.getDepartmentId().equals(departmentId))
                 .sorted(Comparator.comparing(Student::getCourse)
                         .thenComparing(Person::getFullName))
@@ -66,8 +75,8 @@ public class ReportService {public static void printAllStudentsAlphabetically() 
         }
     }
 
-    public static void printStudentsByDepartmentAlphabetically(String departmentId) {
-        List<Student> students = studentRepository.findAll().stream()
+    public void printStudentsByDepartmentAlphabetically(String departmentId) {
+        List<Student> students = studentService.getAllStudents().stream()
                 .filter(s -> s.getDepartmentId() != null && s.getDepartmentId().equals(departmentId))
                 .sorted(Comparator.comparing(Person::getFullName))
                 .toList();
@@ -80,13 +89,13 @@ public class ReportService {public static void printAllStudentsAlphabetically() 
         }
     }
 
-    public static void printStudentsByDeptAndCourse(String departmentId, int course) {
+    public void printStudentsByDeptAndCourse(String departmentId, int course) {
         if (course < 1 || course > 6) {
             System.out.println("Помилка: Курс має бути від 1 до 6.");
             return;
         }
 
-        List<Student> students = studentRepository.findAll().stream()
+        List<Student> students = studentService.getAllStudents().stream()
                 .filter(s -> s.getDepartmentId() != null && s.getDepartmentId().equals(departmentId))
                 .filter(s -> s.getCourse() == course)
                 .toList();
@@ -108,9 +117,8 @@ public class ReportService {public static void printAllStudentsAlphabetically() 
 // ==============================================================================================================
 
 
-
-    public static void printAllTeachersAlphabetically() {
-        List<Teacher> teachers = teacherRepository.findAll().stream()
+    public void printAllTeachersAlphabetically() {
+        List<Teacher> teachers = teacherService.getAllTeachers().stream()
                 .filter(t -> t instanceof Teacher)
                 .map(t -> (Teacher) t)
                 .sorted(Comparator.comparing(Person::getFullName))
@@ -124,8 +132,8 @@ public class ReportService {public static void printAllStudentsAlphabetically() 
         }
     }
 
-    public static void printTeachersByFacultyAlphabetically(String facultyId) {
-        List<Teacher> teachers = teacherRepository.findAll().stream()
+    public void printTeachersByFacultyAlphabetically(String facultyId) {
+        List<Teacher> teachers = teacherService.getAllTeachers().stream()
                 .filter(t -> t.getFacultyId() != null && t.getFacultyId().equals(facultyId))
                 .sorted(Comparator.comparing(Person::getFullName))
                 .toList();
@@ -138,8 +146,8 @@ public class ReportService {public static void printAllStudentsAlphabetically() 
         }
     }
 
-    public static void printTeachersByDepartmentAlphabetically(String departmentId) {
-        List<Teacher> teachers = teacherRepository.findAll().stream()
+    public void printTeachersByDepartmentAlphabetically(String departmentId) {
+        List<Teacher> teachers = teacherService.getAllTeachers().stream()
                 .filter(t -> t.getDepartmentId() != null && t.getDepartmentId().equals(departmentId))
                 .sorted(Comparator.comparing(Person::getFullName))
                 .toList();
@@ -151,6 +159,4 @@ public class ReportService {public static void printAllStudentsAlphabetically() 
             teachers.forEach(System.out::println);
         }
     }
-
 }
-
