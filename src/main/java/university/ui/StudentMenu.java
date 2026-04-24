@@ -258,7 +258,7 @@ public class StudentMenu {
                 Department department = departmentService.getDepartment(departmentId);
                 student.setDepartmentId(departmentId);
                 resume = true;
-            } catch (InvalidValue e) {
+            } catch (InvalidValue | DepartmentNotFoundException e) {
                 logger.warn("Некоректний ID кафедри: {}", e.getMessage());
                 System.out.println(e.getMessage());
                 resume = false;

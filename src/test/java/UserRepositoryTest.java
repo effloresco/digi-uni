@@ -18,7 +18,7 @@ public class UserRepositoryTest {
 
     @BeforeEach
     public void setupTest(){
-        user = new User("test", "12345678", User.UserRole.ADMIN);
+        user = new User("test", "12345678", 7);
         repo = new UserRepository();
     }
 

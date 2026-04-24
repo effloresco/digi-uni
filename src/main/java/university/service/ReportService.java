@@ -20,15 +20,15 @@ public class ReportService {
     }
 
     private final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-    private final String TEACHER_TABLE_FORMAT = "| %-3s | %-40s | %-10s | %-35s | %-12s | %-25s | %-30s | %-30s | %-10s | %-10s | %-30s | %-30s |%n";
-    private final String TEACHER_SEPARATOR = "+" + "-".repeat(5) + "+" + "-".repeat(42) + "+" + "-".repeat(12) + "+" +
+    private final String TEACHER_TABLE_FORMAT = "| %-39s | %-40s | %-10s | %-35s | %-12s | %-25s | %-30s | %-30s | %-10s | %-10s | %-30s | %-30s |%n";
+    private final String TEACHER_SEPARATOR = "+" + "-".repeat(31) + "+" + "-".repeat(42) + "+" + "-".repeat(12) + "+" +
             "-".repeat(37) + "+" + "-".repeat(14) + "+" + "-".repeat(27) + "+" +
             "-".repeat(32) + "+" + "-".repeat(32) + "+" + "-".repeat(12) + "+" +
             "-".repeat(12) + "+" + "-".repeat(32) + "+" + "-".repeat(32) + "+";
 
-    private final String TABLE_FORMAT = "| %-3s | %-50s | %-10s | %-40s | %-12s | %-20s | %-4s | %-15s | %-5s | %-15s | %-15s | %-30s | %-30s | %-30s |%n";
+    private final String TABLE_FORMAT = "| %-39s | %-50s | %-10s | %-40s | %-12s | %-20s | %-4s | %-15s | %-5s | %-15s | %-15s | %-30s | %-30s | %-30s |%n";
 
-    private final String SEPARATOR = "+" + "-".repeat(5) + "+" + "-".repeat(52) + "+" + "-".repeat(12) + "+" +
+    private final String SEPARATOR = "+" + "-".repeat(41) + "+" + "-".repeat(52) + "+" + "-".repeat(12) + "+" +
             "-".repeat(42) + "+" + "-".repeat(14) + "+" + "-".repeat(22) + "+" +
             "-".repeat(6) + "+" + "-".repeat(17) + "+" + "-".repeat(7) + "+" +
             "-".repeat(17) + "+" + "-".repeat(17) + "+" + "-".repeat(32) + "+" +

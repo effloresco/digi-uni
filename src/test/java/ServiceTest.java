@@ -23,7 +23,7 @@ public class ServiceTest {
     @BeforeEach
     public void setupTest(){
         teacher = new Teacher();
-        faculty = new Faculty("1", "", "", teacher, "");
+        faculty = new Faculty("1", "", "", teacher.getID(), "");
     }
 
     @Test

@@ -22,8 +22,8 @@ public class RepositoryTest {
     @BeforeEach
     public void setupTest(){
         teacher = new Teacher();
-        faculty1 = new Faculty("1", "", "", teacher, "");
-        faculty2 = new Faculty("2", "", "", teacher, "");
+        faculty1 = new Faculty("1", "", "", teacher.getID(), "");
+        faculty2 = new Faculty("2", "", "", teacher.getID(), "");
         repo = new FacultyRepository();
     }
 
