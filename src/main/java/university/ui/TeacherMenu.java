@@ -20,6 +20,8 @@ public class TeacherMenu {
     private final Client client;
     protected final TeacherRepository teacherRepository = TeacherRepository.get(TeacherRepository.class);
     protected final RemoteTeacherService teacherService;
+    protected final RemoteDepartmentService departmentService;
+    protected final RemoteFacultyService facultyService;
     protected final TeacherStorageManager teacherStorageManager = new TeacherStorageManager();
     boolean resume;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
@@ -49,6 +51,8 @@ public class TeacherMenu {
     public TeacherMenu(Client client) {
         this.client = client;
         teacherService = new RemoteTeacherService(client);
+        facultyService = new RemoteFacultyService(client);
+        departmentService = new RemoteDepartmentService(client);
     }
 
     protected void teacherManagement() {
@@ -190,9 +194,11 @@ public class TeacherMenu {
         System.out.println("Введіть ID факультету");
         do {
             try {
-                teacher.setFacultyId(scanner.nextLine());
+                String facultyId = scanner.nextLine();
+                Faculty faculty = facultyService.getFaculty(facultyId);
+                teacher.setFacultyId(facultyId);
                 resume = true;
-            } catch (InvalidValue e) {
+            } catch (InvalidValue | FacultyNotFoundException e) {
                 System.out.println(e.getMessage());
                 resume = false;
                 System.out.println("0 - Вихід");
@@ -204,9 +210,11 @@ public class TeacherMenu {
         System.out.println("Введіть ID кафедри");
         do {
             try {
-                teacher.setDepartmentId(scanner.nextLine());
+                String departmentId = scanner.nextLine();
+                Department department = departmentService.getDepartment(departmentId);
+                teacher.setDepartmentId(departmentId);
                 resume = true;
-            } catch (InvalidValue e) {
+            } catch (InvalidValue | DepartmentNotFoundException e) {
                 System.out.println(e.getMessage());
                 resume = false;
                 System.out.println("0 - Вихід");

@@ -20,6 +20,7 @@ public non-sealed class Teacher extends Person {
     private String title;
     private LocalDate hireDate;
     private double rate;
+    @Setter
     private String facultyId;
     @Setter
     private String departmentId;
@@ -36,15 +37,6 @@ public non-sealed class Teacher extends Person {
         setRate(rate);
         this.facultyId = facultyId;
         this.departmentId = departmentId;
-    }
-
-    public void setFacultyId(String facultyId) throws InvalidValue{
-        Optional<Faculty> optionalFaculty = facultyRepository.findById(facultyId);
-
-        if (optionalFaculty.isEmpty()) {
-            throw new InvalidValue("Факультет з таким ID не знайдено.");
-        }
-        this.facultyId = facultyId;
     }
 
     public void setPosition(String position) throws InvalidValue {
