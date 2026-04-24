@@ -1,21 +1,15 @@
 package university.domain;
 
 import lombok.Getter;
+import lombok.Setter;
 import university.exceptions.InvalidValue;
-import university.repository.DepartmentRepository;
-import university.repository.FacultyRepository;
 
-import javax.swing.*;
 import java.time.LocalDate;
-import java.util.Optional;
 
 import static university.service.Utils.*;
 
 @Getter
 public non-sealed class Student extends Person {
-    protected final FacultyRepository facultyRepository = FacultyRepository.get(FacultyRepository.class);
-    protected final DepartmentRepository departmentRepository = DepartmentRepository.get(DepartmentRepository.class);
-
     public enum StudyForm {BUDGET, CONTRACT}
 
     public enum StudentStatus {STUDYING, ACADEMIC_LEAVE, EXPELLED}
@@ -26,12 +20,11 @@ public non-sealed class Student extends Person {
     private int enrollmentYear;
     private StudyForm form;
     private StudentStatus status;
+    @Setter
     private String facultyId;
     private String specialty;
+    @Setter
     private String departmentId;
-
-    private Faculty faculty;
-    private Department department;
 
     public Student() {}
 
@@ -46,24 +39,6 @@ public non-sealed class Student extends Person {
         this.facultyId = facultyId;
         setSpecialty(specialty);
         this.departmentId = departmentId;
-    }
-
-    public void setDepartmentId(String departmentId) throws InvalidValue{
-        Optional<Department> optionalDepartment = departmentRepository.findById(departmentId);
-
-        if (optionalDepartment.isEmpty()) {
-            throw new InvalidValue("Кафедри з таким ID не знайдено.");
-        }
-        this.departmentId = departmentId;
-    }
-
-    public void setFacultyId(String facultyId) throws InvalidValue{
-        Optional<Faculty> optionalFaculty = facultyRepository.findById(facultyId);
-
-        if (optionalFaculty.isEmpty()) {
-            throw new InvalidValue("Факультет з таким ID не знайдено.");
-        }
-        this.facultyId = facultyId;
     }
 
     public void setSpecialty(String specialty) throws InvalidValue{
@@ -108,20 +83,6 @@ public non-sealed class Student extends Person {
 
     public StudentStatus getStudentStatus() {
     return status;
-    }
-
-    public String getFacultyName() {
-        if (facultyId == null || facultyId.isEmpty()) return "---";
-        return facultyRepository.findById(facultyId)
-                .map(Faculty::getName)
-                .orElse("ID не знайдено (" + facultyId + ")");
-    }
-
-    public String getDepartmentName() {
-        if (departmentId == null || departmentId.isEmpty()) return "---";
-        return departmentRepository.findById(departmentId)
-                .map(Department::getName)
-                .orElse("ID не знайдено (" + departmentId + ")");
     }
 
     @Override

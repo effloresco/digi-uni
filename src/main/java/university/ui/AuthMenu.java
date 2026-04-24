@@ -1,59 +1,45 @@
 package university.ui;
 
-import university.domain.User;
-import university.repository.UserRepository;
+import university.network.Client;
 import university.service.UserService;
-import java.util.List;
 import java.util.Scanner;
 
 import static university.service.Utils.*;
 
 public class AuthMenu {
     protected final Scanner scanner = new Scanner(System.in);
-    private final UserRepository userRepository = UserRepository.get(UserRepository.class);
+    private final Client client;
 
-    static void main() {
-        AuthMenu auth = new AuthMenu();
+    public AuthMenu(Client client) {
+        this.client = client;
     }
 
     public void auth() {
         boolean status = true;
         boolean success = false;
-        User targetUser = null;
         printHeader("Вхід в DigiUni");
         while (status) {
             printMessage(Mt.Warning, "Введіть ім'я користувача", "[0] Вихід");
             printPrompt(">");
             String username = scanner.nextLine();
-            if (username.equals("0")) {
-                status = false;
-                continue;
-            }
-            List<User> results = userRepository.findAll().stream()
-                    .filter(p -> p.getUserName().equals(username))
-                    .toList();
+            if (username.equals("0")) { return; }
 
-            if (results.isEmpty()) {
-                printMessage(Mt.Error, "Неправильне ім'я користувача. Повторіть спробу");
-            } else {
-                targetUser = results.get(0);
-                printMessage(Mt.Warning, "Введіть пароль","[0] Вихід", true);
-                printPrompt(">");
-                String password = scanner.nextLine();
-                if (password.equals("0")) {
-                    status = false;
-                    continue;
-                }
-                if (!targetUser.getPassword().equals(password)) {
-                    printMessage(Mt.Error, "Неправильний пароль. Повторіть спробу");
-                    continue;
-                }
+            printMessage(Mt.Warning, "Введіть пароль","[0] Вихід", true);
+            printPrompt(">");
+            String password = scanner.nextLine();
+            if (password.equals("0")) { return; }
 
-                printMessage(Mt.Success, "Успішний вхід! Вітаємо, " + targetUser.getUserName(), "",true);
+            String[] authData = {username, password};
+            String response = client.sendRequest("AUTH_USER", authData);
+            String[] parts = response.split("\\|", 2);
 
-                UserService.currentUser = targetUser.getRole();
+            if (parts[0].equals("OK")) {
+                printMessage(Mt.Success, "Успішний вхід! Вітаємо, " + username);
+                UserService.currentUser = Integer.parseInt(parts[1]);
                 status = false;
                 success = true;
+            } else {
+                printMessage(Mt.Error, "Помилка: " + parts[1] + ". Повторіть спробу.");
             }
         }
         status = true;

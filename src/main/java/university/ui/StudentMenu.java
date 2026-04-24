@@ -2,27 +2,34 @@ package university.ui;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import university.domain.Department;
+import university.domain.Faculty;
 import university.domain.Student;
+import university.network.Client;
 import university.repository.StudentRepository;
+import university.service.RemoteDepartmentService;
+import university.service.RemoteFacultyService;
+import university.service.RemoteStudentService;
 import university.service.SearchService;
-import university.service.StudentService;
 import university.exceptions.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
-import java.util.Optional;
+import java.util.Scanner;
 
 import static university.domain.Student.StudentStatus.*;
 import static university.domain.Student.StudyForm.*;
-import static university.service.SearchService.*;
 
 public class StudentMenu {
     private static final Logger logger = LoggerFactory.getLogger(StudentMenu.class);
 
-    protected final StudentRepository studentRepository = StudentRepository.get(StudentRepository.class);
-    protected final StudentService studentService = new StudentService(studentRepository);
+    private final Client client;
+    private final Scanner scanner = new Scanner(System.in);
+    protected final RemoteStudentService studentService;
+    protected final RemoteFacultyService facultyService;
+    protected final RemoteDepartmentService departmentService;
     boolean resume;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     String exitOpt = null;
@@ -35,6 +42,13 @@ public class StudentMenu {
     private final List<String> studyForms = List.of("1 - Бюджет", "2 - Контракт", opt0);
 
     private final List<String> menuOptions = List.of("1 - Додати студента", "2 - Змінити інформацію про студента", "3 - Видалити студента з бази даних", opt0);
+
+    public StudentMenu(Client client) {
+        this.client = client;
+        studentService = new RemoteStudentService(client);
+        facultyService = new RemoteFacultyService(client);
+        departmentService = new RemoteDepartmentService(client);
+    }
 
     protected void studentManagement() {
         logger.info("Відкрито меню управління студентами");
@@ -115,7 +129,7 @@ public class StudentMenu {
         System.out.println("Введіть дату народження студента");
         do {
             try {
-                student.setBirthDate(LocalDate.parse(SearchService.scanner.nextLine(), formatter));
+                student.setBirthDate(LocalDate.parse(scanner.nextLine(), formatter));
                 resume = true;
             } catch (DateTimeParseException e) {
                 logger.warn("Помилка парсингу дати народження");
@@ -163,7 +177,7 @@ public class StudentMenu {
         System.out.println("Введіть курс");
         do {
             try {
-                student.setCourse(Integer.parseInt(SearchService.scanner.nextLine()));
+                student.setCourse(Integer.parseInt(scanner.nextLine()));
                 resume = true;
             } catch (InvalidValue e) {
                 logger.warn("Помилка введення курсу");
@@ -178,9 +192,11 @@ public class StudentMenu {
         System.out.println("Введіть ID факультету");
         do {
             try {
-                student.setFacultyId(scanner.nextLine());
+                String facultyId = scanner.nextLine();
+                Faculty faculty = facultyService.getFaculty(facultyId);
+                student.setFacultyId(facultyId);
                 resume = true;
-            } catch (InvalidValue e) {
+            } catch (InvalidValue | FacultyNotFoundException e) {
                 logger.warn("Некоректний ID факультету: {}", e.getMessage());
                 System.out.println(e.getMessage());
                 resume = false;
@@ -205,9 +221,11 @@ public class StudentMenu {
         System.out.println("Введіть ID кафедри");
         do {
             try {
-                student.setDepartmentId(scanner.nextLine());
+                String departmentId = scanner.nextLine();
+                Department department = departmentService.getDepartment(departmentId);
+                student.setDepartmentId(departmentId);
                 resume = true;
-            } catch (InvalidValue e) {
+            } catch (InvalidValue | DepartmentNotFoundException e) {
                 logger.warn("Некоректний ID кафедри: {}", e.getMessage());
                 System.out.println(e.getMessage());
                 resume = false;
@@ -220,7 +238,7 @@ public class StudentMenu {
         System.out.println("Введіть рік вступу");
         do {
             try {
-                student.setEnrollmentYear(Integer.parseInt(SearchService.scanner.nextLine()));
+                student.setEnrollmentYear(Integer.parseInt(scanner.nextLine()));
                 resume = true;
             } catch (InvalidValue e) {
                 logger.warn("Помилка введення року вступу");
@@ -292,36 +310,25 @@ public class StudentMenu {
     }
 
     protected void deleteStudent() {
-        boolean found = false;
-        while (!found) {
+        while (true) {
             System.out.println("Введіть ідентифікатор студента, якого треба видалити (нуль, щоб вийти)");
             String studentId = scanner.nextLine();
             if (studentId.equals("0")) return;
-
-            Optional<Student> optionalStudent = studentRepository.findById(studentId);
-            if (optionalStudent.isPresent()) {
-                Student student = optionalStudent.get();
-                studentService.deleteStudent(student);
-                logger.info("Студента {} (ID: {}) успішно видалено", student.getFullName(), studentId);
-                found = true;
-            } else {
-                logger.warn("Спроба видалення: студента з ID {} не знайдено", studentId);
-                System.out.println("Студента з таким ID не знайдено.");
-            }
+            studentService.deleteStudent(studentId);
         }
     }
 
     protected void changeStudent() {
         boolean found = false;
+        String studentId;
+        Student student;
         while (!found) {
-            System.out.println("Введіть ідентифікатор студента, що треба замінити (0 для виходу)");
-            String studentId = scanner.nextLine();
-            if ("0".equals(studentId)) return;
-
-            Optional<Student> optionalStudent = studentRepository.findById(studentId);
-            if (optionalStudent.isPresent()) {
+            try {
+                System.out.println("Введіть ідентифікатор студента, якого треба змінити (нуль, щоб вийти)");
+                studentId = scanner.nextLine();
+                if (studentId.equals("0")) return;
+                student = studentService.getStudent(studentId);
                 found = true;
-                Student student = optionalStudent.get();
                 logger.info("Початок редагування студента: {} (ID: {})", student.getFullName(), studentId);
 
                 boolean status = true;
@@ -337,10 +344,10 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setFirstName(scanner.nextLine());
-                                        studentService.saveAllData();
+                                        studentService.updateStudent(student);
                                         logger.info("Поле 'ім'я' студента ID {} змінено на {}", studentId, student.getFirstName());
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         logger.warn("Помилка зміни імені: {}", e.getMessage());
                                         resume = false;
@@ -353,10 +360,10 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setLastName(scanner.nextLine());
-                                        studentService.saveAllData();
+                                        studentService.updateStudent(student);
                                         logger.info("Поле 'прізвище' студента ID {} змінено на {}", studentId, student.getLastName());
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         logger.warn("Помилка зміни прізвища: {}", e.getMessage());
                                         System.out.println(e.getMessage());
                                         resume = false;
@@ -369,10 +376,10 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setMiddleName(scanner.nextLine());
-                                        studentService.saveAllData();
+                                        studentService.updateStudent(student);
                                         logger.info("Поле 'по батькові' студента ID {} змінено", studentId);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         logger.warn("Помилка зміни по батькові: {}", e.getMessage());
                                         resume = false;
@@ -385,11 +392,14 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setBirthDate(LocalDate.parse(scanner.nextLine(), formatter));
-                                        studentService.saveAllData();
+                                        studentService.updateStudent(student);
                                         logger.info("Поле 'дата народження' студента ID {} змінено", studentId);
                                         resume = true;
                                     } catch (DateTimeParseException e) {
                                         System.out.println("Введіть коректну дату");
+                                        resume = false;
+                                    } catch (PersonNotFoundException e) {
+                                        System.out.println(e.getMessage());
                                         resume = false;
                                     }
                                 } while (!resume);
@@ -400,10 +410,10 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setEmail(scanner.nextLine());
-                                        studentService.saveAllData();
+                                        studentService.updateStudent(student);
                                         logger.info("Поле 'email' студента ID {} змінено", studentId);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         logger.warn("Помилка зміни email: {}", e.getMessage());
                                         resume = false;
@@ -415,10 +425,10 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setPhone(scanner.nextLine());
-                                        studentService.saveAllData();
+                                        studentService.updateStudent(student);
                                         logger.info("Поле 'телефон' студента ID {} змінено", studentId);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         logger.warn("Помилка зміни телефону: {}", e.getMessage());
                                         resume = false;
@@ -431,10 +441,10 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setStudentId(scanner.nextLine());
-                                        studentService.saveAllData();
+                                        studentService.updateStudent(student);
                                         logger.info("Поле 'ID студента' (квиток) студента ID {} змінено", studentId);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         logger.warn("Помилка зміни номера квитка: {}", e.getMessage());
                                         resume = false;
@@ -446,10 +456,10 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setCourse(Integer.parseInt(scanner.nextLine()));
-                                        studentService.saveAllData();
+                                        studentService.updateStudent(student);
                                         logger.info("Поле 'курс' студента ID {} змінено на {}", studentId, student.getCourse());
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         logger.warn("Помилка зміни курсу: {}", e.getMessage());
                                         resume = false;
@@ -457,10 +467,16 @@ public class StudentMenu {
                                 } while (!resume);
                                 break;
                             case 9:
-                                System.out.println("Введіть нову групу");
-                                student.setGroup(scanner.nextLine());
-                                studentService.saveAllData();
-                                logger.info("Поле 'група' студента ID {} змінено на {}", studentId, student.getGroup());
+                                System.out.println("Введіть групу");
+                                try {
+                                    student.setGroup(scanner.nextLine());
+                                    studentService.updateStudent(student);
+                                    logger.info("Поле 'група' студента ID {} змінено на {}", studentId, student.getGroup());
+                                    resume = true;
+                                } catch (PersonNotFoundException e) {
+                                    System.out.println(e.getMessage());
+                                    resume = false;
+                                }
                                 break;
 
                             case 10:
@@ -468,10 +484,10 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setEnrollmentYear(Integer.parseInt(scanner.nextLine()));
-                                        studentService.saveAllData();
+                                        studentService.updateStudent(student);
                                         logger.info("Поле 'рік вступу' студента ID {} змінено на {}", studentId, student.getEnrollmentYear());
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         logger.warn("Помилка зміни року вступу: {}", e.getMessage());
                                         resume = false;
@@ -490,11 +506,11 @@ public class StudentMenu {
                                         switch (inputLocal) {
                                             case 1:
                                                 student.setStudyForm(BUDGET);
-                                                studentService.saveAllData();
+                                                studentService.updateStudent(student);
                                                 break;
                                             case 2:
                                                 student.setStudyForm(CONTRACT);
-                                                studentService.saveAllData();
+                                                studentService.updateStudent(student);
                                                 break;
                                             case 0:
                                                 status = false;
@@ -505,6 +521,8 @@ public class StudentMenu {
                                     } catch (NumberFormatException e) {
                                         System.out.println("Введіть коректне значення");
                                         logger.error("Помилка вибору форми навчання");
+                                    } catch (PersonNotFoundException e) {
+                                        System.out.println(e.getMessage());
                                     }
                                 } while (status);
                                 break;
@@ -519,17 +537,17 @@ public class StudentMenu {
                                         switch (inputLocal) {
                                             case 1:
                                                 student.setStudentStatus(STUDYING);
-                                                studentService.saveAllData();
+                                                studentService.updateStudent(student);
                                                 status = false;
                                                 break;
                                             case 2:
                                                 student.setStudentStatus(ACADEMIC_LEAVE);
-                                                studentService.saveAllData();
+                                                studentService.updateStudent(student);
                                                 status = false;
                                                 break;
                                             case 3:
                                                 student.setStudentStatus(EXPELLED);
-                                                studentService.saveAllData();
+                                                studentService.updateStudent(student);
                                                 status = false;
                                             case 0:
                                                 status = false;
@@ -539,8 +557,10 @@ public class StudentMenu {
                                         }
                                     } catch (NumberFormatException e) {
                                         System.out.println("Введіть коректне значення");
-                                            logger.error("Помилка зміни статусу");System.out.println("Введіть коректне значення");
-                                        }
+                                        logger.error("Помилка зміни статусу");System.out.println("Введіть коректне значення");
+                                    } catch (PersonNotFoundException e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 } while (status);
                                 break;
 
@@ -548,11 +568,13 @@ public class StudentMenu {
                                 System.out.println("Введіть новий ID факультету");
                                 do {
                                     try {
-                                        student.setFacultyId(scanner.nextLine());
-                                        studentService.saveAllData();
+                                        String facultyId = scanner.nextLine();
+                                        Faculty faculty = facultyService.getFaculty(facultyId);
+                                        student.setFacultyId(facultyId);
+                                        studentService.updateStudent(student);
                                         logger.info("Факультет студента ID {} змінено", studentId);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | FacultyNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         logger.warn("Помилка зміни факультету: {}", e.getMessage());
                                         resume = false;
@@ -565,10 +587,10 @@ public class StudentMenu {
                                 do {
                                     try {
                                         student.setSpecialty(scanner.nextLine());
-                                        studentService.saveAllData();
+                                        studentService.updateStudent(student);
                                         logger.info("Спеціальність студента ID {} змінено", studentId);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         logger.warn("Помилка зміни спеціальності: {}", e.getMessage());
                                         resume = false;
@@ -580,11 +602,13 @@ public class StudentMenu {
                                 System.out.println("Введіть новий ID кафедри");
                                 do {
                                     try {
-                                        student.setDepartmentId(scanner.nextLine());
-                                        studentService.saveAllData();
+                                        String departmentId = scanner.nextLine();
+                                        Department department = departmentService.getDepartment(departmentId);
+                                        student.setDepartmentId(departmentId);
+                                        studentService.updateStudent(student);
                                         logger.info("Кафедру студента ID {} змінено", studentId);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | DepartmentNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         logger.warn("Помилка зміни кафедри: {}", e.getMessage());
                                         resume = false;
@@ -605,8 +629,8 @@ public class StudentMenu {
                         System.out.println("Введіть коректне значення");
                     }
                 }
-            } else {
-                logger.warn("Студента з ID {} не знайдено для редагування", studentId);
+            } catch (PersonNotFoundException e) {
+                logger.warn("Студента з не знайдено для редагування");
                 System.out.println("Студента з таким ID не знайдено.");
             }
         }

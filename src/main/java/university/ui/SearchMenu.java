@@ -1,12 +1,16 @@
 package university.ui;
 
 import university.service.Utils;
+import university.network.Client;
+import university.service.SearchService;
+
 import java.util.List;
-import static university.service.SearchService.*;
-import static university.service.SearchService.searchStudentByGroup;
 import static university.service.Utils.*;
+import java.util.Scanner;
 
 public class SearchMenu {
+    private final SearchService searchService;
+
     private final List<String> menuOptions = List.of(
             "[1] Пошук студентів",
             "[2] Пошук викладачів",
@@ -22,10 +26,16 @@ public class SearchMenu {
             "[3] Пошук за групою",
             OPT0);
 
+    private final Scanner scanner = new Scanner(System.in);
+
+    public SearchMenu(Client client) {
+        searchService = new SearchService(client);
+    }
     protected void searchOptions() {
         boolean status = true;
         while (status) {
             printMenu("Пошук", menuOptions);
+            System.out.print("Виберіть опцію: ");
             String choice = scanner.nextLine();
             int input = Integer.parseInt(choice);
             switch (input) {
@@ -48,17 +58,19 @@ public class SearchMenu {
         boolean status = true;
         while (status) {
             printMenu("Пошук студентів", studentOptions);
+            System.out.print("Виберіть опцію: ");
+
             String choice = scanner.nextLine();
             int input = Integer.parseInt(choice);
             switch (input) {
                 case 1:
-                    searchStudentByFullName();
+                    searchService.searchStudentByFullName();
                     break;
                 case 2:
-                    searchStudentByCourse();
+                    searchService.searchStudentByCourse();
                     break;
                 case 3:
-                    searchStudentByGroup();
+                    searchService.searchStudentByGroup();
                     break;
                 case 0:
                     status = false;
@@ -73,17 +85,18 @@ public class SearchMenu {
         boolean status = true;
         while (status) {
             printMenu("Пошук викладачів", teacherOptions);
+            System.out.print("Виберіть опцію: ");
             String choice = scanner.nextLine();
             int input = Integer.parseInt(choice);
             switch (input) {
                 case 1:
-                    searchTeacherByFullName();
+                    searchService.searchTeacherByFullName();
                     break;
                 case 2:
-                    searchStudentByCourse();
+                    searchService.searchStudentByCourse();
                     break;
                 case 3:
-                    searchStudentByGroup();
+                    searchService.searchStudentByGroup();
                     break;
                 case 0:
                     status = false;

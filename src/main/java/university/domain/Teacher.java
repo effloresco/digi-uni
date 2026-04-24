@@ -1,6 +1,7 @@
 package university.domain;
 
 import lombok.Getter;
+import lombok.Setter;
 import university.exceptions.InvalidValue;
 import university.repository.DepartmentRepository;
 import university.repository.FacultyRepository;
@@ -12,14 +13,14 @@ import static university.service.Utils.*;
 
 @Getter
 public non-sealed class Teacher extends Person {
-    protected final FacultyRepository facultyRepository = FacultyRepository.get(FacultyRepository.class);
-    protected final DepartmentRepository departmentRepository = DepartmentRepository.get(DepartmentRepository.class);
     private String position;
     private String degree;
     private String title;
     private LocalDate hireDate;
     private double rate;
+    @Setter
     private String facultyId;
+    @Setter
     private String departmentId;
 
     private Faculty faculty;
@@ -37,24 +38,6 @@ public non-sealed class Teacher extends Person {
         setRate(rate);
         this.facultyId = facultyId;
         this.departmentId = departmentId;
-    }
-
-    public void setDepartmentId(String departmentId) throws InvalidValue{
-        Optional<Department> optionalDepartment = departmentRepository.findById(departmentId);
-
-        if (optionalDepartment.isEmpty()) {
-            throw new InvalidValue("Кафедри з таким ID не знайдено.");
-        }
-        this.departmentId = departmentId;
-    }
-
-    public void setFacultyId(String facultyId) throws InvalidValue{
-        Optional<Faculty> optionalFaculty = facultyRepository.findById(facultyId);
-
-        if (optionalFaculty.isEmpty()) {
-            throw new InvalidValue("Факультет з таким ID не знайдено.");
-        }
-        this.facultyId = facultyId;
     }
 
     public void setPosition(String position) throws InvalidValue {

@@ -1,6 +1,7 @@
 package university.ui;
 
 import university.domain.User;
+import university.network.Client;
 import university.service.UserService;
 
 import java.util.List;
@@ -10,11 +11,9 @@ import static university.service.Utils.OPT0;
 import static university.service.Utils.printMenu;
 
 public class ManagementMenu {
-    protected final Scanner scanner = new Scanner(System.in);
+    private final Client client;
 
-    static void main() {
-        ManagementMenu management = new ManagementMenu();
-    }
+    protected final Scanner scanner = new Scanner(System.in);
 
     private final List<String> menuOptions = List.of(
             "[1] Управління факультетами",
@@ -23,12 +22,16 @@ public class ManagementMenu {
             "[4] Управління викладачами",
             OPT0);
 
+    public ManagementMenu(Client client) {
+        this.client = client;
+    }
+
     public void management() {
-        FacultyMenu fcManagement = new FacultyMenu();
-        StudentMenu stManagement = new StudentMenu();
-        DepartmentMenu dpManagement = new DepartmentMenu();
-        TeacherMenu tcManagement = new TeacherMenu();
-        UserMenu usManagment = new UserMenu();
+        FacultyMenu fcManagement = new FacultyMenu(client);
+        StudentMenu stManagement = new StudentMenu(client);
+        DepartmentMenu dpManagement = new DepartmentMenu(client);
+        TeacherMenu tcManagement = new TeacherMenu(client);
+        UserMenu usManagment = new UserMenu(client);
 
         boolean status = true;
         while (status) {

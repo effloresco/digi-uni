@@ -10,8 +10,8 @@ public class DepartmentMapper implements Mapper<Department, DepartmentDto> {
         return new DepartmentDto(
                 department.getID(),
                 department.getName(),
-                department.getFaculty(),
-                department.getHead(),
+                department.getFacultyId(),
+                department.getHeadId(),
                 department.getLocation()
         );
     }
@@ -22,8 +22,8 @@ public class DepartmentMapper implements Mapper<Department, DepartmentDto> {
         return new Department(
                 dto.getId(),
                 dto.getName(),
-                dto.getFaculty(),
-                dto.getHead(),
+                dto.getFacultyId(),
+                dto.getHeadId(),
                 dto.getLocation()
         );
     }

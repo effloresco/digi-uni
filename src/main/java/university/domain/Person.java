@@ -1,15 +1,14 @@
 package university.domain;
 
 import lombok.Getter;
-import lombok.Setter;
 import university.exceptions.InvalidValue;
 import java.time.LocalDate;
+import java.util.UUID;
+
 import static university.service.Utils.*;
 
 @Getter
 public sealed class Person implements Entity<String> permits Student, Teacher {
-    @Getter @Setter
-    private static int idCounter = 0;
 
     private String id;
     private String lastName;
@@ -20,7 +19,7 @@ public sealed class Person implements Entity<String> permits Student, Teacher {
     private String phone;
 
     public Person() {
-        id = String.valueOf(++idCounter);
+        id = UUID.randomUUID().toString();
     }
 
     public Person(String id, String lastName, String firstName, String middleName, LocalDate birthDate, String email, String phone) throws InvalidValue {
