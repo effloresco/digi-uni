@@ -6,6 +6,9 @@ import university.service.UserService;
 import java.util.List;
 import java.util.Scanner;
 
+import static university.service.Utils.OPT0;
+import static university.service.Utils.printMenu;
+
 public class ManagementMenu {
     protected final Scanner scanner = new Scanner(System.in);
 
@@ -13,10 +16,12 @@ public class ManagementMenu {
         ManagementMenu management = new ManagementMenu();
     }
 
-    private final String opt0 = "0 - Вихід";
-
-    private final List<String> menuOptions = List.of("1 - Управління факультетами", "2 - Управління кафедрами", "3 - Управління студентами", "4 - Управління викладачами", opt0);
-
+    private final List<String> menuOptions = List.of(
+            "[1] Управління факультетами",
+            "[2] Управління кафедрами",
+            "[3] Управління студентами",
+            "[4] Управління викладачами",
+            OPT0);
 
     public void management() {
         FacultyMenu fcManagement = new FacultyMenu();
@@ -27,8 +32,7 @@ public class ManagementMenu {
 
         boolean status = true;
         while (status) {
-            System.out.println("\n*-Керування даними:-*");
-            menuOptions.forEach(System.out::println);
+            printMenu("Керування даними", menuOptions);
 
             if ((UserService.currentUser & User.PERMISSION_MANAGE_USERS) != 0) System.out.println("5 - Управління користувачами");
             String inputLine = scanner.nextLine();

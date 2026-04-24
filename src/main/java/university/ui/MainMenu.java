@@ -7,7 +7,10 @@ import university.repository.UserRepository;
 import university.service.UserService;
 import university.storage.*;
 
+import java.util.List;
 import java.util.Scanner;
+
+import static university.service.Utils.*;
 
 public class MainMenu {
     private final Scanner scanner = new Scanner(System.in);
@@ -23,6 +26,13 @@ public class MainMenu {
     private static final FacultyStorageManager facultyStorageManager = new FacultyStorageManager();
     private static final ServiceStorageManager serviceStorageManager = new ServiceStorageManager();
     private static final UserStorageManager userStorageManager = new UserStorageManager();
+    private final List<String> menuOptions = List.of(
+            "[1] Вихід з акаунта користувача",
+            "[2] Пошук",
+            "[3] Звіти",
+            "[4] Управління",
+            OPT0);
+    private final int PERMISSION_EDIT_INDEX = 3;
 
     static {
         //loads all data from the storage
@@ -35,27 +45,29 @@ public class MainMenu {
         //adds default admin user
         try {
             userService.createUser(new User("admin", "12345678", User.PERMISSION_VIEW | User.PERMISSION_EDIT | User.PERMISSION_MANAGE_USERS));
-        } catch(UserAlreadyExistsException | UsernameAlreadyUsedException _){}
+        } catch (UserAlreadyExistsException | UsernameAlreadyUsedException _) {
+        }
     }
 
-
-static void main() {
+    static void main() {
         MainMenu ui = new MainMenu();
         ui.run();
     }
 
     public void run() {
+        List<String> options;
         while (true) {
             while (UserService.currentUser == null) {
                 auth.auth();
             }
-            System.out.println("\n*---DigiUni Registry---*");
-            System.out.println("1 - Вихід з акаунта користувача");
-            System.out.println("2 - Пошук");
-            System.out.println("3 - Звіти");
+
             if ((UserService.currentUser & User.PERMISSION_EDIT) != 0)
-                System.out.println("4 - Управління");
-            System.out.println("0 - Вихід з програми");
+                options = menuOptions;
+            else
+                options = menuOptions.stream()
+                        .filter(opt -> menuOptions.indexOf(opt) != PERMISSION_EDIT_INDEX)
+                        .toList();
+            printMenu("DigiUni Registry", options);
             String inputLine = scanner.nextLine();
             try {
                 int input = Integer.parseInt(inputLine);
