@@ -1,18 +1,20 @@
 package university.ui;
 
+import university.domain.Department;
+import university.domain.Faculty;
 import university.domain.Student;
 import university.network.Client;
 import university.repository.StudentRepository;
+import university.service.RemoteDepartmentService;
+import university.service.RemoteFacultyService;
 import university.service.RemoteStudentService;
 import university.service.SearchService;
-import university.service.StudentService;
 import university.exceptions.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
-import java.util.Optional;
 
 import static university.domain.Student.StudentStatus.*;
 import static university.domain.Student.StudyForm.*;
@@ -22,6 +24,8 @@ public class StudentMenu {
     private final Client client;
     protected final StudentRepository studentRepository = StudentRepository.get(StudentRepository.class);
     protected final RemoteStudentService studentService;
+    protected final RemoteFacultyService facultyService;
+    protected final RemoteDepartmentService departmentService;
     boolean resume;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     String exitOpt = null;
@@ -65,6 +69,8 @@ public class StudentMenu {
     public StudentMenu(Client client) {
         this.client = client;
         studentService = new RemoteStudentService(client);
+        facultyService = new RemoteFacultyService(client);
+        departmentService = new RemoteDepartmentService(client);
     }
 
     protected void studentManagement() {
@@ -199,9 +205,11 @@ public class StudentMenu {
         System.out.println("Введіть ID факультету");
         do {
             try {
-                student.setFacultyId(scanner.nextLine());
+                String facultyId = scanner.nextLine();
+                Faculty faculty = facultyService.getFaculty(facultyId);
+                student.setFacultyId(facultyId);
                 resume = true;
-            } catch (InvalidValue e) {
+            } catch (InvalidValue | FacultyNotFoundException e) {
                 System.out.println(e.getMessage());
                 resume = false;
                 System.out.println("0 - Вихід");
@@ -227,9 +235,11 @@ public class StudentMenu {
         System.out.println("Введіть ID кафедри");
         do {
             try {
-                student.setDepartmentId(scanner.nextLine());
+                String departmentId = scanner.nextLine();
+                Department department = departmentService.getDepartment(departmentId);
+                student.setDepartmentId(departmentId);
                 resume = true;
-            } catch (InvalidValue e) {
+            } catch (InvalidValue | DepartmentNotFoundException e) {
                 System.out.println(e.getMessage());
                 resume = false;
                 System.out.println("0 - Вихід");
@@ -544,10 +554,12 @@ public class StudentMenu {
                                 System.out.println("Введіть ID факультету");
                                 do {
                                     try {
-                                        student.setFacultyId(scanner.nextLine());
+                                        String facultyId = scanner.nextLine();
+                                        Faculty faculty = facultyService.getFaculty(facultyId);
+                                        student.setFacultyId(facultyId);
                                         studentService.updateStudent(student);
                                         resume = true;
-                                    } catch (InvalidValue | PersonNotFoundException e) {
+                                    } catch (InvalidValue | FacultyNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         resume = false;
                                     }
@@ -570,10 +582,12 @@ public class StudentMenu {
                                 System.out.println("Введіть ID кафедри");
                                 do {
                                     try {
-                                        student.setDepartmentId(scanner.nextLine());
+                                        String departmentId = scanner.nextLine();
+                                        Department department = departmentService.getDepartment(departmentId);
+                                        student.setDepartmentId(departmentId);
                                         studentService.updateStudent(student);
                                         resume = true;
-                                    } catch (InvalidValue | PersonNotFoundException e) {
+                                    } catch (InvalidValue | DepartmentNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         resume = false;
                                     }
