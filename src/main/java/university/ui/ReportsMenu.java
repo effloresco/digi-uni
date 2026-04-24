@@ -40,25 +40,21 @@ public class ReportsMenu {
 
     protected void reports() {
         boolean status = true;
-
         while (status) {
             printMenu("Списки", menuOptions);
             System.out.print("Виберіть опцію: ");
             String choice = scanner.nextLine();
 
-            int input = Integer.parseInt(choice);
-            switch (input) {
-                case 1:
-                    reportStud();
-                    break;
-                case 2:
-                    reportTeacher();
-                    break;
-                case 0:
-                    status = false;
-                    break;
-                default:
-                    printMessage(Utils.Mt.Error, "Некоректне значення");
+            try {
+                int input = Integer.parseInt(choice);
+                switch (input) {
+                    case 1: reportStud(); break;
+                    case 2: reportTeacher(); break;
+                    case 0: status = false; break;
+                    default: printMessage(Utils.Mt.Error, "Некоректне значення");
+                }
+            } catch (NumberFormatException e) {
+                printMessage(Utils.Mt.Error, "Некоректне значення");
             }
         }
     }
