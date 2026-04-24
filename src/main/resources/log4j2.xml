@@ -20,7 +20,10 @@
             <AppenderRef ref="File"/> </Logger>
 
         <Root level="info">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+        </Root>
+        <Root level="error">
+            <AppenderRef ref="File"/>
         </Root>
     </Loggers>
 </Configuration>
