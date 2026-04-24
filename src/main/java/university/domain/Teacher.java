@@ -3,11 +3,8 @@ package university.domain;
 import lombok.Getter;
 import lombok.Setter;
 import university.exceptions.InvalidValue;
-import university.repository.DepartmentRepository;
-import university.repository.FacultyRepository;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
 import static university.service.Utils.*;
 
@@ -73,20 +70,6 @@ public non-sealed class Teacher extends Person {
             throw new InvalidValue("Ставка не може бути від’ємною");
         }
         this.rate = rate;
-    }
-
-    public String getFacultyName() {
-        if (facultyId == null || facultyId.isEmpty()) return "---";
-        return facultyRepository.findById(facultyId)
-                .map(Faculty::getName)
-                .orElse("ID не знайдено (" + facultyId + ")");
-    }
-
-    public String getDepartmentName() {
-        if (departmentId == null || departmentId.isEmpty()) return "---";
-        return departmentRepository.findById(departmentId)
-                .map(Department::getName)
-                .orElse("ID не знайдено (" + departmentId + ")");
     }
 
     @Override

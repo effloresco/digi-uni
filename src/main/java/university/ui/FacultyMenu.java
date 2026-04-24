@@ -255,7 +255,7 @@ public class FacultyMenu {
                 }
             }catch (FacultyNotFoundException e) {
                 System.out.println("Факультет з таким ID не знайдено.");
-                logger.warn("Факультет для зміни з ID {} не знайдено", facultyId);
+                logger.warn("Факультет для зміни не знайдено");
             }
         }
     }
