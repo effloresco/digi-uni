@@ -185,7 +185,7 @@ public class FacultyMenu {
                                         facultyService.updateFaculty(faculty);
                                         logger.info("Поле 'назва' факультету оновлено");
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | FacultyNotFoundException e) {
                                         logger.warn("Помилка оновлення назви: {}", e.getMessage());
                                         System.out.println(e.getMessage());
                                         resume = false;
@@ -200,7 +200,7 @@ public class FacultyMenu {
                                         facultyService.updateFaculty(faculty);
                                         logger.info("Поле 'коротка назва' факультету оновлено");
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | FacultyNotFoundException e) {
                                         logger.warn("Помилка оновлення короткої назви: {}", e.getMessage());
                                         System.out.println(e.getMessage());
                                         resume = false;
@@ -217,7 +217,7 @@ public class FacultyMenu {
                                         facultyService.updateFaculty(faculty);
                                         logger.info("Поле 'декан' факультету оновлено");
                                         resume = true;
-                                    } catch (InvalidValue | PersonNotFoundException e) {
+                                    } catch (InvalidValue  | FacultyNotFoundException | PersonNotFoundException e) {
                                         logger.warn("Помилка оновлення декана: {}", e.getMessage());
                                         System.out.println(e.getMessage());
                                         resume = false;
@@ -235,7 +235,7 @@ public class FacultyMenu {
                                         facultyService.updateFaculty(faculty);
                                         logger.info("Поле 'контакти' факультету оновлено");
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | FacultyNotFoundException e) {
                                         logger.warn("Помилка оновлення контактів: {}", e.getMessage());
                                         System.out.println(e.getMessage());
                                         resume = false;
