@@ -1,13 +1,13 @@
 package university.ui;
 
 import university.network.Client;
+import university.service.SearchService;
 
 import java.util.List;
-
-import static university.service.SearchService.*;
-import static university.service.SearchService.searchStudentByGroup;
+import java.util.Scanner;
 
 public class SearchMenu {
+    private final SearchService searchService;
 
     private final String opt0 = "0 - Вихід";
 
@@ -17,8 +17,10 @@ public class SearchMenu {
 
     private final List<String> teacherOptions = List.of("1. Пошук за ПІБ", "2. Пошук за курсом", "3. Пошук за групою", opt0);
 
-    public SearchMenu(Client client) {
+    private final Scanner scanner = new Scanner(System.in);
 
+    public SearchMenu(Client client) {
+        searchService = new SearchService(client);
     }
 
     protected void searchOptions() {
@@ -61,13 +63,13 @@ public class SearchMenu {
             int input = Integer.parseInt(choice);
             switch (input) {
                 case 1:
-                    searchStudentByFullName();
+                    searchService.searchStudentByFullName();
                     break;
                 case 2:
-                    searchStudentByCourse();
+                    searchService.searchStudentByCourse();
                     break;
                 case 3:
-                    searchStudentByGroup();
+                    searchService.searchStudentByGroup();
                     break;
                 case 0:
                     status = false;
@@ -90,13 +92,13 @@ public class SearchMenu {
             int input = Integer.parseInt(choice);
             switch (input) {
                 case 1:
-                    searchTeacherByFullName();
+                    searchService.searchTeacherByFullName();
                     break;
                 case 2:
-                    searchStudentByCourse();
+                    searchService.searchStudentByCourse();
                     break;
                 case 3:
-                    searchStudentByGroup();
+                    searchService.searchStudentByGroup();
                     break;
                 case 0:
                     status = false;
