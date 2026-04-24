@@ -310,7 +310,7 @@ public class TeacherMenu {
                                         teacherService.updateTeacher(teacher);
                                         logger.info("Поле 'ім'я' викладача з ID {} оновлено", teachertId);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         logger.warn("Помилка зміни імені: {}", e.getMessage());
                                         System.out.println(e.getMessage());
                                         resume = false;
@@ -325,7 +325,7 @@ public class TeacherMenu {
                                         teacherService.updateTeacher(teacher);
                                         logger.info("Поле 'прізвище' викладача з ID {} оновлено", teachertId);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         logger.warn("Помилка зміни прізвища: {}", e.getMessage());
                                         System.out.println(e.getMessage());
                                         resume = false;
@@ -340,7 +340,7 @@ public class TeacherMenu {
                                         teacherService.updateTeacher(teacher);
                                         logger.info("Поле 'по батькові' викладача з ID {} оновлено", teachertId);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         logger.warn("Помилка зміни по батькові: {}", e.getMessage());
                                         System.out.println(e.getMessage());
                                         resume = false;
@@ -358,6 +358,10 @@ public class TeacherMenu {
                                         logger.warn("Помилка дати");
                                         System.out.println("Введіть коректну дату");
                                         resume = false;
+                                    } catch (PersonNotFoundException e) {
+                                        logger.warn("Помилка зміни дати народження: {}", e.getMessage());
+                                        System.out.println(e.getMessage());
+                                        resume = false;
                                     }
 
                                 } while (!resume);
@@ -370,7 +374,7 @@ public class TeacherMenu {
                                         teacherService.updateTeacher(teacher);
                                         logger.info("Поле 'електронну пошту' викладача з ID {} оновлено", teachertId);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         logger.warn("Помилка зміни електронної пошти: {}", e.getMessage());
                                         System.out.println(e.getMessage());
                                         resume = false;
@@ -385,7 +389,7 @@ public class TeacherMenu {
                                         teacherService.updateTeacher(teacher);
                                         logger.info("Поле 'номер телефону' викладача з ID {} оновлено", teachertId);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         logger.warn("Помилка зміни номеру телефону: {}", e.getMessage());
                                         System.out.println(e.getMessage());
                                         resume = false;
@@ -400,7 +404,7 @@ public class TeacherMenu {
                                         teacherService.updateTeacher(teacher);
                                         logger.info("Поле 'посаду' викладача з ID {} оновлено", teachertId);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         logger.warn("Помилка зміни посади: {}", e.getMessage());
                                         resume = false;
@@ -415,7 +419,7 @@ public class TeacherMenu {
                                         teacherService.updateTeacher(teacher);
                                         logger.info("Поле 'науковий ступінь' викладача з ID {} оновлено", teachertId);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         logger.warn("Помилка зміни наукового ступеню: {}", e.getMessage());
                                         System.out.println(e.getMessage());
                                         resume = false;
@@ -430,7 +434,7 @@ public class TeacherMenu {
                                         teacherService.updateTeacher(teacher);
                                         logger.info("Поле 'вчене звання' викладача з ID {} оновлено", teachertId);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         logger.warn("Помилка зміни вченого звання: {}", e.getMessage());
                                         System.out.println(e.getMessage());
                                         resume = false;
@@ -449,6 +453,10 @@ public class TeacherMenu {
                                         logger.warn("Помилка дати");
                                         System.out.println("Введіть коректну дату");
                                         resume = false;
+                                    } catch (PersonNotFoundException e) {
+                                        logger.warn("Помилка зміни дати влаштування: {}", e.getMessage());
+                                        System.out.println(e.getMessage());
+                                        resume = false;
                                     }
                                 } while (!resume);
                                 break;
@@ -460,7 +468,7 @@ public class TeacherMenu {
                                         teacherService.updateTeacher(teacher);
                                         logger.info("Поле 'ставка' викладача з ID {} оновлено", teachertId);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         logger.warn("Помилка зміни ставки: {}", e.getMessage());
                                         System.out.println(e.getMessage());
                                         resume = false;
@@ -478,7 +486,7 @@ public class TeacherMenu {
                                         teacherService.updateTeacher(teacher);
                                         logger.info("Поле 'ID факультету' викладача з ID {} оновлено", teachertId);
                                         resume = true;
-                                    } catch (InvalidValue | FacultyNotFoundException e) {
+                                    } catch (InvalidValue | FacultyNotFoundException | PersonNotFoundException e) {
                                         logger.warn("Помилка зміни ID факультету: {}", e.getMessage());
                                         System.out.println(e.getMessage());
                                         resume = false;
@@ -496,7 +504,7 @@ public class TeacherMenu {
                                         teacherService.updateTeacher(teacher);
                                         logger.info("Поле 'ID кафедри' викладача з ID {} оновлено", teachertId);
                                         resume = true;
-                                    } catch (InvalidValue | DepartmentNotFoundException e) {
+                                    } catch (InvalidValue | DepartmentNotFoundException | PersonNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         resume = false;
                                     }
@@ -513,7 +521,7 @@ public class TeacherMenu {
                         System.out.println("Введіть коректне значення");
                     }
                 }
-            }catch (PersonNotFoundException e) {
+            } catch (PersonNotFoundException e) {
                 logger.warn("Викладача з не знайдено для редагування");
                 System.out.println("Викладача з таким ID не знайдено.");
             }
