@@ -11,7 +11,9 @@ import university.service.RemoteDepartmentService;
 import university.service.RemoteFacultyService;
 import university.service.RemoteStudentService;
 import university.service.SearchService;
+import university.service.StudentService;
 import university.exceptions.*;
+import university.service.Utils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -21,6 +23,8 @@ import java.util.Scanner;
 
 import static university.domain.Student.StudentStatus.*;
 import static university.domain.Student.StudyForm.*;
+import static university.service.SearchService.*;
+import static university.service.Utils.*;
 
 public class StudentMenu {
     private static final Logger logger = LoggerFactory.getLogger(StudentMenu.class);
@@ -33,15 +37,43 @@ public class StudentMenu {
     boolean resume;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     String exitOpt = null;
+    private final List<String> menuOptions = List.of(
+            "[1] Додати студента",
+            "[2] Змінити інформацію про студента",
+            "[3] Видалити студента з бази даних",
+            OPT0
+    );
+    private final List<String> changeList = List.of(
+            "[1] Ім'я",
+            "[2] Прізвище",
+            "[3] По батькові",
+            "[4] Дата народження",
+            "[5] Електронна пошта",
+            "[6] Номер телефону",
+            "[7] Ідентифікатор студента",
+            "[8] Курс",
+            "[9] Група",
+            "[10] Рік вступу",
+            "[11] Форма навчання",
+            "[12] Статус студента",
+            "[13] Факультет",
+            "[14] Спеціальність",
+            "[15] Кафедра",
+            OPT0
+    );
 
-    private final String opt0 = "0 - Вихід";
-    private List<String> changeList = List.of("1 - Ім'я", "2 - Прізвище", "3 - По батькові", "4 - Дату народження", "5 - Електронну пошту", "6 - Номер телефону", "6 - Ідентифікатор студента", "8 - Курс", "9 - Групу", "10 - Рік вступу", "11 - форму навчання", "12 - Статус студента", "13 - Факультет", "14 - Спеціальність", "15 - Кафедру", opt0);
+    private final List<String> studentStatuses = List.of(
+            "[1] Навчається",
+            "[2] В академічній відпустці",
+            "[3] Відрахований",
+            OPT0
+    );
 
-    private final List<String> studentStatuses = List.of("1 - Вчиться", "2 - У академічній відпустці", "3 - Відрахований", opt0);
-
-    private final List<String> studyForms = List.of("1 - Бюджет", "2 - Контракт", opt0);
-
-    private final List<String> menuOptions = List.of("1 - Додати студента", "2 - Змінити інформацію про студента", "3 - Видалити студента з бази даних", opt0);
+    private final List<String> studyForms = List.of(
+            "[1] Бюджет",
+            "[2] Контракт",
+            OPT0
+    );
 
     public StudentMenu(Client client) {
         this.client = client;
@@ -54,8 +86,8 @@ public class StudentMenu {
         logger.info("Відкрито меню управління студентами");
         boolean status = true;
         while (status) {
-            System.out.println("\n*-Управління студентами-*");
-            menuOptions.forEach(System.out::println);
+            printMenu("Управління студентами", menuOptions);
+            printPrompt("Виберіть опцію >");
             String inputLine = scanner.nextLine();
             try {
                 int input = Integer.parseInt(inputLine);
@@ -75,11 +107,11 @@ public class StudentMenu {
                         break;
                     default:
                         logger.warn("Користувач ввів неіснуючий пункт меню: {}", input);
-                        System.out.println("Введіть коректне значення");
+                        printMessage(Utils.Mt.Error, "Некоректний вибір");
                 }
             } catch (NumberFormatException e) {
                 logger.error("Помилка формату числа при виборі меню: {}", inputLine);
-                System.out.println("Введіть коректне значення");
+                printMessage(Utils.Mt.Error, "Некоректне значення");
             }
         }
     }
@@ -88,109 +120,110 @@ public class StudentMenu {
         logger.debug("Запущено генератор нового студента");
         boolean status;
         Student student = new Student();
-        System.out.println("Ідентифікатор студента: " + student.getID());
+        printHeader ("Додавання студента");
+        printMessage(Mt.Info, "ID студента: " + student.getID());
 
-        System.out.println("Введіть ім'я");
         do {
+            printPrompt("Ім'я >");
             try {
                 student.setFirstName(scanner.nextLine());
                 resume = true;
             } catch (InvalidValue e) {
                 logger.warn("Валідація імені не пройдена: {}", e.getMessage());
-                System.out.println(e.getMessage());
+                printMessage(Utils.Mt.Error, "Некоректне значення");
                 resume = false;
             }
         } while (!resume);
 
-        System.out.println("Введіть прізвище");
         do {
+            printPrompt("Прізвище >");
             try {
                 student.setLastName(scanner.nextLine());
                 resume = true;
             } catch (InvalidValue e) {
                 logger.warn("Валідація прізвища не пройдена: {}", e.getMessage());
-                System.out.println(e.getMessage());
+                printMessage(Utils.Mt.Error, "Некоректне значення");
                 resume = false;
             }
         } while (!resume);
 
-        System.out.println("Введіть по батькові");
         do {
+            printPrompt("По батькові >");
             try {
                 student.setMiddleName(scanner.nextLine());
                 resume = true;
             } catch (InvalidValue e) {
                 logger.warn("Валідація по батькові не пройдена: {}", e.getMessage());
-                System.out.println(e.getMessage());
+                printMessage(Utils.Mt.Error, "Некоректне значення");
                 resume = false;
             }
         } while (!resume);
 
-        System.out.println("Введіть дату народження студента");
         do {
+            printPrompt("Дата народження (дд.мм.рррр) >");
             try {
                 student.setBirthDate(LocalDate.parse(scanner.nextLine(), formatter));
                 resume = true;
             } catch (DateTimeParseException e) {
                 logger.warn("Помилка парсингу дати народження");
-                System.out.println("Введіть коректну дату");
+                printMessage(Mt.Error, "Некоректний формат дати");
                 resume = false;
             }
         } while (!resume);
 
-        System.out.println("Введіть електронну пошту");
+        printPrompt("Електронна пошта >");
         do {
             try {
                 student.setEmail(scanner.nextLine());
                 resume = true;
             } catch (InvalidValue e) {
                 logger.warn("Некоректний email: {}", e.getMessage());
-                System.out.println(e.getMessage());
+                printMessage(Utils.Mt.Error, "Некоректне значення");
                 resume = false;
             }
         } while (!resume);
 
-        System.out.println("Введіть номер телефону");
         do {
+            printPrompt("Номер телефону >");
             try {
                 student.setPhone(scanner.nextLine());
                 resume = true;
             } catch (InvalidValue e) {
                 logger.warn("Некоректний номер телефону: {}", e.getMessage());
-                System.out.println(e.getMessage());
+                printMessage(Utils.Mt.Error, "Некоректне значення");
                 resume = false;
             }
         } while (!resume);
 
-        System.out.println("Введіть ідентифікатор студента (номер залікової книжки)");
         do {
+            printPrompt("Номер залікової книжки >");
             try {
                 student.setStudentId(scanner.nextLine());
                 resume = true;
             } catch (InvalidValue e) {
                 logger.warn("Некоректний ID студента: {}", e.getMessage());
-                System.out.println(e.getMessage());
+                printMessage(Utils.Mt.Error, "Некоректне значення");
                 resume = false;
             }
         } while (!resume);
 
-        System.out.println("Введіть курс");
         do {
+            printPrompt("Курс >");
             try {
                 student.setCourse(Integer.parseInt(scanner.nextLine()));
                 resume = true;
             } catch (InvalidValue e) {
                 logger.warn("Помилка введення курсу");
-                System.out.println(e.getMessage());
+                printMessage(Utils.Mt.Error, "Введіть число від 1 до 6");
                 resume = false;
             }
         } while (!resume);
 
-        System.out.println("Введіть групу");
+        printPrompt("Група >");
         student.setGroup(scanner.nextLine());
 
-        System.out.println("Введіть ID факультету");
         do {
+            printPrompt("ID факультету >");
             try {
                 String facultyId = scanner.nextLine();
                 Faculty faculty = facultyService.getFaculty(facultyId);
@@ -198,7 +231,7 @@ public class StudentMenu {
                 resume = true;
             } catch (InvalidValue | FacultyNotFoundException e) {
                 logger.warn("Некоректний ID факультету: {}", e.getMessage());
-                System.out.println(e.getMessage());
+                printMessage(Utils.Mt.Error, "Некоректне значення");
                 resume = false;
                 System.out.println("0 - Пропустити");
                 exitOpt = scanner.nextLine();
@@ -206,51 +239,53 @@ public class StudentMenu {
             }
         } while (!resume);
 
-        System.out.println("Введіть назву спеціальності");
         do {
+            printPrompt("Назва спеціальності >");
             try {
                 student.setSpecialty(scanner.nextLine());
                 resume = true;
             } catch (InvalidValue e) {
                 logger.warn("Некоректна назва спеціальності: {}", e.getMessage());
-                System.out.println(e.getMessage());
+                printMessage(Utils.Mt.Error, "Некоректне значення");
                 resume = false;
             }
         } while (!resume);
 
-        System.out.println("Введіть ID кафедри");
         do {
+            printPrompt("ID кафедри >");
             try {
                 String departmentId = scanner.nextLine();
                 Department department = departmentService.getDepartment(departmentId);
                 student.setDepartmentId(departmentId);
                 resume = true;
-            } catch (InvalidValue | DepartmentNotFoundException e) {
+            } catch (InvalidValue e) {
                 logger.warn("Некоректний ID кафедри: {}", e.getMessage());
                 System.out.println(e.getMessage());
                 resume = false;
                 System.out.println("0 - Пропустити");
                 exitOpt = scanner.nextLine();
                 if (exitOpt.equals("0")) break;
+                resume = false;
             }
         } while (!resume);
 
-        System.out.println("Введіть рік вступу");
         do {
+            printPrompt("Рік вступу >");
             try {
                 student.setEnrollmentYear(Integer.parseInt(scanner.nextLine()));
                 resume = true;
             } catch (InvalidValue e) {
                 logger.warn("Помилка введення року вступу");
-                System.out.println(e.getMessage());
+                printMessage(Utils.Mt.Error, "Введіть коректний рік");
                 resume = false;
             }
         } while (!resume);
 
         do {
             status = true;
-            System.out.println("\n*-Оберіть форму навчання: -*");
-            studyForms.forEach(System.out::println);
+            printMessage(Mt.Prompt, "Оберіть форму навчання:");
+            printMenu(studyForms);
+            printPrompt(">");
             String inputLine = scanner.nextLine();
             try {
                 int input = Integer.parseInt(inputLine);
@@ -267,17 +302,18 @@ public class StudentMenu {
                         status = false;
                         break;
                     default:
-                        System.out.println("Введіть коректне значення");
+                        printMessage(Utils.Mt.Error, "Некоректний вибір");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Введіть коректне значення");
+                printMessage(Utils.Mt.Error, "Введіть число");
             }
         } while (status);
 
         do {
             status = true;
-            System.out.println("\n*-Оберіть статус студента: -*");
-            studentStatuses.forEach(System.out::println);
+            printMessage(Mt.Prompt, "Оберіть статус студента:");
+            printMenu(studentStatuses);
+            printPrompt(">");
             String inputLine = scanner.nextLine();
             try {
                 int input = Integer.parseInt(inputLine);
@@ -297,21 +333,23 @@ public class StudentMenu {
                         status = false;
                         break;
                     default:
-                        System.out.println("Введіть коректне значення");
+                        printMessage(Utils.Mt.Error, "Некоректний вибір");
                 }
             } catch (NumberFormatException e) {
                 logger.error("Помилка вибору статусу студента");
-                System.out.println("Введіть коректне значення");
+                printMessage(Mt.Error, "Введіть число");
             }
         } while (status);
-        System.out.println("Студента " + student.getFullName() + " створено");
         logger.info("Об'єкт студента згенеровано: {} (ID: {})", student.getFullName(), student.getID());
         return student;
     }
 
     protected void deleteStudent() {
-        while (true) {
-            System.out.println("Введіть ідентифікатор студента, якого треба видалити (нуль, щоб вийти)");
+        printHeader("Видалення студента");
+        boolean found = false;
+        while (!found) {
+            printMessage(Mt.Prompt, "Введіть ID студента, якого треба видалити", "[0] Вихід");
+            printPrompt(">");
             String studentId = scanner.nextLine();
             if (studentId.equals("0")) return;
             studentService.deleteStudent(studentId);
@@ -322,19 +360,21 @@ public class StudentMenu {
         boolean found = false;
         String studentId;
         Student student;
+        printHeader("Редагування студента");
         while (!found) {
             try {
-                System.out.println("Введіть ідентифікатор студента, якого треба змінити (нуль, щоб вийти)");
-                studentId = scanner.nextLine();
+            printMessage(Mt.Prompt, "ID студента для редагування", "[0] Вихід");
+            printPrompt(">");
+             studentId = scanner.nextLine();
                 if (studentId.equals("0")) return;
                 student = studentService.getStudent(studentId);
                 found = true;
                 logger.info("Початок редагування студента: {} (ID: {})", student.getFullName(), studentId);
+                printMessage(Mt.Info, "Редагування: " + student.getFullName());
 
                 boolean status = true;
                 while (status) {
-                    System.out.println("\n*-Оберіть, що змінити-*");
-                    changeList.forEach(System.out::println);
+                    printMenu("Оберіть, що змінити?", changeList);
                     String inputLine = scanner.nextLine();
                     try {
                         int input = Integer.parseInt(inputLine);
@@ -467,11 +507,11 @@ public class StudentMenu {
                                 } while (!resume);
                                 break;
                             case 9:
-                                System.out.println("Введіть групу");
-                                try {
-                                    student.setGroup(scanner.nextLine());
-                                    studentService.updateStudent(student);
-                                    logger.info("Поле 'група' студента ID {} змінено на {}", studentId, student.getGroup());
+                                System.out.println("Введіть нову групу");
+                                try{
+                                student.setGroup(scanner.nextLine());
+                                studentService.updateStudent(student);
+                                logger.info("Поле 'група' студента ID {} змінено на {}", studentId, student.getGroup());
                                     resume = true;
                                 } catch (PersonNotFoundException e) {
                                     System.out.println(e.getMessage());
@@ -609,7 +649,7 @@ public class StudentMenu {
                                         logger.info("Кафедру студента ID {} змінено", studentId);
                                         resume = true;
                                     } catch (InvalidValue | DepartmentNotFoundException e) {
-                                        System.out.println(e.getMessage());
+                                        printMessage(Utils.Mt.Error, "Некорректне значення");
                                         logger.warn("Помилка зміни кафедри: {}", e.getMessage());
                                         resume = false;
                                     }
@@ -622,16 +662,16 @@ public class StudentMenu {
 
                             default:
                                 logger.warn("Невірний пункт підменю редагування: {}", input);
-                                System.out.println("Введіть коректне значення");
+                                printMessage(Utils.Mt.Error, "Некоректний вибір");
                         }
                     } catch (NumberFormatException e) {
-                        logger.error("Помилка вводу в меню редагування студента");
-                        System.out.println("Введіть коректне значення");
+                        logger.error("Помилка вводу в меню редагування студента: {}", e.getMessage());
+                        printMessage(Utils.Mt.Error, "Введено не число");
                     }
                 }
             } catch (PersonNotFoundException e) {
-                logger.warn("Студента з не знайдено для редагування");
-                System.out.println("Студента з таким ID не знайдено.");
+                logger.warn("Студента з цим ID  не знайдено для редагування");
+                printMessage(Utils.Mt.Error, "Студента з таким ID не знайдено");
             }
         }
     }
@@ -640,5 +680,6 @@ public class StudentMenu {
         Student student = studentGenerator();
         studentService.createStudent(student);
         logger.info("Студента '{}' успішно збережено в базу", student.getFullName());
+        printMessage(Mt.Success, "Cтудента додано");
     }
 }

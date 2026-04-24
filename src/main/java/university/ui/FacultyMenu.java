@@ -79,7 +79,7 @@ public class FacultyMenu {
         }
     }
 
-    protected Faculty facultyGenerator() {
+    public Faculty facultyGenerator() {
         logger.debug("Запущено генератор нового факультету");
         Faculty faculty = new Faculty();
 

@@ -9,12 +9,13 @@ public final class Utils {
     public static final String ANSI_YELLOW = "\u001B[33m";
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_BLUE = "\u001B[34m";
     public static final String ANSI_BOLD = "\u001B[1m";
     public static final int WIDTH = 40;
     public static final String OPT0 = "[0] Вихід";
 
     public enum Mt {
-        Success, Error, Warning
+        Success, Error, Warning, Prompt, Info
     }
 
     public static boolean containsNonDigit(String s) {
@@ -77,6 +78,8 @@ public final class Utils {
             }
             case Success -> color = ANSI_GREEN;
             case Warning -> color = ANSI_YELLOW;
+            case Prompt -> color = ANSI_BLUE;
+            case Info -> color = ANSI_CYAN;
         }
         System.out.println(color + " " + message + ANSI_RESET + nl);
     }
@@ -93,10 +96,14 @@ public final class Utils {
         printMessage(mt, message, s);
     }
 
-    public static void printMenu(String header, List<String> items) {
-        printHeader(header);
+    public static void printMenu(List<String> items) {
         items.forEach(item -> System.out.println(" " + item));
         printPrompt(">");
+    }
+
+    public static void printMenu(String header, List<String> items) {
+        printHeader(header);
+        printMenu(items);
     }
 
 }

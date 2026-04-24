@@ -75,27 +75,27 @@ public class ReportsMenu {
                         reportService.printAllStudentsByCourse();
                         break;
                     case 3:
-                        System.out.print("Введіть ID факультету: ");
+                        printPrompt("ID факультету >");
                         String facultyId = scanner.nextLine();
                         reportService.printStudentsByFacultyAlphabetically(facultyId);
                         break;
 
                     case 4: {
-                        System.out.print("Введіть ID кафедри: ");
+                        printPrompt("ID кафедри >");
                         String departmentId = scanner.nextLine();
                         reportService.printStudentsByDepartmentAlphabetically(departmentId);
                         break;
                     }
                     case 5: {
-                        System.out.print("Введіть ID кафедри: ");
+                        printPrompt("ID кафедри >");
                         String departmentId = scanner.nextLine();
                         reportService.printStudentsByDepartmentByCourse(departmentId);
                         break;
                     }
                     case 6: {
-                        System.out.print("Введіть ID кафедри: ");
+                        printPrompt("ID кафедри >");
                         String departmentId = scanner.nextLine();
-                        System.out.print("Введіть курс (1-6): ");
+                        printPrompt("курс (1-6) >");
                         int course = Integer.parseInt(scanner.nextLine());
                         reportService.printStudentsByDeptAndCourse(departmentId, course);
                         break;
@@ -144,7 +144,7 @@ public class ReportsMenu {
             }
         } catch (NumberFormatException e) {
                 printMessage(Utils.Mt.Error, "Некоректне значення");
-        }
+            }
         }
     }
 }
