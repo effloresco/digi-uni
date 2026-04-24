@@ -56,7 +56,6 @@ public class Server {
 
         System.out.println("Зчитування локальної бази даних з файлів...");
         studentStorageManager.loadAllData();
-        studentStorageManager.loadAllData();
         teacherStorageManager.loadAllData();
         departmentStorageManager.loadAllData();
         facultyStorageManager.loadAllData();
