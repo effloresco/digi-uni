@@ -1,6 +1,7 @@
 package university.ui;
 
 import university.domain.*;
+import university.exceptions.FacultyNotFoundException;
 import university.exceptions.InvalidValue;
 import university.exceptions.PersonNotFoundException;
 import university.network.Client;
@@ -147,98 +148,91 @@ public class FacultyMenu {
 
     protected void changeFaculty() {
         boolean found = false;
-        boolean exit = false;
         String facultyId;
         Faculty faculty;
-        while (!found && !exit) {
-            System.out.println("Введіть ідентифікатор факультету, що треба замінити (введіть 0 щоб повернутись назад)");
-            facultyId = scanner.nextLine();
-
-            if (facultyId.equals("0")) exit = true;
-            else {
-                while (!found) {
-                    System.out.println("Введіть ідентифікатор факультету, що треба замінити");
-                    facultyId = scanner.nextLine();
-
-                    Optional<Faculty> optionalFaculty = facultyRepository.findById(facultyId);
-
-                    if (optionalFaculty.isPresent()) {
-                        found = true;
-                        faculty = optionalFaculty.get();
-                        boolean status = true;
-                        while (status) {
-                            System.out.println("\n*-Оберіть, що змінити-*");
-                            changeList.forEach(System.out::println);
-                            String inputLine = scanner.nextLine();
-                            try {
-                                int input = Integer.parseInt(inputLine);
-                                switch (input) {
-                                    case 1:
-                                        System.out.println("Введіть назву факультету");
-                                        do {
-                                            try {
-                                                faculty.setName(scanner.nextLine());
-                                                facultyStorageManager.saveAllData();
-                                                resume = true;
-                                            } catch (InvalidValue e) {
-                                                System.out.println(e.getMessage());
-                                                resume = false;
-                                            }
-                                        } while (!resume);
-                                        break;
-                                    case 2:
-                                        System.out.println("Введіть коротку назву факультету");
-                                        do {
-                                            try {
-                                                faculty.setShortName(scanner.nextLine());
-                                                facultyStorageManager.saveAllData();
-                                                resume = true;
-                                            } catch (InvalidValue e) {
-                                                System.out.println(e.getMessage());
-                                                resume = false;
-                                            }
-                                        } while (!resume);
-                                        break;
-                                    case 3:
-                                        do {
-                                            try {
-                                                faculty.setDeanId(receiveDean());
-                                                facultyStorageManager.saveAllData();
-                                                resume = true;
-                                            } catch (InvalidValue e) {
-                                                System.out.println(e.getMessage());
-                                                resume = false;
-                                                System.out.println("0 - Вихід");
-                                                exitOpt = scanner.nextLine();
-                                                if (exitOpt.equals("0")) break;
-                                            }
-                                        } while (!resume);
-                                        break;
-                                    case 4:
-                                        System.out.println("Введіть контакти факультету");
-                                        do {
-                                            try {
-                                                faculty.setContacts(scanner.nextLine());
-                                                facultyStorageManager.saveAllData();
-                                                resume = true;
-                                            } catch (InvalidValue e) {
-                                                System.out.println(e.getMessage());
-                                                resume = false;
-                                            }
-                                        } while (!resume);
-                                        break;
-                                    case 0:
-                                        status = false;
-                                        break;
-                                    default:
-                                        System.out.println("Введіть коректне значення");
-                                }
-                            } catch (NumberFormatException e) {
+        while (!found) {
+            try {
+                System.out.println("Введіть ідентифікатор факультету, який треба замінити (введіть 0 щоб повернутись назад)");
+                facultyId = scanner.nextLine();
+                if (facultyId.equals("0")) return;
+                faculty = facultyService.getFaculty(facultyId);
+                found = true;
+                boolean status = true;
+                while (status) {
+                    System.out.println("\n*-Оберіть, що змінити-*");
+                    changeList.forEach(System.out::println);
+                    String inputLine = scanner.nextLine();
+                    try {
+                        int input = Integer.parseInt(inputLine);
+                        switch (input) {
+                            case 1:
+                                System.out.println("Введіть назву факультету");
+                                do {
+                                    try {
+                                        faculty.setName(scanner.nextLine());
+                                        facultyService.updateFaculty(faculty);
+                                        resume = true;
+                                    } catch (InvalidValue e) {
+                                        System.out.println(e.getMessage());
+                                        resume = false;
+                                    }
+                                } while (!resume);
+                                break;
+                            case 2:
+                                System.out.println("Введіть коротку назву факультету");
+                                do {
+                                    try {
+                                        faculty.setShortName(scanner.nextLine());
+                                        facultyService.updateFaculty(faculty);
+                                        resume = true;
+                                    } catch (InvalidValue e) {
+                                        System.out.println(e.getMessage());
+                                        resume = false;
+                                    }
+                                } while (!resume);
+                                break;
+                            case 3:
+                                do {
+                                    try {
+                                        String teacherId = scanner.nextLine();
+                                        Teacher dean = teacherService.getTeacher(teacherId);
+                                        faculty.setDeanId(teacherId);
+                                        facultyService.updateFaculty(faculty);
+                                        resume = true;
+                                    } catch (InvalidValue e) {
+                                        System.out.println(e.getMessage());
+                                        resume = false;
+                                        System.out.println("0 - Вихід");
+                                        exitOpt = scanner.nextLine();
+                                        if (exitOpt.equals("0")) break;
+                                    }
+                                } while (!resume);
+                                break;
+                            case 4:
+                                System.out.println("Введіть контакти факультету");
+                                do {
+                                    try {
+                                        faculty.setContacts(scanner.nextLine());
+                                        facultyService.updateFaculty(faculty);
+                                        resume = true;
+                                    } catch (InvalidValue e) {
+                                        System.out.println(e.getMessage());
+                                        resume = false;
+                                    }
+                                } while (!resume);
+                                break;
+                            case 0:
+                                status = false;
+                                break;
+                            default:
                                 System.out.println("Введіть коректне значення");
-                            }
                         }
-                    } else System.out.println("Кафедри з таким ID не знайдено.");
+                    } catch (NumberFormatException e) {
+                        System.out.println("Введіть коректне значення");
+                    }
                 }
+            }catch (FacultyNotFoundException e) {
+                System.out.println("Факультет з таким ID не знайдено.");
             }
         }
     }
