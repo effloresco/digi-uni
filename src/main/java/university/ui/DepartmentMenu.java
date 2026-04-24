@@ -10,14 +10,16 @@ import university.service.RemoteTeacherService;
 import university.storage.DepartmentStorageManager;
 
 import java.util.List;
+import java.util.Scanner;
 
-import static university.service.SearchService.scanner;
 
 public class DepartmentMenu {
     private final Client client;
     protected final RemoteDepartmentService departmentService;
     protected final RemoteTeacherService teacherService;
     protected final RemoteFacultyService facultyService;
+    private final Scanner scanner = new Scanner(System.in);
+
 
     boolean resume;
     String exitOpt = null;

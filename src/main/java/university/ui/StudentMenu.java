@@ -15,14 +15,14 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Scanner;
 
 import static university.domain.Student.StudentStatus.*;
 import static university.domain.Student.StudyForm.*;
-import static university.service.SearchService.*;
 
 public class StudentMenu {
     private final Client client;
-    protected final StudentRepository studentRepository = StudentRepository.get(StudentRepository.class);
+    private final Scanner scanner = new Scanner(System.in);
     protected final RemoteStudentService studentService;
     protected final RemoteFacultyService facultyService;
     protected final RemoteDepartmentService departmentService;
@@ -145,7 +145,7 @@ public class StudentMenu {
         System.out.println("Введіть дату народження студента");
         do {
             try {
-                student.setBirthDate(LocalDate.parse(SearchService.scanner.nextLine(), formatter));
+                student.setBirthDate(LocalDate.parse(scanner.nextLine(), formatter));
                 resume = true;
             } catch (DateTimeParseException e) {
                 System.out.println("Введіть коректну дату");
@@ -190,7 +190,7 @@ public class StudentMenu {
         System.out.println("Введіть  курс");
         do {
             try {
-                student.setCourse(Integer.parseInt(SearchService.scanner.nextLine()));
+                student.setCourse(Integer.parseInt(scanner.nextLine()));
                 resume = true;
             } catch (InvalidValue e) {
                 System.out.println(e.getMessage());
@@ -252,7 +252,7 @@ public class StudentMenu {
         System.out.println("Введіть рік вступу");
         do {
             try {
-                student.setEnrollmentYear(Integer.parseInt(SearchService.scanner.nextLine()));
+                student.setEnrollmentYear(Integer.parseInt(scanner.nextLine()));
                 resume = true;
             } catch (InvalidValue e) {
                 System.out.println(e.getMessage());
@@ -395,7 +395,7 @@ public class StudentMenu {
                                 System.out.println("Введіть дату народження студента");
                                 do {
                                     try {
-                                        student.setBirthDate(LocalDate.parse(SearchService.scanner.nextLine(), formatter));
+                                        student.setBirthDate(LocalDate.parse(scanner.nextLine(), formatter));
                                         studentService.updateStudent(student);
                                         resume = true;
                                     } catch (DateTimeParseException e) {
@@ -450,7 +450,7 @@ public class StudentMenu {
                                 System.out.println("Введіть  курс");
                                 do {
                                     try {
-                                        student.setCourse(Integer.parseInt(SearchService.scanner.nextLine()));
+                                        student.setCourse(Integer.parseInt(scanner.nextLine()));
                                         studentService.updateStudent(student);
                                         resume = true;
                                     } catch (InvalidValue | PersonNotFoundException e) {
@@ -474,7 +474,7 @@ public class StudentMenu {
                                 System.out.println("Введіть рік вступу");
                                 do {
                                     try {
-                                        student.setEnrollmentYear(Integer.parseInt(SearchService.scanner.nextLine()));
+                                        student.setEnrollmentYear(Integer.parseInt(scanner.nextLine()));
                                         studentService.updateStudent(student);
                                         resume = true;
                                     } catch (InvalidValue | PersonNotFoundException e) {

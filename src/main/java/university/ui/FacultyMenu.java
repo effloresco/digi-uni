@@ -16,9 +16,11 @@ import static university.service.SearchService.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Scanner;
 
 public class FacultyMenu {
     private final Client client;
+    private final Scanner scanner = new Scanner(System.in);
     protected final FacultyRepository facultyRepository = FacultyRepository.get(FacultyRepository.class);
     protected final RemoteFacultyService facultyService;
     protected final RemoteTeacherService teacherService;

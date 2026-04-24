@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Scanner;
 
 import university.exceptions.*;
 import university.storage.TeacherStorageManager;
@@ -18,11 +19,10 @@ import static university.service.SearchService.*;
 
 public class TeacherMenu {
     private final Client client;
-    protected final TeacherRepository teacherRepository = TeacherRepository.get(TeacherRepository.class);
+    private final Scanner scanner = new Scanner(System.in);
     protected final RemoteTeacherService teacherService;
     protected final RemoteDepartmentService departmentService;
     protected final RemoteFacultyService facultyService;
-    protected final TeacherStorageManager teacherStorageManager = new TeacherStorageManager();
     boolean resume;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     String exitOpt = null;
@@ -128,7 +128,7 @@ public class TeacherMenu {
         System.out.println("Введіть дату народження викладача");
         do {
             try {
-                teacher.setBirthDate(LocalDate.parse(SearchService.scanner.nextLine(), formatter));
+                teacher.setBirthDate(LocalDate.parse(scanner.nextLine(), formatter));
                 resume = true;
             } catch (DateTimeParseException e) {
                 System.out.println("Введіть коректну дату");
@@ -326,7 +326,7 @@ public class TeacherMenu {
                             case 4:
                                 do {
                                     try {
-                                        teacher.setBirthDate(LocalDate.parse(SearchService.scanner.nextLine(), formatter));
+                                        teacher.setBirthDate(LocalDate.parse(scanner.nextLine(), formatter));
                                         teacherService.updateTeacher(teacher);
                                         resume = true;
                                     } catch (DateTimeParseException e) {
@@ -405,7 +405,7 @@ public class TeacherMenu {
                                 System.out.println("Введіть дату влаштування на роботу");
                                 do {
                                     try {
-                                        teacher.setHireDate(LocalDate.parse(SearchService.scanner.nextLine(), formatter));
+                                        teacher.setHireDate(LocalDate.parse(scanner.nextLine(), formatter));
                                         teacherService.updateTeacher(teacher);
                                         resume = true;
                                     } catch (DateTimeParseException e) {
@@ -418,7 +418,7 @@ public class TeacherMenu {
                                 System.out.println("Введіть ставку");
                                 do {
                                     try {
-                                        teacher.setRate(Double.parseDouble(SearchService.scanner.nextLine()));
+                                        teacher.setRate(Double.parseDouble(scanner.nextLine()));
                                         teacherService.updateTeacher(teacher);
                                         resume = true;
                                     } catch (InvalidValue e) {

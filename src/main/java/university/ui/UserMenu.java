@@ -11,13 +11,14 @@ import university.service.RemoteUserService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Scanner;
 
 import static university.domain.Student.StudyForm.BUDGET;
 import static university.domain.Student.StudyForm.CONTRACT;
-import static university.service.SearchService.scanner;
 
 public class UserMenu {
     private final Client client;
+    private final Scanner scanner = new Scanner(System.in);
     protected final UserRepository userRepository = UserRepository.get(UserRepository.class);
     protected final RemoteUserService userService;
 
