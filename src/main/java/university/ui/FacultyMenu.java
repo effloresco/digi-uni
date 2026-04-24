@@ -193,6 +193,7 @@ public class FacultyMenu {
                                 } while (!resume);
                                 break;
                             case 3:
+                                System.out.println("Введіть id декана факультету");
                                 do {
                                     try {
                                         String teacherId = scanner.nextLine();
