@@ -67,19 +67,20 @@ public class SearchService {
 
     public void searchStudentByCourse() {
         System.out.print("Введіть текст для пошуку (Курс): ");
-        int query = scanner.nextInt();
-        scanner.nextLine();
+        try {
+            int query = Integer.parseInt(scanner.nextLine());
 
-        List<Student> results = studentService.getAllStudents().stream()
-                .filter(p -> p instanceof Student)
-                .map(p -> (Student) p)
-                .filter(s -> s.getCourse() == query)
-                .toList();
+            List<Student> results = studentService.getAllStudents().stream()
+                    .filter(s -> s.getCourse() == query)
+                    .toList();
 
-        if (results.isEmpty()) {
-            System.out.println("Нічого не знайдено.");
-        } else {
-            results.forEach(System.out::println);
+            if (results.isEmpty()) {
+                System.out.println("Нічого не знайдено.");
+            } else {
+                results.forEach(System.out::println);
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Курс має бути цифрою!");
         }
     }
 
