@@ -201,7 +201,7 @@ public class FacultyMenu {
                                         faculty.setDeanId(teacherId);
                                         facultyService.updateFaculty(faculty);
                                         resume = true;
-                                    } catch (InvalidValue e) {
+                                    } catch (InvalidValue | PersonNotFoundException e) {
                                         System.out.println(e.getMessage());
                                         resume = false;
                                         System.out.println("0 - Вихід");
